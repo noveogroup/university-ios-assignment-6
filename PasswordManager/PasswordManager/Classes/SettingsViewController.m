@@ -7,10 +7,19 @@
 //
 
 #import "SettingsViewController.h"
+#import "Preferences.h"
+
+static NSString *settingsID = @"ReusableSettingsCellID";
 
 @interface SettingsViewController ()<UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic) int selectedIndex;
+@property (nonatomic, strong) NSMutableArray * /*of PasswordStrength*/strengths;
+
+typedef NS_ENUM(NSInteger, Sections)
+{
+    Strength = 0
+};
 
 @end
 
@@ -19,10 +28,18 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+
     if (self) {
         self.selectedIndex = NSNotFound;
-        // Custom initialization
+
+        self.strengths = [[NSMutableArray alloc] initWithCapacity:3];
+
+        [self.strengths addObject:@(PasswordStrengthWeak)];
+        [self.strengths addObject:@(PasswordStrengthMedium)];
+        [self.strengths addObject:@(PasswordStrengthStrong)];
+
     }
+
     return self;
 }
 
@@ -35,17 +52,11 @@
 
         UIBarButtonItem *const cancelBarButtonItem =
                 [[UIBarButtonItem alloc]
-                        initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                        initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                         target:self
                         action:@selector(dismiss)];
         [self.navigationItem setLeftBarButtonItem:cancelBarButtonItem];
     }
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -56,13 +67,19 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 2;
+    switch (section)
+    {
+        case Strength:
+            return [self.strengths count];
+        default:
+            return 0;
+    }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     switch (section) {
-        case 0:
+        case Strength:
             return @"Password strength";
         default:
             return @"Other";
@@ -72,15 +89,31 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"tableView");
+    UITableViewCell *tableViewCell = [tableView dequeueReusableCellWithIdentifier:settingsID];
 
-    UITableViewCell *cell = [[UITableViewCell alloc]
-            initWithStyle:UITableViewCellStyleDefault
-            reuseIdentifier:@"ololo"];
-    cell.textLabel.text = @"Test cell";
-    //cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    if (!tableViewCell) {
+        tableViewCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                reuseIdentifier:settingsID];
+    }
 
-    return cell;
+    switch (indexPath.section) {
+        case Strength:
+            tableViewCell.textLabel.text = [self stringByEnum:[[self.strengths
+                                objectAtIndex:indexPath.row] intValue]];
+
+            if ([[self.strengths objectAtIndex:indexPath.row] intValue] == [Preferences
+                    standardPreferences].passwordStrength)
+            {
+                tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+                self.selectedIndex = indexPath.row;
+            }
+
+            break;
+        default:
+            break;
+    }
+
+    return tableViewCell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -100,11 +133,29 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
 
     cell.accessoryType = UITableViewCellAccessoryCheckmark;
+
+    [[Preferences standardPreferences] setPasswordStrength:[[self.strengths
+            objectAtIndex:indexPath.row] intValue]];
 }
 
 - (void)dismiss
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (NSString *)stringByEnum:(NSInteger)strength
+{
+    switch (strength)
+    {
+        case PasswordStrengthWeak:
+            return @"Weak";
+        case PasswordStrengthMedium:
+            return @"Medium";
+        case PasswordStrengthStrong:
+            return @"Strong";
+        default:
+            return @"";
+    }
 }
 
 @end
