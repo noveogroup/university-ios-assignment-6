@@ -26,6 +26,11 @@
 - (void)registerRecord:(NSDictionary *)record;
 
 /**
+ *  Deletes the specified record.
+ */
+- (void)deleteRecord:(NSDictionary *)record;
+
+/**
  *  Returns the records the receiver manages.
  */
 - (NSArray *)records;

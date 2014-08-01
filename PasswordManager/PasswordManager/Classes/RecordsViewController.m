@@ -84,6 +84,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
         [[self.recordsManager records] objectAtIndex:indexPath.row];
     tableViewCell.textLabel.text = [record valueForKey:kServiceName];
     tableViewCell.detailTextLabel.text = [record valueForKey:kPassword];
+    //[tableViewCell setEditing:YES animated:YES];
 
     return tableViewCell;
 
@@ -96,6 +97,21 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+// enable deleting password records
+-     (BOOL)tableView:(UITableView *)tableView
+canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [self.recordsManager deleteRecord:[[self.recordsManager records] objectAtIndex:indexPath.row]];
+        [self.recordsManager synchronize];
+        
+        [tableView reloadData];
+    }
 }
 
 #pragma mark - NewRecordViewControllerDelegate implementation
