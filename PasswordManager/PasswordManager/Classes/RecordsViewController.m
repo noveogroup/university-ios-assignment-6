@@ -10,6 +10,7 @@
 #import "Record.h"
 #import "RecordsManager.h"
 #import "RecordsViewController.h"
+#import "SettingsViewController.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
@@ -23,13 +24,13 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 - (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender;
+- (IBAction)didTouchSettingsBarButtonItem:(UIBarButtonItem *)sender;
 
 @end
 
 @implementation RecordsViewController
 
 @synthesize recordsManager = recordsManager_;
-
 @synthesize tableView = tableView_;
 
 #pragma mark - Getters
@@ -60,6 +61,17 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
         [[UINavigationController alloc] initWithRootViewController:rootViewController];
     [self presentViewController:navigationController animated:YES completion:NULL];
 }
+
+- (IBAction)didTouchSettingsBarButtonItem:(UIBarButtonItem *)sender
+{
+    UIViewController *const rootViewController = [[SettingsViewController alloc] init];
+
+    UINavigationController *const navigationController = [[UINavigationController alloc]
+            initWithRootViewController:rootViewController];
+
+    [self presentViewController:navigationController animated:YES completion:NULL];
+}
+
 
 #pragma mark - UITableViewDataSource implementation
 
