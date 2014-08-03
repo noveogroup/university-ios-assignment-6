@@ -15,6 +15,10 @@ static const NSUInteger PasswordLengthShort = 5;
 static const NSUInteger PasswordLengthMedium = 10;
 static const NSUInteger PasswordLengthLong = 15;
 
+static const NSUInteger StrengthSegmentWeak = 0;
+static const NSUInteger StrengthSegmentMedium = 1;
+static const NSUInteger StrengthSegmentStrong = 2;
+
 static NSString *const LowercaseLetterAlphabet = @"abcdefghijklmnopqrstuvwxyz";
 static NSString *const UppercaseLetterAlphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 static NSString *const DecimalDigitAlphabet = @"1234567890";
@@ -25,6 +29,8 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 @property (weak, nonatomic) IBOutlet UITextField *serviceNameTextField;
 @property (weak, nonatomic) IBOutlet UILabel *passwordLabel;
 @property (strong, nonatomic) NSDictionary *record;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *passwordStrengthControl;
+@property (readwrite, nonatomic) NSInteger passwordStrength;
 
 - (void)refreshPassword;
 - (void)saveRecord;
@@ -34,6 +40,8 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 - (void)didTouchSaveBarButtonItem:(UIBarButtonItem *)sender;
 
 - (IBAction)didTouchRefreshButton:(UIButton *)sender;
+
+- (IBAction)changePasswordStrangth:(UISegmentedControl *)sender;
 
 @end
 
@@ -67,7 +75,7 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 {
     NSUInteger passwordLength = 0;
     NSString *alphabet = LowercaseLetterAlphabet;
-    switch ([[Preferences standardPreferences] passwordStrength]) {
+    switch (self.passwordStrength) {
         case PasswordStrengthStrong: {
             passwordLength = PasswordLengthLong;
             alphabet = [alphabet stringByAppendingString:UppercaseLetterAlphabet];
@@ -105,7 +113,6 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
     if (!!self.navigationItem) {
         UIBarButtonItem *const cancelBarButtonItem =
             [[UIBarButtonItem alloc]
@@ -121,6 +128,23 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
                                      action:@selector(didTouchSaveBarButtonItem:)];
         [self.navigationItem setRightBarButtonItem:saveBarButtonItem];
     }
+    self.passwordStrength = [[Preferences standardPreferences] passwordStrength];
+    switch (self.passwordStrength) {
+        case PasswordStrengthStrong: {
+            [self.passwordStrengthControl setSelectedSegmentIndex:StrengthSegmentStrong];
+            break;
+        }
+        case PasswordStrengthMedium: {
+            [self.passwordStrengthControl setSelectedSegmentIndex:StrengthSegmentMedium];
+            break;
+        }
+        case PasswordStrengthWeak:
+        default: {
+            [self.passwordStrengthControl setSelectedSegmentIndex:StrengthSegmentWeak];
+            break;
+        }
+    }
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -154,6 +178,26 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 
 - (IBAction)didTouchRefreshButton:(UIButton *)sender
 {
+    [self refreshPassword];
+}
+
+- (IBAction)changePasswordStrangth:(UISegmentedControl *)sender
+{
+        switch (sender.selectedSegmentIndex) {
+        case StrengthSegmentStrong: {
+            self.passwordStrength = PasswordStrengthStrong;
+            break;
+        }
+        case StrengthSegmentMedium: {
+            self.passwordStrength = PasswordStrengthMedium;
+            break;
+        }
+        case StrengthSegmentWeak:
+        default: {
+            self.passwordStrength = PasswordStrengthWeak;
+            break;
+        }
+    }
     [self refreshPassword];
 }
 

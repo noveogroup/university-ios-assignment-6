@@ -10,6 +10,7 @@
 #import "Record.h"
 #import "RecordsManager.h"
 #import "RecordsViewController.h"
+#import "OptionsViewController.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
@@ -23,6 +24,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 - (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender;
+- (IBAction)didTouchOptionsBarButtonItem:(UIBarButtonItem *)sender;
 
 @end
 
@@ -55,6 +57,15 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 {
     NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] init];
     rootViewController.delegate = self;
+
+    UINavigationController *const navigationController =
+        [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    [self presentViewController:navigationController animated:YES completion:NULL];
+}
+
+- (IBAction)didTouchOptionsBarButtonItem:(UIBarButtonItem *)sender
+{
+    OptionsViewController *const rootViewController = [[OptionsViewController alloc] init];
 
     UINavigationController *const navigationController =
         [[UINavigationController alloc] initWithRootViewController:rootViewController];
