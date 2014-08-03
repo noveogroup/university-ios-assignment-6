@@ -90,11 +90,42 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 #undef REUSABLE_CELL_ID
 }
 
+- (BOOL) tableView:tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+
+- (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+    NSDictionary *const record =
+        [[self.recordsManager records] objectAtIndex:indexPath.row];
+        [self.recordsManager deleteRecord:record];
+        [self.recordsManager synchronize];
+        [tableView beginUpdates];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tableView endUpdates];
+    }
+}
+
 #pragma mark - UITableViewDelegate implementation
 
 -       (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NewRecordViewController *const rootViewController =
+        [[NewRecordViewController alloc] initWithRecord:
+            [[self.recordsManager records] objectAtIndex:indexPath.row]];
+    rootViewController.delegate = self;
+    
+    NSDictionary *const record =
+    [[self.recordsManager records] objectAtIndex:indexPath.row];
+    [self.recordsManager deleteRecord:record];
+    
+    UINavigationController *const navigationController =
+        [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    [self presentViewController:navigationController animated:YES completion:NULL];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -106,11 +137,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     if (record) {
         [self.recordsManager registerRecord:record];
         [self.recordsManager synchronize];
-
         [self.tableView reloadData];
     }
     [self dismissViewControllerAnimated:YES
                              completion:NULL];
 }
+
 
 @end

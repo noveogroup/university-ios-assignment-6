@@ -24,6 +24,7 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 
 @property (weak, nonatomic) IBOutlet UITextField *serviceNameTextField;
 @property (weak, nonatomic) IBOutlet UILabel *passwordLabel;
+@property (strong, nonatomic) NSDictionary *record;
 
 - (void)refreshPassword;
 - (void)saveRecord;
@@ -42,6 +43,23 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 
 @synthesize serviceNameTextField = serviceNameTextField_;
 @synthesize passwordLabel = passwordLabel_;
+
+
+#pragma mark - Inits
+
+- (instancetype) initWithRecord:(NSDictionary *)record
+{
+    if (self = [super init]) {
+        self.record = record;
+    }
+    return self;
+}
+
+- (instancetype) init
+{
+    return [self initWithRecord:nil];
+}
+
 
 #pragma mark - Auxiliaries
 
@@ -108,15 +126,25 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
-    [self refreshPassword];
+    if (!self.record) {
+        [self refreshPassword];
+    }
+    else {
+        self.passwordLabel.text = self.record[kPassword];
+        self.serviceNameTextField.text = self.record[kServiceName];
+    }
 }
 
 #pragma mark - Actions
 
 - (void)didTouchCancelBarButtonItem:(UIBarButtonItem *)sender
 {
-    [self.delegate newRecordViewController:self didFinishWithRecord:nil];
+    if (self.record) {
+        [self saveRecord];
+    }
+    else {
+        [self.delegate newRecordViewController:self didFinishWithRecord:nil];
+    }
 }
 
 - (void)didTouchSaveBarButtonItem:(UIBarButtonItem *)sender
@@ -134,7 +162,6 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [self saveRecord];
-
     return YES;
 }
 

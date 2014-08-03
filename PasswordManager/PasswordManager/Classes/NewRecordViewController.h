@@ -35,4 +35,10 @@
  */
 @property (nonatomic, weak) id<NewRecordViewControllerDelegate> delegate;
 
+
+/**
+ *  Designated initializer.
+ */
+- (instancetype) initWithRecord:(NSDictionary *)record;
+
 @end
