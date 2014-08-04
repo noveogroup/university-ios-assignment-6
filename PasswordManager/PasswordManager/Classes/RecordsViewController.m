@@ -10,26 +10,28 @@
 #import "Record.h"
 #import "RecordsManager.h"
 #import "RecordsViewController.h"
+#import "SettingsViewController.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 @interface RecordsViewController ()
     <UITableViewDataSource,
      UITableViewDelegate,
-     NewRecordViewControllerDelegate>
+     NewRecordViewControllerDelegate,
+     SettingsViewControllerDelegate>
 
 @property (nonatomic, readonly) RecordsManager *recordsManager;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 - (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender;
+- (IBAction)didTouchSettingsBarButtonItem:(UIBarButtonItem *)sender;
 
 @end
 
 @implementation RecordsViewController
 
 @synthesize recordsManager = recordsManager_;
-
 @synthesize tableView = tableView_;
 
 #pragma mark - Getters
@@ -61,6 +63,18 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
     [self presentViewController:navigationController animated:YES completion:NULL];
 }
 
+- (IBAction)didTouchSettingsBarButtonItem:(UIBarButtonItem *)sender
+{
+    SettingsViewController *const rootViewController = [[SettingsViewController alloc] init];
+    rootViewController.delegate = self;
+
+    UINavigationController *const navigationController = [[UINavigationController alloc]
+            initWithRootViewController:rootViewController];
+
+    [self presentViewController:navigationController animated:YES completion:NULL];
+}
+
+
 #pragma mark - UITableViewDataSource implementation
 
 - (NSInteger)tableView:(UITableView *)tableView
@@ -81,7 +95,8 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
                                                reuseIdentifier:REUSABLE_CELL_ID];
     }
     NSDictionary *const record =
-        [[self.recordsManager records] objectAtIndex:indexPath.row];
+            [self.recordsManager records][indexPath.row];
+
     tableViewCell.textLabel.text = [record valueForKey:kServiceName];
     tableViewCell.detailTextLabel.text = [record valueForKey:kPassword];
 
@@ -90,12 +105,45 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 #undef REUSABLE_CELL_ID
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView setEditing:YES animated:YES];
+
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [self.recordsManager removeRecordAtIndex:indexPath.row];
+
+        [tableView deleteRowsAtIndexPaths:@[indexPath]
+                withRowAnimation:UITableViewRowAnimationTop]; // tell table to refresh now
+    }
+}
+
+
 #pragma mark - UITableViewDelegate implementation
 
 -       (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSDictionary *record = [self.recordsManager records][indexPath.row];
+
+    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc]
+            initWithRecord:record];
+
+    rootViewController.delegate = self;
+    UINavigationController *const navigationController =
+    [[UINavigationController alloc] initWithRootViewController:rootViewController];
+
+    [self.recordsManager removeRecordAtIndex:indexPath.row];
+    [self presentViewController:navigationController animated:YES completion:^{
+        self.tableView;
+    }];
+
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [tableView reloadData];
 }
 
 #pragma mark - NewRecordViewControllerDelegate implementation
@@ -111,6 +159,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     }
     [self dismissViewControllerAnimated:YES
                              completion:NULL];
+}
+
+- (void)kickRecordsManager
+{
+    [self.recordsManager synchronize];
+    [self.tableView reloadData];
 }
 
 @end

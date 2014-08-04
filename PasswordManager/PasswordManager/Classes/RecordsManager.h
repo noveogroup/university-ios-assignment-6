@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "Preferences.h"
+
 @interface RecordsManager : NSObject
 
 /**
@@ -24,6 +26,7 @@
  *  Registers the specified record.
  */
 - (void)registerRecord:(NSDictionary *)record;
+- (void)removeRecordAtIndex:(NSInteger)index;
 
 /**
  *  Returns the records the receiver manages.

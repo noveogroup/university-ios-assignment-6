@@ -25,6 +25,11 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 @property (weak, nonatomic) IBOutlet UITextField *serviceNameTextField;
 @property (weak, nonatomic) IBOutlet UILabel *passwordLabel;
 
+@property (nonatomic, strong) NSString *serviceName;
+@property (nonatomic, strong) NSString *password;
+
+@property (nonatomic, assign) BOOL editMode;
+
 - (void)refreshPassword;
 - (void)saveRecord;
 
@@ -42,6 +47,30 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 
 @synthesize serviceNameTextField = serviceNameTextField_;
 @synthesize passwordLabel = passwordLabel_;
+
+- (instancetype)init
+{
+    self = [super init];
+
+    if (self) {
+        self.editMode = NO;
+    }
+
+    return self;
+}
+
+- (instancetype)initWithRecord:(NSDictionary *)record
+{
+    self = [self init];
+
+    if (self) {
+        self.serviceName = record[kServiceName];
+        self.password = record[kPassword];
+        self.editMode = YES;
+    }
+
+    return self;
+}
 
 #pragma mark - Auxiliaries
 
@@ -103,20 +132,31 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
                                      action:@selector(didTouchSaveBarButtonItem:)];
         [self.navigationItem setRightBarButtonItem:saveBarButtonItem];
     }
+
+    self.serviceNameTextField.text = self.serviceName;
+    self.passwordLabel.text = self.password;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 
-    [self refreshPassword];
+    if (!self.editMode) {
+        [self refreshPassword];
+    }
 }
 
 #pragma mark - Actions
 
 - (void)didTouchCancelBarButtonItem:(UIBarButtonItem *)sender
 {
-    [self.delegate newRecordViewController:self didFinishWithRecord:nil];
+    if (!self.editMode) {
+        [self.delegate newRecordViewController:self didFinishWithRecord:nil];
+    }
+    else {
+        [self saveRecord];
+    }
+
 }
 
 - (void)didTouchSaveBarButtonItem:(UIBarButtonItem *)sender
