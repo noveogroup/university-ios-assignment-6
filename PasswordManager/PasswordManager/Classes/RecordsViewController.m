@@ -61,6 +61,11 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
     [self presentViewController:navigationController animated:YES completion:NULL];
 }
 
+- (IBAction)didTouchSettingsBarButtonItem:(UIBarButtonItem *)sender
+{
+    
+}
+
 #pragma mark - UITableViewDataSource implementation
 
 - (NSInteger)tableView:(UITableView *)tableView
@@ -96,6 +101,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 -       (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

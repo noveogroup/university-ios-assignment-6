@@ -23,7 +23,7 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
     <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *serviceNameTextField;
-@property (weak, nonatomic) IBOutlet UILabel *passwordLabel;
+@property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 
 - (void)refreshPassword;
 - (void)saveRecord;
@@ -41,7 +41,7 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 @synthesize delegate = delegate_;
 
 @synthesize serviceNameTextField = serviceNameTextField_;
-@synthesize passwordLabel = passwordLabel_;
+@synthesize passwordTextField = passwordTextField_;
 
 #pragma mark - Auxiliaries
 
@@ -67,17 +67,20 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
             break;
         }
     }
-    self.passwordLabel.text =
-        [PasswordGenerator generatePasswordOfLength:passwordLength
-                                      usingAlphabet:alphabet];
+    NSString *password = [PasswordGenerator
+        generatePasswordOfLength:passwordLength
+        usingAlphabet:alphabet];
+    
+    self.passwordTextField.text = password;
 }
 
 - (void)saveRecord
 {
-    if ([self.serviceNameTextField.text length] > 0) {
+    if ([self.serviceNameTextField.text length] > 0
+        && [self.passwordTextField.text length] > 0) {
         NSDictionary *const record =
             @{kServiceName: self.serviceNameTextField.text,
-              kPassword: self.passwordLabel.text};
+              kPassword: self.passwordTextField.text};
         [self.delegate newRecordViewController:self didFinishWithRecord:record];
     }
 }
@@ -133,7 +136,11 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    [self saveRecord];
+    if ([textField isEqual:self.serviceNameTextField]) {
+        [self.passwordTextField becomeFirstResponder];
+    } else if ([textField isEqual:self.passwordTextField]) {
+        [self saveRecord];
+    }
 
     return YES;
 }
