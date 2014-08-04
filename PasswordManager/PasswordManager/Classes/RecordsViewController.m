@@ -93,7 +93,8 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
                                                reuseIdentifier:REUSABLE_CELL_ID];
     }
     NSDictionary *const record =
-        [[self.recordsManager records] objectAtIndex:indexPath.row];
+            [self.recordsManager records][indexPath.row];
+
     tableViewCell.textLabel.text = [record valueForKey:kServiceName];
     tableViewCell.detailTextLabel.text = [record valueForKey:kPassword];
 
@@ -102,12 +103,45 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 #undef REUSABLE_CELL_ID
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView setEditing:YES animated:YES];
+
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [self.recordsManager removeRecordAtIndex:indexPath.row];
+
+        [tableView deleteRowsAtIndexPaths:@[indexPath]
+                withRowAnimation:UITableViewRowAnimationTop]; // tell table to refresh now
+    }
+}
+
+
 #pragma mark - UITableViewDelegate implementation
 
 -       (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSDictionary *record = [self.recordsManager records][indexPath.row];
+
+    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc]
+            initWithRecord:record];
+
+    rootViewController.delegate = self;
+    UINavigationController *const navigationController =
+    [[UINavigationController alloc] initWithRootViewController:rootViewController];
+
+    [self.recordsManager removeRecordAtIndex:indexPath.row];
+    [self presentViewController:navigationController animated:YES completion:^{
+        self.tableView;
+    }];
+
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [tableView reloadData];
 }
 
 #pragma mark - NewRecordViewControllerDelegate implementation

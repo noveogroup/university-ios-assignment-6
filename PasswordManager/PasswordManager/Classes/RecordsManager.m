@@ -8,6 +8,8 @@
 
 #import "RecordsManager.h"
 
+static NSString *identifier = @"RecordDictionary";
+
 @interface RecordsManager ()
 
 @property (nonatomic, strong) NSMutableArray *mutableRecords;
@@ -46,6 +48,11 @@
     if ([record count] > 0) {
         [self.mutableRecords addObject:record];
     }
+}
+
+- (void)removeRecordAtIndex:(NSInteger)index
+{
+    [self.mutableRecords removeObjectAtIndex:index];
 }
 
 - (NSMutableArray *)mutableRecords
