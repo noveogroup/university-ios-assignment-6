@@ -48,6 +48,21 @@
     }
 }
 
+-(void)replaceRecord:(NSDictionary*)oldRecord
+                with:(NSDictionary*)newRecord
+{
+    if([self.mutableRecords containsObject:oldRecord]){
+        NSInteger index = [self.mutableRecords indexOfObject:oldRecord];
+        [self.mutableRecords removeObject:oldRecord];
+        [self.mutableRecords insertObject:newRecord atIndex:index];
+    }
+}
+
+-(void)deleteRecord:(NSDictionary *)record
+{
+    [self.mutableRecords removeObject:record];
+}
+
 - (NSMutableArray *)mutableRecords
 {
     if (!mutableRecords_) {

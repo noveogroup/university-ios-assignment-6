@@ -25,6 +25,11 @@
  */
 - (void)registerRecord:(NSDictionary *)record;
 
+-(void)replaceRecord:(NSDictionary*)oldRecord
+                with:(NSDictionary*)newRecord;
+
+-(void)deleteRecord:(NSDictionary*)record;
+
 /**
  *  Returns the records the receiver manages.
  */

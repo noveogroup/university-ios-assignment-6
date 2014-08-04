@@ -26,10 +26,15 @@
 - (void)newRecordViewController:(NewRecordViewController *)sender
             didFinishWithRecord:(NSDictionary *)record;
 
+-(void)newRecordViewController:(NewRecordViewController *)sender
+                       replace:(NSDictionary *)oldRecord
+                          with:(NSDictionary*)newRecord;
+
 @end
 
 @interface NewRecordViewController : UIViewController
 
+-(instancetype)initWithRecord:(NSDictionary*)currentRecord;
 /**
  *  Returns the object that handles the delegated duties.
  */
