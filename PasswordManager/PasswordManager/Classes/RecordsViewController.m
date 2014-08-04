@@ -101,6 +101,13 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 -       (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc]
+        initWithRecord:[[self.recordsManager records] objectAtIndex:indexPath.row]];
+    rootViewController.delegate = self;
+
+    UINavigationController *const navigationController =
+        [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    [self presentViewController:navigationController animated:YES completion:NULL];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -135,4 +142,18 @@ canEditRowAtIndexPath:(NSIndexPath *)indexPath {
                              completion:NULL];
 }
 
+-(void)newRecordViewController:(NewRecordViewController *)sender
+            didFinishWithNewRecord:(NSDictionary *)newRecord
+            insteadOfOldRecord:(NSDictionary *)oldRecord {
+    if (![oldRecord isEqual:newRecord]) {
+        [self.recordsManager deleteRecord:oldRecord];
+        [self.recordsManager registerRecord:newRecord];
+        [self.recordsManager synchronize];
+    }
+    
+    [self.tableView reloadData];
+    
+    [self dismissViewControllerAnimated:YES
+                             completion:NULL];
+}
 @end
