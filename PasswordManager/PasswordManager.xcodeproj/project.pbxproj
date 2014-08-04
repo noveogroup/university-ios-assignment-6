@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8499403D198F729B0001C817 /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 8499403C198F729B0001C817 /* settings.png */; };
 		93DE15E318B4AA8D00A46FD2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E218B4AA8D00A46FD2 /* Foundation.framework */; };
 		93DE15E518B4AA8D00A46FD2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E418B4AA8D00A46FD2 /* CoreGraphics.framework */; };
 		93DE15E718B4AA8D00A46FD2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E618B4AA8D00A46FD2 /* UIKit.framework */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8499403C198F729B0001C817 /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 		93C1371818B602AD0021D0F2 /* Record.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Record.h; sourceTree = "<group>"; };
 		93DE15DF18B4AA8D00A46FD2 /* PasswordManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PasswordManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93DE15E218B4AA8D00A46FD2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -105,6 +107,7 @@
 		93DE15E818B4AA8D00A46FD2 /* PasswordManager */ = {
 			isa = PBXGroup;
 			children = (
+				8499403C198F729B0001C817 /* settings.png */,
 				93DE161118B4AAD800A46FD2 /* Classes */,
 				93DE15E918B4AA8D00A46FD2 /* Supporting Files */,
 				93DE15F418B4AA8D00A46FD2 /* Images.xcassets */,
@@ -211,6 +214,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				93E767E818B5F9BA0053F9F0 /* NewRecordViewController.xib in Resources */,
+				8499403D198F729B0001C817 /* settings.png in Resources */,
 				93DE15ED18B4AA8D00A46FD2 /* InfoPlist.strings in Resources */,
 				93DE15F518B4AA8D00A46FD2 /* Images.xcassets in Resources */,
 				93E767DD18B5D8DE0053F9F0 /* RecordsViewController.xib in Resources */,
