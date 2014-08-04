@@ -58,7 +58,20 @@ static NSString *identifier = @"RecordDictionary";
 - (NSMutableArray *)mutableRecords
 {
     if (!mutableRecords_) {
-        mutableRecords_ = [NSMutableArray arrayWithContentsOfURL:self.url];
+        switch ([Preferences standardPreferences].storageMode) {
+            case StorageModeNSCoding:
+                mutableRecords_ = [NSMutableArray arrayWithContentsOfURL:self.url];
+                break;
+
+            case StorageModeNSUserDefaults:
+                mutableRecords_ = [[[NSUserDefaults standardUserDefaults]
+                        arrayForKey:identifier] mutableCopy];
+
+
+                break;
+            default:
+                break;
+        }
         if (!mutableRecords_) {
             mutableRecords_ = [NSMutableArray array];
         }
@@ -76,7 +89,28 @@ static NSString *identifier = @"RecordDictionary";
 
 - (BOOL)synchronize
 {
-    return [self.mutableRecords writeToURL:self.url atomically:YES];
+    BOOL result;
+
+    switch ([Preferences standardPreferences].storageMode) {
+        case StorageModeNSCoding: {
+            result = [self.mutableRecords writeToURL:self.url atomically:YES];
+
+            if (result) {
+                self.mutableRecords = nil;
+            }
+
+            break;
+        }
+        case StorageModeNSUserDefaults:
+            [[NSUserDefaults standardUserDefaults] setObject:self.mutableRecords forKey:identifier];
+            self.mutableRecords = nil;
+            result = YES;
+            break;
+        default:
+            result = NO;
+    }
+
+    return result;
 }
 
 @end

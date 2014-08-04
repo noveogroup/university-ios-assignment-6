@@ -13,12 +13,15 @@ static NSString *settingsID = @"ReusableSettingsCellID";
 
 @interface SettingsViewController ()<UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic) int selectedIndex;
+@property (nonatomic) int selectedStrengthIndex;
+@property (nonatomic) int selectedModeIndex;
 @property (nonatomic, strong) NSMutableArray * /*of PasswordStrength*/strengths;
+@property (nonatomic, strong) NSMutableArray * /*of StorageMode*/modes;
 
 typedef NS_ENUM(NSInteger, Sections)
 {
-    Strength = 0
+    Strength = 0,
+    Mode = 1
 };
 
 @end
@@ -30,7 +33,7 @@ typedef NS_ENUM(NSInteger, Sections)
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 
     if (self) {
-        self.selectedIndex = NSNotFound;
+        self.selectedStrengthIndex = NSNotFound;
 
         self.strengths = [[NSMutableArray alloc] initWithCapacity:3];
 
@@ -38,6 +41,10 @@ typedef NS_ENUM(NSInteger, Sections)
         [self.strengths addObject:@(PasswordStrengthMedium)];
         [self.strengths addObject:@(PasswordStrengthStrong)];
 
+        self.modes = [[NSMutableArray alloc] initWithCapacity:2];
+
+        [self.modes addObject:@(StorageModeNSCoding)];
+        [self.modes addObject:@(StorageModeNSUserDefaults)];
     }
 
     return self;
@@ -71,6 +78,8 @@ typedef NS_ENUM(NSInteger, Sections)
     {
         case Strength:
             return [self.strengths count];
+        case Mode:
+            return [self.modes count];
         default:
             return 0;
     }
@@ -81,6 +90,8 @@ typedef NS_ENUM(NSInteger, Sections)
     switch (section) {
         case Strength:
             return @"Password strength";
+        case Mode:
+            return @"Storage mode";
         default:
             return @"Other";
     }
@@ -97,18 +108,27 @@ typedef NS_ENUM(NSInteger, Sections)
     }
 
     switch (indexPath.section) {
-        case Strength:
-            tableViewCell.textLabel.text = [self stringByEnum:[[self.strengths
-                                objectAtIndex:indexPath.row] intValue]];
+        case Strength: {
+            tableViewCell.textLabel.text =
+                    [self stringByStrength:[self.strengths[indexPath.row] intValue]];
 
-            if ([[self.strengths objectAtIndex:indexPath.row] intValue] == [Preferences
-                    standardPreferences].passwordStrength)
-            {
+            if ([self.strengths[indexPath.row] intValue] == [Preferences
+                    standardPreferences].passwordStrength) {
                 tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
-                self.selectedIndex = indexPath.row;
+                self.selectedStrengthIndex = indexPath.row;
             }
 
             break;
+        }
+        case Mode: {
+            tableViewCell.textLabel.text = [self stringByMode:[self.modes[indexPath.row] intValue]];
+
+            if ([self.modes[indexPath.row] intValue] == [Preferences standardPreferences]
+                    .storageMode) {
+                tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+                self.selectedModeIndex = indexPath.row;
+            }
+        }
         default:
             break;
     }
@@ -118,24 +138,48 @@ typedef NS_ENUM(NSInteger, Sections)
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    switch (indexPath.section) {
+        case Strength: {
+            if (self.selectedStrengthIndex != NSNotFound) {
+                UITableViewCell *cell = [tableView cellForRowAtIndexPath:[NSIndexPath
+                        indexPathForRow:self.selectedStrengthIndex inSection:indexPath.section]];
 
-    if (self.selectedIndex != NSNotFound)
-    {
-        UITableViewCell *cell = [tableView cellForRowAtIndexPath:[NSIndexPath
-                indexPathForRow:self.selectedIndex inSection:indexPath.section]];
+                cell.accessoryType = UITableViewCellAccessoryNone;
+            }
 
-        cell.accessoryType = UITableViewCellAccessoryNone;
+            self.selectedStrengthIndex = indexPath.row;
+
+            [Preferences standardPreferences].passwordStrength = [(self.strengths)[indexPath.row]
+                    intValue];
+
+            break;
+        }
+        case Mode: {
+            if (self.selectedModeIndex != NSNotFound) {
+                UITableViewCell *cell = [tableView cellForRowAtIndexPath:[NSIndexPath
+                        indexPathForRow:self.selectedModeIndex inSection:indexPath.section]];
+
+                cell.accessoryType = UITableViewCellAccessoryNone;
+            }
+
+            self.selectedModeIndex = indexPath.row;
+
+            [Preferences standardPreferences].storageMode = [(self.modes)[indexPath.row]
+                    intValue];
+
+            [self.delegate kickRecordsManager];
+
+            break;
+        }
+        default:
+            break;
     }
-
-    self.selectedIndex = indexPath.row;
 
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
 
     cell.accessoryType = UITableViewCellAccessoryCheckmark;
 
-    [[Preferences standardPreferences] setPasswordStrength:[[self.strengths
-            objectAtIndex:indexPath.row] intValue]];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)dismiss
@@ -143,7 +187,7 @@ typedef NS_ENUM(NSInteger, Sections)
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
-- (NSString *)stringByEnum:(NSInteger)strength
+- (NSString *)stringByStrength:(NSInteger)strength
 {
     switch (strength)
     {
@@ -153,6 +197,18 @@ typedef NS_ENUM(NSInteger, Sections)
             return @"Medium";
         case PasswordStrengthStrong:
             return @"Strong";
+        default:
+            return @"";
+    }
+}
+
+- (NSString *)stringByMode:(NSInteger)mode
+{
+    switch (mode) {
+        case StorageModeNSCoding:
+            return @"NSCoding";
+        case StorageModeNSUserDefaults:
+            return @"UserDefaults";
         default:
             return @"";
     }

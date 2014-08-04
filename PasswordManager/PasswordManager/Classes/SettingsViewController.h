@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol SettingsViewControllerDelegate<NSObject>
+
+- (void)kickRecordsManager;
+
+@end
+
 @interface SettingsViewController : UIViewController
+
+@property (nonatomic, weak) id<SettingsViewControllerDelegate> delegate;
 
 @end

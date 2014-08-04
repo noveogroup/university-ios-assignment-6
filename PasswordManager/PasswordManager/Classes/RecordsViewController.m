@@ -17,7 +17,8 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 @interface RecordsViewController ()
     <UITableViewDataSource,
      UITableViewDelegate,
-     NewRecordViewControllerDelegate>
+     NewRecordViewControllerDelegate,
+     SettingsViewControllerDelegate>
 
 @property (nonatomic, readonly) RecordsManager *recordsManager;
 
@@ -64,7 +65,8 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 - (IBAction)didTouchSettingsBarButtonItem:(UIBarButtonItem *)sender
 {
-    UIViewController *const rootViewController = [[SettingsViewController alloc] init];
+    SettingsViewController *const rootViewController = [[SettingsViewController alloc] init];
+    rootViewController.delegate = self;
 
     UINavigationController *const navigationController = [[UINavigationController alloc]
             initWithRootViewController:rootViewController];
@@ -157,6 +159,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     }
     [self dismissViewControllerAnimated:YES
                              completion:NULL];
+}
+
+- (void)kickRecordsManager
+{
+    [self.recordsManager synchronize];
+    [self.tableView reloadData];
 }
 
 @end
