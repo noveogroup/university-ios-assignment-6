@@ -22,6 +22,7 @@
 @property (nonatomic, weak) Preferences *preferences;
 
 @property (nonatomic, strong) NSDictionary *passwordStrength;
+@property (nonatomic, strong) NSDictionary *storageType;
 
 @end
 
@@ -64,6 +65,11 @@
             [NSNumber numberWithInteger:PasswordStrengthWeak]: [NSNumber numberWithInteger:0],
             [NSNumber numberWithInteger:PasswordStrengthMedium]: [NSNumber numberWithInteger:1],
             [NSNumber numberWithInteger:PasswordStrengthStrong]: [NSNumber numberWithInteger:2]
+        };
+        
+        _passwordStrength = @{
+            [NSNumber numberWithInteger:StorageTypeCoding]: [NSNumber numberWithInteger:0],
+            [NSNumber numberWithInteger:StorageTypeDatabase]: [NSNumber numberWithInteger:1]
         };
     }
     return self;
@@ -117,10 +123,18 @@
             
             break;
         }
+        
+        // storage type
+        case 1: {
+            NSInteger currentStorageTypeValue = self.preferences.storageType;
+            NSNumber *currentStorageType = [NSNumber numberWithInteger:currentStorageTypeValue];
             
-        case 1: // storage type
+            if (indexPath.row == [self.storageType[currentStorageType] integerValue]) {
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            }
             
             break;
+        }
 
         default:
             break;
