@@ -15,7 +15,10 @@ static NSString *const kPasswordStrengthString = @"Password Strength";
 static NSString *const kKeepingModePlistStringValue = @"Plist";
 static NSString *const kKeepingModeEncodedStringValue = @"Encoded";
 
-@interface OptionsViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OptionsViewController () <
+    UITableViewDelegate,
+    UITableViewDataSource,
+    UIApplicationDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
@@ -180,7 +183,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.tableView reloadData];
 }
-
 
 
 

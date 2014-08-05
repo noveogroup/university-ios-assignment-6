@@ -11,6 +11,8 @@
 
 @interface AppDelegate ()
 
+@property (nonatomic, weak) id<ShouldUpdateDefaultsDelegate> delegate;
+
 @end
 
 @implementation AppDelegate
@@ -22,9 +24,11 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
+    RecordsViewController *const rootController = [[RecordsViewController alloc] init];
+    self.delegate = rootController;
     self.window.rootViewController =
         [[UINavigationController alloc]
-            initWithRootViewController:[[RecordsViewController alloc] init]];
+            initWithRootViewController:rootController];
 
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -46,6 +50,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [self.delegate updateDefaults:self];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

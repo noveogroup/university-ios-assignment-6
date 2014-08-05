@@ -180,5 +180,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     [self.tableView reloadData];
 }
 
+#pragma mark ShouldUpdateDelegate implementation
+
+- (void) updateDefaults:(id)sender
+{
+    [self didCloseOptionsMenu:nil];
+}
+
 
 @end

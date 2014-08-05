@@ -24,6 +24,7 @@
 		93E767E318B5EDD90053F9F0 /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E767E218B5EDD90053F9F0 /* Preferences.m */; };
 		93E767E618B5F3790053F9F0 /* NewRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E767E518B5F3790053F9F0 /* NewRecordViewController.m */; };
 		93E767E818B5F9BA0053F9F0 /* NewRecordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */; };
+		CE6F973F1990F280009CED03 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CE6F973E1990F280009CED03 /* Settings.bundle */; };
 		CECC7990198EA7CC00385C1E /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CECC798E198EA7CC00385C1E /* OptionsViewController.m */; };
 		CECC7991198EA7CC00385C1E /* OptionsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CECC798F198EA7CC00385C1E /* OptionsViewController.xib */; };
 /* End PBXBuildFile section */
@@ -60,6 +61,7 @@
 		93E767E418B5F3790053F9F0 /* NewRecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewRecordViewController.h; sourceTree = "<group>"; };
 		93E767E518B5F3790053F9F0 /* NewRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewRecordViewController.m; sourceTree = "<group>"; };
 		93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewRecordViewController.xib; sourceTree = "<group>"; };
+		CE6F973E1990F280009CED03 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Settings.bundle; path = ../Settings.bundle; sourceTree = "<group>"; };
 		CECC798D198EA7CC00385C1E /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
 		CECC798E198EA7CC00385C1E /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
 		CECC798F198EA7CC00385C1E /* OptionsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OptionsViewController.xib; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 		93DE15E918B4AA8D00A46FD2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CE6F973E1990F280009CED03 /* Settings.bundle */,
 				93DE15EA18B4AA8D00A46FD2 /* PasswordManager-Info.plist */,
 				93DE15EB18B4AA8D00A46FD2 /* InfoPlist.strings */,
 				93DE15EE18B4AA8D00A46FD2 /* main.m */,
@@ -222,6 +225,7 @@
 				CECC7991198EA7CC00385C1E /* OptionsViewController.xib in Resources */,
 				93DE15ED18B4AA8D00A46FD2 /* InfoPlist.strings in Resources */,
 				93DE15F518B4AA8D00A46FD2 /* Images.xcassets in Resources */,
+				CE6F973F1990F280009CED03 /* Settings.bundle in Resources */,
 				93E767DD18B5D8DE0053F9F0 /* RecordsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

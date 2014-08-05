@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AppDelegate.h"
 
-@interface RecordsViewController : UIViewController
+@interface RecordsViewController : UIViewController <ShouldUpdateDefaultsDelegate>
 
 @end
