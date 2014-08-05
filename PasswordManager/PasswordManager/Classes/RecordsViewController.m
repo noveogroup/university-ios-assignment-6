@@ -135,7 +135,7 @@ canEditRowAtIndexPath:(NSIndexPath *)indexPath {
         
         [tableView reloadData];
     }
-}
+}	
 
 #pragma mark - NewRecordViewControllerDelegate implementation
 
