@@ -11,13 +11,16 @@
 #import "RecordsManager.h"
 #import "RecordsViewController.h"
 #import "OptionsViewController.h"
+#import "Preferences.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
+static NSString *const DefaultCodedFileNameForLocalStore = @"AwesomeCodedFileName.dat";
 
 @interface RecordsViewController ()
     <UITableViewDataSource,
      UITableViewDelegate,
-     NewRecordViewControllerDelegate>
+     NewRecordViewControllerDelegate,
+     OptionsViewControllerDelegate>
 
 @property (nonatomic, readonly) RecordsManager *recordsManager;
 
@@ -42,12 +45,21 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
         NSURL *const documentDirectoryURL =
             [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
                                                     inDomains:NSUserDomainMask] lastObject];
-        NSURL *const fileURLForLocalStore =
-            [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
-
+        
+        NSURL *fileURLForLocalStore = nil;
+        
+        switch ([[Preferences standardPreferences]keepingMode]) {
+            case KeepingModeEncoded:
+                fileURLForLocalStore = [documentDirectoryURL URLByAppendingPathComponent:DefaultCodedFileNameForLocalStore];
+                break;
+            
+            case KeepingModePlist:
+            default:
+                fileURLForLocalStore = [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
+                break;
+        }
         recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
     }
-
     return recordsManager_;
 }
 
@@ -65,7 +77,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 - (IBAction)didTouchOptionsBarButtonItem:(UIBarButtonItem *)sender
 {
-    OptionsViewController *const rootViewController = [[OptionsViewController alloc] init];
+    OptionsViewController *const rootViewController = [[OptionsViewController alloc] initWithDelegate:self];
 
     UINavigationController *const navigationController =
         [[UINavigationController alloc] initWithRootViewController:rootViewController];
@@ -147,11 +159,25 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (record) {
         [self.recordsManager registerRecord:record];
-        [self.recordsManager synchronize];
+        if ([self.recordsManager synchronize]) {
+            NSLog(@"Successfull synchronized");
+        }
+        else {
+            NSLog(@"Synchronization error!");
+        }
         [self.tableView reloadData];
     }
     [self dismissViewControllerAnimated:YES
                              completion:NULL];
+}
+
+#pragma mark - OptionsViewControllerDelegate implementation
+
+- (void)didCloseOptionsMenu:(OptionsViewController *)sender
+{
+    recordsManager_ = nil;
+    [self recordsManager];
+    [self.tableView reloadData];
 }
 
 

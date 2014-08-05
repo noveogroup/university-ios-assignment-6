@@ -8,6 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OptionsViewController : UIViewController
+@class OptionsViewController;
+@protocol OptionsViewControllerDelegate <NSObject>
+
+- (void) didCloseOptionsMenu:(OptionsViewController *)sender;
 
 @end
+
+@interface OptionsViewController : UIViewController
+
+- (id)initWithDelegate:(id<OptionsViewControllerDelegate>) delegate;
+
+@end
+
+

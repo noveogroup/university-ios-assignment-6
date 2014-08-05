@@ -164,7 +164,7 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 - (void)didTouchCancelBarButtonItem:(UIBarButtonItem *)sender
 {
     if (self.record) {
-        [self saveRecord];
+        [self.delegate newRecordViewController:self didFinishWithRecord:self.record];
     }
     else {
         [self.delegate newRecordViewController:self didFinishWithRecord:nil];

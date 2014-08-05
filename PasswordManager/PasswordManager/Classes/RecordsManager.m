@@ -7,6 +7,7 @@
 //
 
 #import "RecordsManager.h"
+#import "Preferences.h"
 
 @interface RecordsManager ()
 
@@ -58,12 +59,21 @@
 - (NSMutableArray *)mutableRecords
 {
     if (!mutableRecords_) {
-        mutableRecords_ = [NSMutableArray arrayWithContentsOfURL:self.url];
-        if (!mutableRecords_) {
-            mutableRecords_ = [NSMutableArray array];
-        }
-    }
+        switch ([[Preferences standardPreferences]keepingMode]) {
+            case KeepingModeEncoded:
+                mutableRecords_ = [NSKeyedUnarchiver unarchiveObjectWithFile:
+                    [self.url path]];
+            break;
 
+            case KeepingModePlist:
+            default:
+                mutableRecords_ = [NSMutableArray arrayWithContentsOfURL:self.url];
+            break;
+    }
+    if (!mutableRecords_) {
+        mutableRecords_ = [NSMutableArray array];
+    }
+    }
     return mutableRecords_;
 }
 
@@ -76,7 +86,17 @@
 
 - (BOOL)synchronize
 {
-    return [self.mutableRecords writeToURL:self.url atomically:YES];
+    switch ([[Preferences standardPreferences]keepingMode]) {
+        case KeepingModeEncoded:
+            return [NSKeyedArchiver archiveRootObject:mutableRecords_ toFile:[self.url path]];
+            break;
+            
+        case KeepingModePlist:
+        default:
+            return [self.records writeToURL:self.url atomically:YES];
+            break;
+        }
 }
+
 
 @end

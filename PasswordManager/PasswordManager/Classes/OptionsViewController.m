@@ -9,12 +9,21 @@
 #import "OptionsViewController.h"
 #import "Preferences.h"
 
+static NSString *const kKeepingModeString = @"Keeping Mode";
+static NSString *const kPasswordStrengthString = @"Password Strength";
+
+static NSString *const kKeepingModePlistStringValue = @"Plist";
+static NSString *const kKeepingModeEncodedStringValue = @"Encoded";
+
 @interface OptionsViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (strong, nonatomic) NSMutableDictionary *mutableOptions;
-@property (strong, nonatomic) NSMutableDictionary *mutableSafeModes;
+@property (strong, nonatomic) NSMutableDictionary *mutableKeepingModes;
+@property (strong, nonatomic) NSArray *stringModes;
+
+@property (weak,nonatomic) id<OptionsViewControllerDelegate> delegate;
 
 @end
 
@@ -22,16 +31,24 @@
 
 #pragma mark - Inits
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)init
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super init];
     if (self) {
         // Custom initialization
-        self.mutableOptions = [@{@"Password Strength":
+        self.mutableOptions = [@{kPasswordStrengthString:
             @([[Preferences standardPreferences]passwordStrength])} mutableCopy];
-        self.mutableSafeModes = [@{@"Safe Mode":@(0)} mutableCopy];
+        self.mutableKeepingModes = [@{kKeepingModeString:
+            @([[Preferences standardPreferences]keepingMode])} mutableCopy];
+        self.stringModes = @[kKeepingModePlistStringValue, kKeepingModeEncodedStringValue];
     }
     return self;
+}
+
+- (id)initWithDelegate:(id<OptionsViewControllerDelegate>) delegate
+{
+    self.delegate = delegate;
+    return [self init];
 }
 
 #pragma mark - View's lifecycle
@@ -40,34 +57,23 @@
 {
     [super viewDidLoad];
     if (!!self.navigationItem) {
-        UIBarButtonItem *const cancelBarButtonItem =
+        UIBarButtonItem *const doneBarButtonItem =
             [[UIBarButtonItem alloc]
-                initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                      target:self
-                                     action:@selector(didTouchCancelBarButtonItem:)];
-        [self.navigationItem setLeftBarButtonItem:cancelBarButtonItem];
-
-        UIBarButtonItem *const saveBarButtonItem =
-            [[UIBarButtonItem alloc]
-                initWithBarButtonSystemItem:UIBarButtonSystemItemSave
-                                     target:self
-                                     action:@selector(didTouchSaveBarButtonItem:)];
-        [self.navigationItem setRightBarButtonItem:saveBarButtonItem];
+                                     action:@selector(didTouchDoneBarButtonItem:)];
+        [self.navigationItem setLeftBarButtonItem:doneBarButtonItem];
     }
 
 }
 
 #pragma mark - Actions
 
-- (void)didTouchCancelBarButtonItem:(UIBarButtonItem *)sender
+- (void)didTouchDoneBarButtonItem:(UIBarButtonItem *)sender
 {
     [self dismissViewControllerAnimated:YES
                              completion:NULL];
-}
-
-- (void)didTouchSaveBarButtonItem:(UIBarButtonItem *)sender
-{
-
+    [self.delegate didCloseOptionsMenu:self];
 }
 
 #pragma mark - UITableViewDataSource implementation
@@ -78,7 +84,7 @@
     if (section == 0) {
         return [self.mutableOptions count];
     }
-    else return [self.mutableSafeModes count];
+    else return [self.mutableKeepingModes count];
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -107,11 +113,13 @@
         tableViewCell.textLabel.text = key;
         tableViewCell.detailTextLabel.text = [NSString stringWithFormat:@"%@", self.mutableOptions[key]];
     }
-    else {
+    else if (indexPath.section == 1)  {
             NSString *const key =
-            [[self.mutableSafeModes allKeys]objectAtIndex:indexPath.row];
+            [[self.mutableKeepingModes allKeys]objectAtIndex:indexPath.row];
         tableViewCell.textLabel.text = key;
-        tableViewCell.detailTextLabel.text = [NSString stringWithFormat:@"%@", self.mutableSafeModes[key]];
+        NSString *const modeStringValue =
+            self.stringModes [[self.mutableKeepingModes[key]intValue]];
+        tableViewCell.detailTextLabel.text = modeStringValue;
     }
     return tableViewCell;
 
@@ -128,21 +136,49 @@
     return 2;
 }
 
-- (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [tableView beginUpdates];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [tableView endUpdates];
-    }
-}
 
 #pragma mark - UITableViewDelegate implementation
 
 -       (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 0) {
+        // Process Password Strength
+        switch ([[Preferences standardPreferences]passwordStrength]) {
+            case PasswordStrengthStrong:
+                [[Preferences standardPreferences]setPasswordStrength:PasswordStrengthWeak];
+                break;
+            
+            case PasswordStrengthMedium:
+                [[Preferences standardPreferences]setPasswordStrength:PasswordStrengthStrong];
+                break;
+
+            case PasswordStrengthWeak:
+            default:
+                [[Preferences standardPreferences]setPasswordStrength:PasswordStrengthMedium];
+                break;
+        }
+        self.mutableOptions = [@{kPasswordStrengthString:
+                    @([[Preferences standardPreferences]passwordStrength])} mutableCopy];
+    }
+    else if (indexPath.section == 1) {
+        // Process Keeping Options
+        switch ([[Preferences standardPreferences]keepingMode]) {
+            case KeepingModeEncoded:
+                [[Preferences standardPreferences]setKeepingMode:KeepingModePlist];
+                
+                break;
+                
+            case KeepingModePlist:
+            default:
+                [[Preferences standardPreferences]setKeepingMode:KeepingModeEncoded];
+                break;
+        }
+        self.mutableKeepingModes = [@{kKeepingModeString:
+                    @([[Preferences standardPreferences]keepingMode])} mutableCopy];
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.tableView reloadData];
 }
 
 
