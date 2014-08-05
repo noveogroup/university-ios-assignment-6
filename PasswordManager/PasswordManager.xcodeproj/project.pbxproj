@@ -14,6 +14,9 @@
 		849940F81990B5950001C817 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 849940F11990B5950001C817 /* FMDatabaseQueue.m */; };
 		849940F91990B5950001C817 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 849940F41990B5950001C817 /* FMResultSet.m */; };
 		849940FB1990B5AB0001C817 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 849940FA1990B5AB0001C817 /* libsqlite3.dylib */; };
+		849940FE1990BB840001C817 /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 849940FD1990BB840001C817 /* Database.m */; };
+		849941021990BF0A0001C817 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 849941001990BF0A0001C817 /* SettingsViewController.m */; };
+		849941031990BF0A0001C817 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849941011990BF0A0001C817 /* SettingsViewController.xib */; };
 		93DE15E318B4AA8D00A46FD2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E218B4AA8D00A46FD2 /* Foundation.framework */; };
 		93DE15E518B4AA8D00A46FD2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E418B4AA8D00A46FD2 /* CoreGraphics.framework */; };
 		93DE15E718B4AA8D00A46FD2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E618B4AA8D00A46FD2 /* UIKit.framework */; };
@@ -47,6 +50,11 @@
 		849940F31990B5950001C817 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		849940F41990B5950001C817 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		849940FA1990B5AB0001C817 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		849940FC1990BB840001C817 /* Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Database.h; sourceTree = "<group>"; };
+		849940FD1990BB840001C817 /* Database.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Database.m; sourceTree = "<group>"; };
+		849940FF1990BF0A0001C817 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		849941001990BF0A0001C817 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		849941011990BF0A0001C817 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
 		93C1371818B602AD0021D0F2 /* Record.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Record.h; sourceTree = "<group>"; };
 		93DE15DF18B4AA8D00A46FD2 /* PasswordManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PasswordManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93DE15E218B4AA8D00A46FD2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -184,6 +192,11 @@
 				93E767D918B5D8DE0053F9F0 /* RecordsViewController.h */,
 				93E767DA18B5D8DE0053F9F0 /* RecordsViewController.m */,
 				93E767DB18B5D8DE0053F9F0 /* RecordsViewController.xib */,
+				849940FC1990BB840001C817 /* Database.h */,
+				849940FD1990BB840001C817 /* Database.m */,
+				849940FF1990BF0A0001C817 /* SettingsViewController.h */,
+				849941001990BF0A0001C817 /* SettingsViewController.m */,
+				849941011990BF0A0001C817 /* SettingsViewController.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -253,6 +266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				93E767E818B5F9BA0053F9F0 /* NewRecordViewController.xib in Resources */,
+				849941031990BF0A0001C817 /* SettingsViewController.xib in Resources */,
 				8499403D198F729B0001C817 /* settings.png in Resources */,
 				93DE15ED18B4AA8D00A46FD2 /* InfoPlist.strings in Resources */,
 				93DE15F518B4AA8D00A46FD2 /* Images.xcassets in Resources */,
@@ -276,7 +290,9 @@
 				93DE161818B4AB7F00A46FD2 /* PasswordGenerator.m in Sources */,
 				93DE161E18B5929400A46FD2 /* NSMutableString+Exchange.m in Sources */,
 				93E767E618B5F3790053F9F0 /* NewRecordViewController.m in Sources */,
+				849941021990BF0A0001C817 /* SettingsViewController.m in Sources */,
 				849940F91990B5950001C817 /* FMResultSet.m in Sources */,
+				849940FE1990BB840001C817 /* Database.m in Sources */,
 				93E767E318B5EDD90053F9F0 /* Preferences.m in Sources */,
 				93E767E018B5DA9A0053F9F0 /* RecordsManager.m in Sources */,
 				849940F51990B5950001C817 /* FMDatabase.m in Sources */,

@@ -10,13 +10,15 @@
 #import "Record.h"
 #import "RecordsManager.h"
 #import "RecordsViewController.h"
+#import "SettingsViewController.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 @interface RecordsViewController ()
     <UITableViewDataSource,
      UITableViewDelegate,
-     NewRecordViewControllerDelegate>
+     NewRecordViewControllerDelegate,
+     SettingsViewControllerDelegate>
 
 @property (nonatomic, readonly) RecordsManager *recordsManager;
 
@@ -51,19 +53,27 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 #pragma mark - Actions
 
+- (void) showViewControllerInNavigationController:(UIViewController *)viewController {
+    UINavigationController *const navigationController =
+        [[UINavigationController alloc] initWithRootViewController:viewController];
+    
+    [self presentViewController:navigationController animated:YES completion:NULL];
+}
+
 - (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender
 {
     NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] init];
     rootViewController.delegate = self;
 
-    UINavigationController *const navigationController =
-        [[UINavigationController alloc] initWithRootViewController:rootViewController];
-    [self presentViewController:navigationController animated:YES completion:NULL];
+    [self showViewControllerInNavigationController:rootViewController];
 }
 
 - (IBAction)didTouchSettingsBarButtonItem:(UIBarButtonItem *)sender
 {
-    
+    SettingsViewController *const rootViewController = [[SettingsViewController alloc] init];
+    rootViewController.delegate = self;
+
+    [self showViewControllerInNavigationController:rootViewController];
 }
 
 #pragma mark - UITableViewDataSource implementation
@@ -156,4 +166,12 @@ canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     [self dismissViewControllerAnimated:YES
                              completion:NULL];
 }
+
+#pragma mark - SettingsViewControllerDelegate implementation
+
+- (void)settingsViewControllerDone:(SettingsViewController *)sender {
+    [self dismissViewControllerAnimated:YES
+                             completion:NULL];
+}
+
 @end
