@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PasswordManager/Classes/RecordsManager.m"
-            timestampString = "428841066.408128"
+            timestampString = "428916200.178985"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
             landmarkName = "-replaceRecord:with:"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,12 +26,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PasswordManager/Classes/RecordsManager.m"
-            timestampString = "428841068.568095"
+            timestampString = "428916200.178985"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "54"
-            endingLineNumber = "54"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
             landmarkName = "-replaceRecord:with:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PasswordManager/Classes/RecordsManager.m"
+            timestampString = "428916200.178985"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "101"
+            endingLineNumber = "101"
+            landmarkName = "-mutableRecords"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

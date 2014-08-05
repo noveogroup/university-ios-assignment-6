@@ -8,17 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, PasswordStorage) {
+    PasswordStoragePLIST,
+    PasswordStorageEncodedFile
+};
+
 @interface RecordsManager : NSObject
+
+@property (nonatomic) NSInteger passwordStorage;
 
 /**
  *  Performs no initialization; please use @c -initWithURL: instead.
  */
 - (id)init;
-
-/**
- *  Initializes a newly created instance with the specifed URL.
- */
-- (instancetype)initWithURL:(NSURL *)url;
 
 /**
  *  Registers the specified record.

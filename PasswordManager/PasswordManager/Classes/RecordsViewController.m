@@ -37,13 +37,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 - (RecordsManager *)recordsManager
 {
     if (!recordsManager_) {
-        NSURL *const documentDirectoryURL =
-            [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
-                                                    inDomains:NSUserDomainMask] lastObject];
-        NSURL *const fileURLForLocalStore =
-            [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
-
-        recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
+        recordsManager_ = [[RecordsManager alloc] init];
     }
 
     return recordsManager_;
