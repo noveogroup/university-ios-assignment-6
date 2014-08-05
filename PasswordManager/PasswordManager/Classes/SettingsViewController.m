@@ -7,6 +7,7 @@
 //
 
 #import "SettingsViewController.h"
+#import "Preferences.h"
 
 @interface SettingsViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -14,6 +15,13 @@
 
 @property (nonatomic, strong) NSArray *sections;
 @property (nonatomic, strong) NSDictionary *sectionsContent;
+
+@property (nonatomic, strong) NSMutableArray *selectedRowsInSections;
+@property (nonatomic, strong) NSMutableArray *previousIndexPaths;
+
+@property (nonatomic, weak) Preferences *preferences;
+
+@property (nonatomic, strong) NSDictionary *passwordStrength;
 
 @end
 
@@ -39,6 +47,24 @@
                 @"SQLite"
             ]
         };
+        
+        _selectedRowsInSections = [[NSMutableArray alloc] initWithArray:@[
+            [NSNumber numberWithInt:0],
+            [NSNumber numberWithInt:0]
+        ]];
+        
+        _previousIndexPaths = [[NSMutableArray alloc] initWithArray:@[
+            [NSIndexPath indexPathForRow:0 inSection:0],
+            [NSIndexPath indexPathForRow:0 inSection:1]
+        ]];
+        
+        _preferences = [Preferences standardPreferences];
+        
+        _passwordStrength = @{
+            [NSNumber numberWithInteger:PasswordStrengthWeak]: [NSNumber numberWithInteger:0],
+            [NSNumber numberWithInteger:PasswordStrengthMedium]: [NSNumber numberWithInteger:1],
+            [NSNumber numberWithInteger:PasswordStrengthStrong]: [NSNumber numberWithInteger:2]
+        };
     }
     return self;
 }
@@ -55,9 +81,11 @@
                                      action:@selector(didTouchDoneBarButtonItem:)];
         [self.navigationItem setLeftBarButtonItem:backBarButtonItem];
     }
+    
+    NSLog(@"reload");
 }
 
-#pragma mark - TableViewDataSourceDeletgate implementation
+#pragma mark - TableViewDataSource implementation
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return [self.sections count];
 }
@@ -69,13 +97,35 @@
     return [sectionContent count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView
+    cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc] init];
     
     NSString *sectionTitle = [self.sections objectAtIndex:indexPath.section];
     NSArray *sectionContents = [self.sectionsContent objectForKey:sectionTitle];
     NSString *menuTitle = [sectionContents objectAtIndex:indexPath.row];
     
+    switch (indexPath.section) {
+        // password strength
+        case 0: {
+            NSInteger currentStrengthValue = self.preferences.passwordStrength;
+            NSNumber *currentStrength = [NSNumber numberWithInteger:currentStrengthValue];
+            
+            if (indexPath.row == [self.passwordStrength[currentStrength] integerValue]) {
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            }
+            
+            break;
+        }
+            
+        case 1: // storage type
+            
+            break;
+
+        default:
+            break;
+    }
+
     cell.textLabel.text = menuTitle;
     
     return cell;
@@ -83,6 +133,23 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     return [self.sections objectAtIndex:section];
+}
+
+#pragma mark - TableViewDeletgate implementation
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSIndexPath *oldIndexPath = self.previousIndexPaths[indexPath.section];
+    
+    UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:oldIndexPath];
+    UITableViewCell *newCell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    self.selectedRowsInSections[indexPath.section] = [NSNumber numberWithInteger:indexPath.row];
+    
+    oldCell.accessoryType = UITableViewCellAccessoryNone;
+    newCell.accessoryType = UITableViewCellAccessoryCheckmark;
+    
+    self.previousIndexPaths[indexPath.section] = indexPath;
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - Actions
