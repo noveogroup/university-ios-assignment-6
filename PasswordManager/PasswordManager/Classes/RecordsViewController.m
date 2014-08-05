@@ -25,6 +25,7 @@ static NSString *const DefaultCodedFileNameForLocalStore = @"AwesomeCodedFileNam
 @property (nonatomic, readonly) RecordsManager *recordsManager;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (readwrite, nonatomic) BOOL needsToUpdate;
 
 - (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender;
 - (IBAction)didTouchOptionsBarButtonItem:(UIBarButtonItem *)sender;
@@ -37,11 +38,21 @@ static NSString *const DefaultCodedFileNameForLocalStore = @"AwesomeCodedFileNam
 
 @synthesize tableView = tableView_;
 
+#pragma mark - Init
+- (instancetype) init
+{
+    if (self = [super init]) {
+        self.needsToUpdate = YES;
+    }
+    return self;
+}
+
 #pragma mark - Getters
 
 - (RecordsManager *)recordsManager
 {
-    if (!recordsManager_) {
+    if (self.needsToUpdate) {
+        self.needsToUpdate = NO;
         NSURL *const documentDirectoryURL =
             [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
                                                     inDomains:NSUserDomainMask] lastObject];
@@ -175,7 +186,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)didCloseOptionsMenu:(OptionsViewController *)sender
 {
-    recordsManager_ = nil;
+    self.needsToUpdate = YES;
     [self recordsManager];
     [self.tableView reloadData];
 }
