@@ -45,11 +45,13 @@
 			<array>
 				<string>Plist</string>
 				<string>Encode</string>
+				<string>FMDB</string>
 			</array>
 			<key>Values</key>
 			<array>
 				<integer>0</integer>
 				<integer>1</integer>
+				<string>2</string>
 			</array>
 		</dict>
 	</array>

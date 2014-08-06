@@ -14,6 +14,7 @@ static NSString *const kPasswordStrengthString = @"Password Strength";
 
 static NSString *const kKeepingModePlistStringValue = @"Plist";
 static NSString *const kKeepingModeEncodedStringValue = @"Encoded";
+static NSString *const kKeepingModeFmdbStringValue = @"FMDB";
 
 @interface OptionsViewController () <
     UITableViewDelegate,
@@ -43,7 +44,8 @@ static NSString *const kKeepingModeEncodedStringValue = @"Encoded";
             @([[Preferences standardPreferences]passwordStrength])} mutableCopy];
         self.mutableKeepingModes = [@{kKeepingModeString:
             @([[Preferences standardPreferences]keepingMode])} mutableCopy];
-        self.stringModes = @[kKeepingModePlistStringValue, kKeepingModeEncodedStringValue];
+        self.stringModes = @[kKeepingModePlistStringValue,
+            kKeepingModeEncodedStringValue, kKeepingModeFmdbStringValue];
     }
     return self;
 }
@@ -167,10 +169,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     else if (indexPath.section == 1) {
         // Process Keeping Options
         switch ([[Preferences standardPreferences]keepingMode]) {
-            case KeepingModeEncoded:
+            case KeepingModeFmdb:
                 [[Preferences standardPreferences]setKeepingMode:KeepingModePlist];
-                
                 break;
+                
+            case KeepingModeEncoded:
+                [[Preferences standardPreferences]setKeepingMode:KeepingModeFmdb];
+            break;
                 
             case KeepingModePlist:
             default:

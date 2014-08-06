@@ -19,6 +19,7 @@ typedef NS_ENUM(NSInteger, PasswordStrength) {
 typedef NS_ENUM(NSInteger, KeepingMode) {
     KeepingModePlist    = 0,
     KeepingModeEncoded  = 1,
+    KeepingModeFmdb     = 2,
     KeepingModeDefault  = KeepingModePlist
 };
 

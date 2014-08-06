@@ -15,6 +15,7 @@
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 static NSString *const DefaultCodedFileNameForLocalStore = @"AwesomeCodedFileName.dat";
+static NSString *const DefaultDBFileNameForLocalStore = @"AwesomeDB.db";
 
 @interface RecordsViewController ()
     <UITableViewDataSource,
@@ -56,6 +57,9 @@ static NSString *const DefaultCodedFileNameForLocalStore = @"AwesomeCodedFileNam
         NSURL *const documentDirectoryURL =
             [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
                                                     inDomains:NSUserDomainMask] lastObject];
+        NSURL *const libraryDirectoryURL =
+            [[[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory
+                                                    inDomains:NSUserDomainMask] lastObject];
         
         NSURL *fileURLForLocalStore = nil;
         
@@ -63,6 +67,10 @@ static NSString *const DefaultCodedFileNameForLocalStore = @"AwesomeCodedFileNam
             case KeepingModeEncoded:
                 fileURLForLocalStore = [documentDirectoryURL URLByAppendingPathComponent:DefaultCodedFileNameForLocalStore];
                 break;
+                
+            case KeepingModeFmdb:
+                fileURLForLocalStore = [libraryDirectoryURL URLByAppendingPathComponent:DefaultDBFileNameForLocalStore];
+            break;
             
             case KeepingModePlist:
             default:

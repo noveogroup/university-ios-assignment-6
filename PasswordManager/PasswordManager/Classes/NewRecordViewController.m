@@ -15,9 +15,9 @@ static const NSUInteger PasswordLengthShort = 5;
 static const NSUInteger PasswordLengthMedium = 10;
 static const NSUInteger PasswordLengthLong = 15;
 
-static const NSUInteger StrengthSegmentWeak = 0;
-static const NSUInteger StrengthSegmentMedium = 1;
-static const NSUInteger StrengthSegmentStrong = 2;
+static const NSUInteger SegmentStrengthWeak = 0;
+static const NSUInteger SegmentStrengthMedium = 1;
+static const NSUInteger SegmentStrengthStrong = 2;
 
 static NSString *const LowercaseLetterAlphabet = @"abcdefghijklmnopqrstuvwxyz";
 static NSString *const UppercaseLetterAlphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -131,16 +131,16 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
     self.passwordStrength = [[Preferences standardPreferences] passwordStrength];
     switch (self.passwordStrength) {
         case PasswordStrengthStrong: {
-            [self.passwordStrengthControl setSelectedSegmentIndex:StrengthSegmentStrong];
+            [self.passwordStrengthControl setSelectedSegmentIndex:SegmentStrengthStrong];
             break;
         }
         case PasswordStrengthMedium: {
-            [self.passwordStrengthControl setSelectedSegmentIndex:StrengthSegmentMedium];
+            [self.passwordStrengthControl setSelectedSegmentIndex:SegmentStrengthMedium];
             break;
         }
         case PasswordStrengthWeak:
         default: {
-            [self.passwordStrengthControl setSelectedSegmentIndex:StrengthSegmentWeak];
+            [self.passwordStrengthControl setSelectedSegmentIndex:SegmentStrengthWeak];
             break;
         }
     }
@@ -184,15 +184,15 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 - (IBAction)changePasswordStrangth:(UISegmentedControl *)sender
 {
         switch (sender.selectedSegmentIndex) {
-        case StrengthSegmentStrong: {
+        case SegmentStrengthStrong: {
             self.passwordStrength = PasswordStrengthStrong;
             break;
         }
-        case StrengthSegmentMedium: {
+        case SegmentStrengthMedium: {
             self.passwordStrength = PasswordStrengthMedium;
             break;
         }
-        case StrengthSegmentWeak:
+        case SegmentStrengthWeak:
         default: {
             self.passwordStrength = PasswordStrengthWeak;
             break;

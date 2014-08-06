@@ -8,11 +8,13 @@
 
 #import "RecordsManager.h"
 #import "Preferences.h"
+#import "FmdbHandler.h"
 
 @interface RecordsManager ()
 
 @property (nonatomic, strong) NSMutableArray *mutableRecords;
 @property (nonatomic, strong) NSURL *url;
+@property (nonatomic, strong) FmdbHandler *recordsDbHandler;
 
 @end
 
@@ -20,6 +22,7 @@
 
 @synthesize url = url_;
 @synthesize mutableRecords = mutableRecords_;
+@synthesize recordsDbHandler = recordsDbHandler_;
 
 #pragma mark - Initialization
 
@@ -35,6 +38,10 @@
 {
     if ((self = [super init])) {
         url_ = url;
+        if ([[Preferences standardPreferences]keepingMode]==KeepingModeFmdb) {
+            recordsDbHandler_ = [[FmdbHandler alloc]initWithContentsOfUrl:url];
+        }
+        
     }
 
     return self;
@@ -64,6 +71,10 @@
                 mutableRecords_ = [NSKeyedUnarchiver unarchiveObjectWithFile:
                     [self.url path]];
             break;
+            
+            case KeepingModeFmdb:
+                mutableRecords_ = [[self.recordsDbHandler loadArrayFromDb]mutableCopy];
+            break;
 
             case KeepingModePlist:
             default:
@@ -88,7 +99,12 @@
 {
     switch ([[Preferences standardPreferences]keepingMode]) {
         case KeepingModeEncoded:
-            return [NSKeyedArchiver archiveRootObject:mutableRecords_ toFile:[self.url path]];
+            return [NSKeyedArchiver archiveRootObject:self.records toFile:[self.url path]];
+            break;
+            
+        case KeepingModeFmdb:
+            [self.recordsDbHandler saveArrayToDb:self.records];
+            return YES;
             break;
             
         case KeepingModePlist:
