@@ -34,10 +34,10 @@
 
 @interface NewRecordViewController : UIViewController
 
--(instancetype)initWithRecord:(NSDictionary*)currentRecord;
 /**
  *  Returns the object that handles the delegated duties.
  */
+@property (copy, nonatomic) NSDictionary* currentRecord;
 @property (nonatomic, weak) id<NewRecordViewControllerDelegate> delegate;
 
 @end

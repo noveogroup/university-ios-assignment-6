@@ -7,40 +7,56 @@
 //
 
 #import "RecordsManager.h"
+#import "DataBaseManager.h"
 
 static NSString *const kPasswordStorage = @"PasswordStorage";
 static NSString *const DefaultPLISTFileName = @"AwesomeFileName";
 static NSString *const DefaultEncodedFileName = @"WonderfulFileName";
+static NSString *const DefaultDataBaseFileName = @"Records.db";
 
 @interface RecordsManager ()
 
 @property (nonatomic, strong) NSMutableArray *mutableRecords;
-@property (nonatomic, strong) NSString *path;
+@property (nonatomic, strong) NSURL* url;
+@property (nonatomic, strong) DataBaseManager* dbManager;
 
 @end
 
 @implementation RecordsManager
 
-@synthesize path = path_;
+@synthesize url = url_;
 @synthesize passwordStorage = passwordStorage_;
 @synthesize mutableRecords = mutableRecords_;
 
 #pragma mark - Initialization
 
-- (instancetype)init
+- (id)init
+{
+    NSLog(@"Please use -initWithURL: instead.");
+    [self doesNotRecognizeSelector:_cmd];
+    
+    return nil;
+}
+
+- (instancetype)initWithURL:(NSURL *)url
 {
     if ((self = [super init])) {
-        passwordStorage_ = 1;
-        path_ = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        passwordStorage_ = 2;
+        url_ = url;
         switch (passwordStorage_) {
             case PasswordStoragePLIST:
             {
-                path_ = [path_ stringByAppendingPathComponent:DefaultPLISTFileName];
+                url_ = [url_ URLByAppendingPathComponent:DefaultPLISTFileName];
             }
                 break;
             case PasswordStorageEncodedFile:
             {
-                path_ = [path_ stringByAppendingPathComponent:DefaultEncodedFileName];
+                url_ = [url_ URLByAppendingPathComponent:DefaultEncodedFileName];
+            }
+                break;
+            case PasswordStorageDataBase:
+            {
+                url_ = [url_ URLByAppendingPathComponent:DefaultDataBaseFileName];
             }
                 break;
                 
@@ -61,6 +77,14 @@ static NSString *const DefaultEncodedFileName = @"WonderfulFileName";
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+-(DataBaseManager*)dbManager
+{
+    if(!_dbManager){
+        _dbManager = [[DataBaseManager alloc]initWithURL:self.url];
+    }
+    return _dbManager;
+}
+
 #pragma mark - Management of records
 
 - (void)registerRecord:(NSDictionary *)record
@@ -71,7 +95,7 @@ static NSString *const DefaultEncodedFileName = @"WonderfulFileName";
 }
 
 -(void)replaceRecord:(NSDictionary*)oldRecord
-                with:(NSDictionary*)newRecord
+                withRecord:(NSDictionary*)newRecord
 {
     if([self.mutableRecords containsObject:oldRecord]){
         NSInteger index = [self.mutableRecords indexOfObject:oldRecord];
@@ -87,20 +111,22 @@ static NSString *const DefaultEncodedFileName = @"WonderfulFileName";
 
 - (NSMutableArray *)mutableRecords
 {
-    NSLog(@"%@",self.path);
     if (!mutableRecords_) {
         switch (self.passwordStorage) {
             case PasswordStoragePLIST:
                 {
-                    NSURL* url = [NSURL fileURLWithPath:self.path];
-                    mutableRecords_ = [NSMutableArray arrayWithContentsOfURL:url];
+                    mutableRecords_ = [NSMutableArray arrayWithContentsOfURL:self.url];
                 }
                 break;
             case PasswordStorageEncodedFile:
                 {
-                    mutableRecords_ = [NSKeyedUnarchiver unarchiveObjectWithFile:self.path];
+                    mutableRecords_ = [NSKeyedUnarchiver unarchiveObjectWithFile:[self.url path]];
                 }
                 break;
+            case PasswordStorageDataBase:
+            {
+                mutableRecords_ = [[self.dbManager records] mutableCopy];
+            }
                 
             default:
                 break;
@@ -126,15 +152,18 @@ static NSString *const DefaultEncodedFileName = @"WonderfulFileName";
     switch (self.passwordStorage) {
         case PasswordStoragePLIST:
         {
-            NSURL* url = [NSURL fileURLWithPath:self.path];
-            return [self.mutableRecords writeToURL:url atomically:YES];
+            return [self.mutableRecords writeToURL:self.url atomically:YES];
         }
             break;
         case PasswordStorageEncodedFile:
         {
-            return [NSKeyedArchiver archiveRootObject:self.mutableRecords toFile:self.path];
+            return [NSKeyedArchiver archiveRootObject:self.mutableRecords toFile:[self.url path]];
         }
             break;
+        case PasswordStorageDataBase:
+        {
+            return [self.dbManager synchronizeWith:self.mutableRecords];
+        }
             
         default:
             break;

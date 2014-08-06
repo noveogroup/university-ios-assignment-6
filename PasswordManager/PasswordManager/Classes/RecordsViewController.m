@@ -37,7 +37,8 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 - (RecordsManager *)recordsManager
 {
     if (!recordsManager_) {
-        recordsManager_ = [[RecordsManager alloc] init];
+        NSURL* url = [[[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask] lastObject];
+        recordsManager_ = [[RecordsManager alloc] initWithURL:url];
     }
 
     return recordsManager_;
@@ -90,7 +91,8 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] initWithRecord:[self.recordsManager.records objectAtIndex:indexPath.row]];
+    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc]init];
+    rootViewController.currentRecord = self.recordsManager.records[indexPath.row];
     rootViewController.delegate = self;
     
     UINavigationController *const navigationController =
@@ -130,7 +132,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
                           with:(NSDictionary*)newRecord
 {
     if(oldRecord && newRecord){
-        [self.recordsManager replaceRecord:oldRecord with:newRecord];
+        [self.recordsManager replaceRecord:oldRecord withRecord:newRecord];
         [self.tableView reloadData];
     }
     [self dismissViewControllerAnimated:YES

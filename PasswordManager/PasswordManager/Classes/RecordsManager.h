@@ -10,7 +10,8 @@
 
 typedef NS_ENUM(NSInteger, PasswordStorage) {
     PasswordStoragePLIST,
-    PasswordStorageEncodedFile
+    PasswordStorageEncodedFile,
+    PasswordStorageDataBase
 };
 
 @interface RecordsManager : NSObject
@@ -23,12 +24,17 @@ typedef NS_ENUM(NSInteger, PasswordStorage) {
 - (id)init;
 
 /**
+ *  Initializes a newly created instance with the specifed URL.
+ */
+- (instancetype)initWithURL:(NSURL *)url;
+
+/**
  *  Registers the specified record.
  */
 - (void)registerRecord:(NSDictionary *)record;
 
 -(void)replaceRecord:(NSDictionary*)oldRecord
-                with:(NSDictionary*)newRecord;
+                withRecord:(NSDictionary*)newRecord;
 
 -(void)deleteRecord:(NSDictionary*)record;
 

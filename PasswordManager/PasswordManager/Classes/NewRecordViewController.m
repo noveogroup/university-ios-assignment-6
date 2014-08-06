@@ -22,7 +22,6 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 @interface NewRecordViewController ()
     <UITextFieldDelegate>
 
-@property (strong, nonatomic) NSDictionary* currentRecord;
 @property (weak, nonatomic) IBOutlet UITextField *serviceNameTextField;
 @property (weak, nonatomic) IBOutlet UILabel *passwordLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *passwordStrengthOption;
@@ -40,14 +39,6 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 @end
 
 @implementation NewRecordViewController
-
--(instancetype)initWithRecord:(NSDictionary *)currentRecord
-{
-    if(self = [super init]){
-        _currentRecord = currentRecord;
-    }
-    return self;
-}
 
 @synthesize delegate = delegate_;
 
