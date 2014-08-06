@@ -37,13 +37,8 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 - (RecordsManager *)recordsManager
 {
     if (!recordsManager_) {
-        NSURL *const documentDirectoryURL =
-            [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
-                                                    inDomains:NSUserDomainMask] lastObject];
-        NSURL *const fileURLForLocalStore =
-            [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
-
-        recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
+        NSURL* url = [[[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask] lastObject];
+        recordsManager_ = [[RecordsManager alloc] initWithURL:url];
     }
 
     return recordsManager_;
@@ -96,6 +91,25 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc]init];
+    rootViewController.currentRecord = self.recordsManager.records[indexPath.row];
+    rootViewController.delegate = self;
+    
+    UINavigationController *const navigationController =
+    [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    [self presentViewController:navigationController animated:YES completion:NULL];
+}
+
+- (void)tableView:(UITableView *)tableView
+commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(editingStyle == UITableViewCellEditingStyleDelete){
+        NSDictionary* record = [self.recordsManager.records objectAtIndex:indexPath.row];
+        [self.recordsManager deleteRecord:record];
+        [self.recordsManager synchronize];
+    }
+    [self.tableView reloadData];
 }
 
 #pragma mark - NewRecordViewControllerDelegate implementation
@@ -113,4 +127,19 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
                              completion:NULL];
 }
 
+-(void)newRecordViewController:(NewRecordViewController *)sender
+                       replace:(NSDictionary *)oldRecord
+                          with:(NSDictionary*)newRecord
+{
+    if(oldRecord && newRecord){
+        [self.recordsManager replaceRecord:oldRecord withRecord:newRecord];
+        [self.tableView reloadData];
+    }
+    [self dismissViewControllerAnimated:YES
+                             completion:NULL];
+}
+
 @end
+
+
+

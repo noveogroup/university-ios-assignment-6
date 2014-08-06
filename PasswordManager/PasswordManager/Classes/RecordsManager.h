@@ -8,7 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, PasswordStorage) {
+    PasswordStoragePLIST,
+    PasswordStorageEncodedFile,
+    PasswordStorageDataBase
+};
+
 @interface RecordsManager : NSObject
+
+@property (nonatomic) NSInteger passwordStorage;
 
 /**
  *  Performs no initialization; please use @c -initWithURL: instead.
@@ -24,6 +32,11 @@
  *  Registers the specified record.
  */
 - (void)registerRecord:(NSDictionary *)record;
+
+-(void)replaceRecord:(NSDictionary*)oldRecord
+                withRecord:(NSDictionary*)newRecord;
+
+-(void)deleteRecord:(NSDictionary*)record;
 
 /**
  *  Returns the records the receiver manages.

@@ -24,6 +24,7 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 
 @property (weak, nonatomic) IBOutlet UITextField *serviceNameTextField;
 @property (weak, nonatomic) IBOutlet UILabel *passwordLabel;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *passwordStrengthOption;
 
 - (void)refreshPassword;
 - (void)saveRecord;
@@ -33,6 +34,7 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 - (void)didTouchSaveBarButtonItem:(UIBarButtonItem *)sender;
 
 - (IBAction)didTouchRefreshButton:(UIButton *)sender;
+- (IBAction)changePasswordStrength:(id)sender;
 
 @end
 
@@ -78,7 +80,13 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
         NSDictionary *const record =
             @{kServiceName: self.serviceNameTextField.text,
               kPassword: self.passwordLabel.text};
-        [self.delegate newRecordViewController:self didFinishWithRecord:record];
+        if(self.currentRecord){
+            [self.delegate newRecordViewController:self replace:self.currentRecord with:record];
+        }
+        else{
+            [self.delegate newRecordViewController:self didFinishWithRecord:record];
+
+        }
     }
 }
 
@@ -103,6 +111,10 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
                                      action:@selector(didTouchSaveBarButtonItem:)];
         [self.navigationItem setRightBarButtonItem:saveBarButtonItem];
     }
+    if(self.currentRecord){
+        self.serviceNameTextField.text = [self.currentRecord valueForKey:kServiceName];
+        self.passwordLabel.text = [self.currentRecord valueForKey:kPassword];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -126,6 +138,25 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 
 - (IBAction)didTouchRefreshButton:(UIButton *)sender
 {
+    [self refreshPassword];
+}
+
+- (IBAction)changePasswordStrength:(id)sender
+{
+    switch (self.passwordStrengthOption.selectedSegmentIndex) {
+        case 0:
+            [[Preferences standardPreferences] setPasswordStrength:PasswordStrengthWeak];
+            break;
+        case 1:
+            [[Preferences standardPreferences] setPasswordStrength:PasswordStrengthMedium];
+            break;
+        case 2:
+            [[Preferences standardPreferences] setPasswordStrength:PasswordStrengthStrong];
+            break;
+            
+        default:
+            break;
+    }
     [self refreshPassword];
 }
 

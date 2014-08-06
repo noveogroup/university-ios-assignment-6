@@ -26,6 +26,10 @@
 - (void)newRecordViewController:(NewRecordViewController *)sender
             didFinishWithRecord:(NSDictionary *)record;
 
+-(void)newRecordViewController:(NewRecordViewController *)sender
+                       replace:(NSDictionary *)oldRecord
+                          with:(NSDictionary*)newRecord;
+
 @end
 
 @interface NewRecordViewController : UIViewController
@@ -33,6 +37,7 @@
 /**
  *  Returns the object that handles the delegated duties.
  */
+@property (copy, nonatomic) NSDictionary* currentRecord;
 @property (nonatomic, weak) id<NewRecordViewControllerDelegate> delegate;
 
 @end
