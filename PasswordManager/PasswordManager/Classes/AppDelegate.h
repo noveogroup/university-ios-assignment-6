@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol ShouldUpdateDefaultsDelegate <NSObject>
+
+
+- (void) updateDefaults:(id)sender;
+
+@end
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;

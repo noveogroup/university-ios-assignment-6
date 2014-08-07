@@ -15,6 +15,10 @@ static const NSUInteger PasswordLengthShort = 5;
 static const NSUInteger PasswordLengthMedium = 10;
 static const NSUInteger PasswordLengthLong = 15;
 
+static const NSUInteger SegmentStrengthWeak = 0;
+static const NSUInteger SegmentStrengthMedium = 1;
+static const NSUInteger SegmentStrengthStrong = 2;
+
 static NSString *const LowercaseLetterAlphabet = @"abcdefghijklmnopqrstuvwxyz";
 static NSString *const UppercaseLetterAlphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 static NSString *const DecimalDigitAlphabet = @"1234567890";
@@ -24,6 +28,9 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 
 @property (weak, nonatomic) IBOutlet UITextField *serviceNameTextField;
 @property (weak, nonatomic) IBOutlet UILabel *passwordLabel;
+@property (copy, nonatomic) NSDictionary *record;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *passwordStrengthControl;
+@property (readwrite, nonatomic) NSInteger passwordStrength;
 
 - (void)refreshPassword;
 - (void)saveRecord;
@@ -34,6 +41,8 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 
 - (IBAction)didTouchRefreshButton:(UIButton *)sender;
 
+- (IBAction)changePasswordStrangth:(UISegmentedControl *)sender;
+
 @end
 
 @implementation NewRecordViewController
@@ -43,13 +52,32 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 @synthesize serviceNameTextField = serviceNameTextField_;
 @synthesize passwordLabel = passwordLabel_;
 
+@synthesize record = record_;
+
+
+#pragma mark - Inits
+
+- (instancetype) initWithRecord:(NSDictionary *)record
+{
+    if (self = [super init]) {
+        record_ = record;
+    }
+    return self;
+}
+
+- (instancetype) init
+{
+    return [self initWithRecord:nil];
+}
+
+
 #pragma mark - Auxiliaries
 
 - (void)refreshPassword
 {
     NSUInteger passwordLength = 0;
     NSString *alphabet = LowercaseLetterAlphabet;
-    switch ([[Preferences standardPreferences] passwordStrength]) {
+    switch (self.passwordStrength) {
         case PasswordStrengthStrong: {
             passwordLength = PasswordLengthLong;
             alphabet = [alphabet stringByAppendingString:UppercaseLetterAlphabet];
@@ -87,7 +115,6 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
     if (!!self.navigationItem) {
         UIBarButtonItem *const cancelBarButtonItem =
             [[UIBarButtonItem alloc]
@@ -103,20 +130,47 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
                                      action:@selector(didTouchSaveBarButtonItem:)];
         [self.navigationItem setRightBarButtonItem:saveBarButtonItem];
     }
+    self.passwordStrength = [[Preferences standardPreferences] passwordStrength];
+    switch (self.passwordStrength) {
+        case PasswordStrengthStrong: {
+            [self.passwordStrengthControl setSelectedSegmentIndex:SegmentStrengthStrong];
+            break;
+        }
+        case PasswordStrengthMedium: {
+            [self.passwordStrengthControl setSelectedSegmentIndex:SegmentStrengthMedium];
+            break;
+        }
+        case PasswordStrengthWeak:
+        default: {
+            [self.passwordStrengthControl setSelectedSegmentIndex:SegmentStrengthWeak];
+            break;
+        }
+    }
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
-    [self refreshPassword];
+    if (!self.record) {
+        [self refreshPassword];
+    }
+    else {
+        self.passwordLabel.text = self.record[kPassword];
+        self.serviceNameTextField.text = self.record[kServiceName];
+    }
 }
 
 #pragma mark - Actions
 
 - (void)didTouchCancelBarButtonItem:(UIBarButtonItem *)sender
 {
-    [self.delegate newRecordViewController:self didFinishWithRecord:nil];
+    if (self.record) {
+        [self.delegate newRecordViewController:self didFinishWithRecord:self.record];
+    }
+    else {
+        [self.delegate newRecordViewController:self didFinishWithRecord:nil];
+    }
 }
 
 - (void)didTouchSaveBarButtonItem:(UIBarButtonItem *)sender
@@ -129,12 +183,31 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
     [self refreshPassword];
 }
 
+- (IBAction)changePasswordStrangth:(UISegmentedControl *)sender
+{
+        switch (sender.selectedSegmentIndex) {
+        case SegmentStrengthStrong: {
+            self.passwordStrength = PasswordStrengthStrong;
+            break;
+        }
+        case SegmentStrengthMedium: {
+            self.passwordStrength = PasswordStrengthMedium;
+            break;
+        }
+        case SegmentStrengthWeak:
+        default: {
+            self.passwordStrength = PasswordStrengthWeak;
+            break;
+        }
+    }
+    [self refreshPassword];
+}
+
 #pragma mark - UITextFieldDelegate implementation
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [self saveRecord];
-
     return YES;
 }
 

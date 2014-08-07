@@ -7,11 +7,14 @@
 //
 
 #import "RecordsManager.h"
+#import "Preferences.h"
+#import "FmdbHandler.h"
 
 @interface RecordsManager ()
 
 @property (nonatomic, strong) NSMutableArray *mutableRecords;
 @property (nonatomic, strong) NSURL *url;
+@property (nonatomic, strong) FmdbHandler *recordsDbHandler;
 
 @end
 
@@ -19,6 +22,7 @@
 
 @synthesize url = url_;
 @synthesize mutableRecords = mutableRecords_;
+@synthesize recordsDbHandler = recordsDbHandler_;
 
 #pragma mark - Initialization
 
@@ -34,6 +38,10 @@
 {
     if ((self = [super init])) {
         url_ = url;
+        if ([[Preferences standardPreferences]keepingMode]==KeepingModeFmdb) {
+            recordsDbHandler_ = [[FmdbHandler alloc]initWithContentsOfUrl:url];
+        }
+        
     }
 
     return self;
@@ -48,15 +56,37 @@
     }
 }
 
+- (void)deleteRecord:(NSDictionary *)record
+{
+    if ([record count] > 0) {
+        [self.mutableRecords removeObject:record];
+    }
+}
+
 - (NSMutableArray *)mutableRecords
 {
     if (!mutableRecords_) {
-        mutableRecords_ = [NSMutableArray arrayWithContentsOfURL:self.url];
+        switch ([[Preferences standardPreferences]keepingMode]) {
+            case KeepingModeEncoded:
+                mutableRecords_ = [NSKeyedUnarchiver unarchiveObjectWithFile:
+                    [self.url path]];
+                    NSLog(@"Encoded records loaded from: %@", [self.url path]);
+                    NSLog(@"Encoded records: %@", mutableRecords_);
+            break;
+            
+            case KeepingModeFmdb:
+                mutableRecords_ = [[self.recordsDbHandler loadArrayFromDb]mutableCopy];
+            break;
+
+            case KeepingModePlist:
+            default:
+                mutableRecords_ = [NSMutableArray arrayWithContentsOfURL:self.url];
+            break;
+        }
         if (!mutableRecords_) {
             mutableRecords_ = [NSMutableArray array];
         }
     }
-
     return mutableRecords_;
 }
 
@@ -69,7 +99,22 @@
 
 - (BOOL)synchronize
 {
-    return [self.mutableRecords writeToURL:self.url atomically:YES];
+    switch ([[Preferences standardPreferences]keepingMode]) {
+        case KeepingModeEncoded:
+            return [NSKeyedArchiver archiveRootObject:self.records toFile:[self.url path]];
+            break;
+            
+        case KeepingModeFmdb:
+            [self.recordsDbHandler saveArrayToDb:self.records];
+            return YES;
+            break;
+            
+        case KeepingModePlist:
+        default:
+            return [self.records writeToURL:self.url atomically:YES];
+            break;
+        }
 }
+
 
 @end
