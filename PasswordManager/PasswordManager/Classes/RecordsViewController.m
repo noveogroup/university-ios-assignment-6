@@ -24,9 +24,11 @@ static NSString *const DefaultDBFileNameForLocalStore = @"AwesomeDB.db";
      OptionsViewControllerDelegate>
 
 @property (nonatomic, readonly) RecordsManager *recordsManager;
+@property (nonatomic, readonly) RecordsManager *recordsDbManager;
+@property (nonatomic, readonly) RecordsManager *recordsEncodedManager;
+@property (nonatomic, readonly) RecordsManager *recordsPlistManager;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (readwrite, nonatomic) BOOL needsToUpdate;
 
 - (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender;
 - (IBAction)didTouchOptionsBarButtonItem:(UIBarButtonItem *)sender;
@@ -36,6 +38,9 @@ static NSString *const DefaultDBFileNameForLocalStore = @"AwesomeDB.db";
 @implementation RecordsViewController
 
 @synthesize recordsManager = recordsManager_;
+@synthesize recordsDbManager = recordsDbManager_;
+@synthesize recordsEncodedManager = recordsEncodedManager_;
+@synthesize recordsPlistManager = recordsPlistManager_;
 
 @synthesize tableView = tableView_;
 
@@ -43,7 +48,23 @@ static NSString *const DefaultDBFileNameForLocalStore = @"AwesomeDB.db";
 - (instancetype) init
 {
     if (self = [super init]) {
-        self.needsToUpdate = YES;
+        NSURL *const documentDirectoryURL =
+            [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                    inDomains:NSUserDomainMask] lastObject];
+        NSURL *const libraryDirectoryURL =
+            [[[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory
+                                                    inDomains:NSUserDomainMask] lastObject];
+        NSURL *fileURLForLocalStore = nil;
+        
+        fileURLForLocalStore = [libraryDirectoryURL URLByAppendingPathComponent:DefaultDBFileNameForLocalStore];
+        recordsPlistManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
+        
+        fileURLForLocalStore = [libraryDirectoryURL URLByAppendingPathComponent:DefaultDBFileNameForLocalStore];
+        recordsDbManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
+        
+        fileURLForLocalStore = [documentDirectoryURL URLByAppendingPathComponent:DefaultCodedFileNameForLocalStore];
+        recordsEncodedManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
+        
     }
     return self;
 }
@@ -52,32 +73,19 @@ static NSString *const DefaultDBFileNameForLocalStore = @"AwesomeDB.db";
 
 - (RecordsManager *)recordsManager
 {
-    if (self.needsToUpdate) {
-        self.needsToUpdate = NO;
-        NSURL *const documentDirectoryURL =
-            [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
-                                                    inDomains:NSUserDomainMask] lastObject];
-        NSURL *const libraryDirectoryURL =
-            [[[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory
-                                                    inDomains:NSUserDomainMask] lastObject];
-        
-        NSURL *fileURLForLocalStore = nil;
-        
-        switch ([[Preferences standardPreferences]keepingMode]) {
-            case KeepingModeEncoded:
-                fileURLForLocalStore = [documentDirectoryURL URLByAppendingPathComponent:DefaultCodedFileNameForLocalStore];
-                break;
-                
-            case KeepingModeFmdb:
-                fileURLForLocalStore = [libraryDirectoryURL URLByAppendingPathComponent:DefaultDBFileNameForLocalStore];
+    switch ([[Preferences standardPreferences]keepingMode]) {
+        case KeepingModeEncoded:
+            recordsManager_ = recordsEncodedManager_;
             break;
             
-            case KeepingModePlist:
-            default:
-                fileURLForLocalStore = [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
-                break;
-        }
-        recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
+        case KeepingModeFmdb:
+            recordsManager_ = recordsDbManager_;
+        break;
+        
+        case KeepingModePlist:
+        default:
+            recordsManager_ = recordsPlistManager_;
+            break;
     }
     return recordsManager_;
 }
@@ -197,8 +205,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [sender dismissViewControllerAnimated:YES
                                completion:NULL];
-    self.needsToUpdate = YES;
-    [self recordsManager];
     [self.tableView reloadData];
 }
 

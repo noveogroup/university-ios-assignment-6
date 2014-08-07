@@ -70,6 +70,8 @@
             case KeepingModeEncoded:
                 mutableRecords_ = [NSKeyedUnarchiver unarchiveObjectWithFile:
                     [self.url path]];
+                    NSLog(@"Encoded records loaded from: %@", [self.url path]);
+                    NSLog(@"Encoded records: %@", mutableRecords_);
             break;
             
             case KeepingModeFmdb:

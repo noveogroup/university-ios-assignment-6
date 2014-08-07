@@ -37,12 +37,13 @@
 
 - (void) saveArrayToDb:(NSArray *)records
 {
-    for (NSDictionary *record  in records) {
-        [self.queue inDatabase:^(FMDatabase *db) {
+    [self.queue inDatabase:^(FMDatabase *db) {
+        [db executeUpdate:@"DELETE FROM myrecords"];
+        for (NSDictionary *record  in records) {
             [db executeUpdate:@"INSERT INTO myrecords (service_name, password) "
             "VALUES (?,?)", record[kServiceName], record[kPassword]];
-        }];
-    }
+        }
+    }];
 }
 
 - (NSArray *)loadArrayFromDb
