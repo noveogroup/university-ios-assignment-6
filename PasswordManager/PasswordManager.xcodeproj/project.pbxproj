@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8499403D198F729B0001C817 /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 8499403C198F729B0001C817 /* settings.png */; };
+		849940F51990B5950001C817 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 849940EB1990B5950001C817 /* FMDatabase.m */; };
+		849940F61990B5950001C817 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 849940ED1990B5950001C817 /* FMDatabaseAdditions.m */; };
+		849940F71990B5950001C817 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 849940EF1990B5950001C817 /* FMDatabasePool.m */; };
+		849940F81990B5950001C817 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 849940F11990B5950001C817 /* FMDatabaseQueue.m */; };
+		849940F91990B5950001C817 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 849940F41990B5950001C817 /* FMResultSet.m */; };
+		849940FB1990B5AB0001C817 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 849940FA1990B5AB0001C817 /* libsqlite3.dylib */; };
+		849940FE1990BB840001C817 /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 849940FD1990BB840001C817 /* Database.m */; };
+		849941021990BF0A0001C817 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 849941001990BF0A0001C817 /* SettingsViewController.m */; };
+		849941031990BF0A0001C817 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849941011990BF0A0001C817 /* SettingsViewController.xib */; };
 		93DE15E318B4AA8D00A46FD2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E218B4AA8D00A46FD2 /* Foundation.framework */; };
 		93DE15E518B4AA8D00A46FD2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E418B4AA8D00A46FD2 /* CoreGraphics.framework */; };
 		93DE15E718B4AA8D00A46FD2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E618B4AA8D00A46FD2 /* UIKit.framework */; };
@@ -27,6 +37,24 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8499403C198F729B0001C817 /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
+		849940EA1990B5950001C817 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
+		849940EB1990B5950001C817 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
+		849940EC1990B5950001C817 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		849940ED1990B5950001C817 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		849940EE1990B5950001C817 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
+		849940EF1990B5950001C817 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
+		849940F01990B5950001C817 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
+		849940F11990B5950001C817 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
+		849940F21990B5950001C817 /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
+		849940F31990B5950001C817 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
+		849940F41990B5950001C817 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
+		849940FA1990B5AB0001C817 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		849940FC1990BB840001C817 /* Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Database.h; sourceTree = "<group>"; };
+		849940FD1990BB840001C817 /* Database.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Database.m; sourceTree = "<group>"; };
+		849940FF1990BF0A0001C817 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		849941001990BF0A0001C817 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		849941011990BF0A0001C817 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
 		93C1371818B602AD0021D0F2 /* Record.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Record.h; sourceTree = "<group>"; };
 		93DE15DF18B4AA8D00A46FD2 /* PasswordManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PasswordManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93DE15E218B4AA8D00A46FD2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -65,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				849940FB1990B5AB0001C817 /* libsqlite3.dylib in Frameworks */,
 				93DE15E518B4AA8D00A46FD2 /* CoreGraphics.framework in Frameworks */,
 				93DE15E718B4AA8D00A46FD2 /* UIKit.framework in Frameworks */,
 				93DE15E318B4AA8D00A46FD2 /* Foundation.framework in Frameworks */,
@@ -74,6 +103,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		849940E91990B5950001C817 /* fmdb */ = {
+			isa = PBXGroup;
+			children = (
+				849940EA1990B5950001C817 /* FMDatabase.h */,
+				849940EB1990B5950001C817 /* FMDatabase.m */,
+				849940EC1990B5950001C817 /* FMDatabaseAdditions.h */,
+				849940ED1990B5950001C817 /* FMDatabaseAdditions.m */,
+				849940EE1990B5950001C817 /* FMDatabasePool.h */,
+				849940EF1990B5950001C817 /* FMDatabasePool.m */,
+				849940F01990B5950001C817 /* FMDatabaseQueue.h */,
+				849940F11990B5950001C817 /* FMDatabaseQueue.m */,
+				849940F21990B5950001C817 /* FMDB.h */,
+				849940F31990B5950001C817 /* FMResultSet.h */,
+				849940F41990B5950001C817 /* FMResultSet.m */,
+			);
+			path = fmdb;
+			sourceTree = "<group>";
+		};
 		93DE15D618B4AA8D00A46FD2 = {
 			isa = PBXGroup;
 			children = (
@@ -94,6 +141,7 @@
 		93DE15E118B4AA8D00A46FD2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				849940FA1990B5AB0001C817 /* libsqlite3.dylib */,
 				93DE15E218B4AA8D00A46FD2 /* Foundation.framework */,
 				93DE15E418B4AA8D00A46FD2 /* CoreGraphics.framework */,
 				93DE15E618B4AA8D00A46FD2 /* UIKit.framework */,
@@ -105,6 +153,7 @@
 		93DE15E818B4AA8D00A46FD2 /* PasswordManager */ = {
 			isa = PBXGroup;
 			children = (
+				8499403C198F729B0001C817 /* settings.png */,
 				93DE161118B4AAD800A46FD2 /* Classes */,
 				93DE15E918B4AA8D00A46FD2 /* Supporting Files */,
 				93DE15F418B4AA8D00A46FD2 /* Images.xcassets */,
@@ -126,6 +175,7 @@
 		93DE161118B4AAD800A46FD2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				849940E91990B5950001C817 /* fmdb */,
 				93DE162218B5955400A46FD2 /* Categories */,
 				93DE161218B4AAD800A46FD2 /* AppDelegate.h */,
 				93DE161318B4AAD800A46FD2 /* AppDelegate.m */,
@@ -142,6 +192,11 @@
 				93E767D918B5D8DE0053F9F0 /* RecordsViewController.h */,
 				93E767DA18B5D8DE0053F9F0 /* RecordsViewController.m */,
 				93E767DB18B5D8DE0053F9F0 /* RecordsViewController.xib */,
+				849940FC1990BB840001C817 /* Database.h */,
+				849940FD1990BB840001C817 /* Database.m */,
+				849940FF1990BF0A0001C817 /* SettingsViewController.h */,
+				849941001990BF0A0001C817 /* SettingsViewController.m */,
+				849941011990BF0A0001C817 /* SettingsViewController.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -211,6 +266,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				93E767E818B5F9BA0053F9F0 /* NewRecordViewController.xib in Resources */,
+				849941031990BF0A0001C817 /* SettingsViewController.xib in Resources */,
+				8499403D198F729B0001C817 /* settings.png in Resources */,
 				93DE15ED18B4AA8D00A46FD2 /* InfoPlist.strings in Resources */,
 				93DE15F518B4AA8D00A46FD2 /* Images.xcassets in Resources */,
 				93E767DD18B5D8DE0053F9F0 /* RecordsViewController.xib in Resources */,
@@ -226,14 +283,21 @@
 			files = (
 				93DE161418B4AAD800A46FD2 /* AppDelegate.m in Sources */,
 				93DE161B18B591E900A46FD2 /* NSMutableString+Shuffling.m in Sources */,
+				849940F71990B5950001C817 /* FMDatabasePool.m in Sources */,
+				849940F81990B5950001C817 /* FMDatabaseQueue.m in Sources */,
 				93E767DC18B5D8DE0053F9F0 /* RecordsViewController.m in Sources */,
 				93DE162118B5955100A46FD2 /* NSString+Shuffling.m in Sources */,
 				93DE161818B4AB7F00A46FD2 /* PasswordGenerator.m in Sources */,
 				93DE161E18B5929400A46FD2 /* NSMutableString+Exchange.m in Sources */,
 				93E767E618B5F3790053F9F0 /* NewRecordViewController.m in Sources */,
+				849941021990BF0A0001C817 /* SettingsViewController.m in Sources */,
+				849940F91990B5950001C817 /* FMResultSet.m in Sources */,
+				849940FE1990BB840001C817 /* Database.m in Sources */,
 				93E767E318B5EDD90053F9F0 /* Preferences.m in Sources */,
 				93E767E018B5DA9A0053F9F0 /* RecordsManager.m in Sources */,
+				849940F51990B5950001C817 /* FMDatabase.m in Sources */,
 				93DE15EF18B4AA8D00A46FD2 /* main.m in Sources */,
+				849940F61990B5950001C817 /* FMDatabaseAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -26,6 +26,11 @@
 - (void)registerRecord:(NSDictionary *)record;
 
 /**
+ *  Deletes the specified record.
+ */
+- (void)deleteRecord:(NSDictionary *)record;
+
+/**
  *  Returns the records the receiver manages.
  */
 - (NSArray *)records;
@@ -36,5 +41,11 @@
  *  @return @c YES if the records were saved successfully to disk.
  */
 - (BOOL)synchronize;
+
+/**
+ *  Notify password managed that storage type is changed,
+ *  so it can reload all records from new data source
+ */
+- (void)storageTypeChanged;
 
 @end

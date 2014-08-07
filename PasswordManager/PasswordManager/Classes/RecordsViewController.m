@@ -10,13 +10,15 @@
 #import "Record.h"
 #import "RecordsManager.h"
 #import "RecordsViewController.h"
+#import "SettingsViewController.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 @interface RecordsViewController ()
     <UITableViewDataSource,
      UITableViewDelegate,
-     NewRecordViewControllerDelegate>
+     NewRecordViewControllerDelegate,
+     SettingsViewControllerDelegate>
 
 @property (nonatomic, readonly) RecordsManager *recordsManager;
 
@@ -51,14 +53,27 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 #pragma mark - Actions
 
+- (void) showViewControllerInNavigationController:(UIViewController *)viewController {
+    UINavigationController *const navigationController =
+        [[UINavigationController alloc] initWithRootViewController:viewController];
+    
+    [self presentViewController:navigationController animated:YES completion:NULL];
+}
+
 - (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender
 {
     NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] init];
     rootViewController.delegate = self;
 
-    UINavigationController *const navigationController =
-        [[UINavigationController alloc] initWithRootViewController:rootViewController];
-    [self presentViewController:navigationController animated:YES completion:NULL];
+    [self showViewControllerInNavigationController:rootViewController];
+}
+
+- (IBAction)didTouchSettingsBarButtonItem:(UIBarButtonItem *)sender
+{
+    SettingsViewController *const rootViewController = [[SettingsViewController alloc] init];
+    rootViewController.delegate = self;
+
+    [self showViewControllerInNavigationController:rootViewController];
 }
 
 #pragma mark - UITableViewDataSource implementation
@@ -84,6 +99,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
         [[self.recordsManager records] objectAtIndex:indexPath.row];
     tableViewCell.textLabel.text = [record valueForKey:kServiceName];
     tableViewCell.detailTextLabel.text = [record valueForKey:kPassword];
+    //[tableViewCell setEditing:YES animated:YES];
 
     return tableViewCell;
 
@@ -95,8 +111,31 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 -       (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc]
+        initWithRecord:[[self.recordsManager records] objectAtIndex:indexPath.row]];
+    rootViewController.delegate = self;
+
+    UINavigationController *const navigationController =
+        [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    [self presentViewController:navigationController animated:YES completion:NULL];
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
+// enable deleting password records
+-     (BOOL)tableView:(UITableView *)tableView
+canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [self.recordsManager deleteRecord:[[self.recordsManager records] objectAtIndex:indexPath.row]];
+        [self.recordsManager synchronize];
+        
+        [tableView reloadData];
+    }
+}	
 
 #pragma mark - NewRecordViewControllerDelegate implementation
 
@@ -111,6 +150,30 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     }
     [self dismissViewControllerAnimated:YES
                              completion:NULL];
+}
+
+-(void)newRecordViewController:(NewRecordViewController *)sender
+            didFinishWithNewRecord:(NSDictionary *)newRecord
+            insteadOfOldRecord:(NSDictionary *)oldRecord {
+    if (![oldRecord isEqual:newRecord]) {
+        [self.recordsManager deleteRecord:oldRecord];
+        [self.recordsManager registerRecord:newRecord];
+        [self.recordsManager synchronize];
+    }
+    
+    [self.tableView reloadData];
+    
+    [self dismissViewControllerAnimated:YES
+                             completion:NULL];
+}
+
+#pragma mark - SettingsViewControllerDelegate implementation
+
+- (void)settingsViewControllerDone:(SettingsViewController *)sender {
+    [self dismissViewControllerAnimated:YES
+                             completion:NULL];
+    [self.recordsManager storageTypeChanged];
+    [self.tableView reloadData];
 }
 
 @end
