@@ -80,10 +80,10 @@
             default:
                 mutableRecords_ = [NSMutableArray arrayWithContentsOfURL:self.url];
             break;
-    }
-    if (!mutableRecords_) {
-        mutableRecords_ = [NSMutableArray array];
-    }
+        }
+        if (!mutableRecords_) {
+            mutableRecords_ = [NSMutableArray array];
+        }
     }
     return mutableRecords_;
 }

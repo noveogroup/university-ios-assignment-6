@@ -17,7 +17,7 @@
 
 @interface OptionsViewController : UIViewController
 
-- (id)initWithDelegate:(id<OptionsViewControllerDelegate>) delegate;
+@property (nonatomic, weak) id <OptionsViewControllerDelegate> delegate;
 
 @end
 

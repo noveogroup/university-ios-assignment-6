@@ -25,13 +25,15 @@ static NSString *const kKeepingModeFmdbStringValue = @"FMDB";
 
 @property (strong, nonatomic) NSMutableDictionary *mutableOptions;
 @property (strong, nonatomic) NSMutableDictionary *mutableKeepingModes;
-@property (strong, nonatomic) NSArray *stringModes;
-
-@property (weak,nonatomic) id<OptionsViewControllerDelegate> delegate;
+@property (copy, nonatomic) NSArray *stringModes;
 
 @end
 
 @implementation OptionsViewController
+
+@synthesize mutableKeepingModes = mutableKeepingModes_;
+@synthesize mutableOptions = mutableOptions_;
+@synthesize stringModes = stringModes_;
 
 #pragma mark - Inits
 
@@ -40,20 +42,14 @@ static NSString *const kKeepingModeFmdbStringValue = @"FMDB";
     self = [super init];
     if (self) {
         // Custom initialization
-        self.mutableOptions = [@{kPasswordStrengthString:
+        mutableOptions_ = [@{kPasswordStrengthString:
             @([[Preferences standardPreferences]passwordStrength])} mutableCopy];
-        self.mutableKeepingModes = [@{kKeepingModeString:
+        mutableKeepingModes_ = [@{kKeepingModeString:
             @([[Preferences standardPreferences]keepingMode])} mutableCopy];
-        self.stringModes = @[kKeepingModePlistStringValue,
+        stringModes_ = @[kKeepingModePlistStringValue,
             kKeepingModeEncodedStringValue, kKeepingModeFmdbStringValue];
     }
     return self;
-}
-
-- (id)initWithDelegate:(id<OptionsViewControllerDelegate>) delegate
-{
-    self.delegate = delegate;
-    return [self init];
 }
 
 #pragma mark - View's lifecycle
@@ -76,8 +72,6 @@ static NSString *const kKeepingModeFmdbStringValue = @"FMDB";
 
 - (void)didTouchDoneBarButtonItem:(UIBarButtonItem *)sender
 {
-    [self dismissViewControllerAnimated:YES
-                             completion:NULL];
     [self.delegate didCloseOptionsMenu:self];
 }
 

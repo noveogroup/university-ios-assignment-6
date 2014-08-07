@@ -96,7 +96,8 @@ static NSString *const DefaultDBFileNameForLocalStore = @"AwesomeDB.db";
 
 - (IBAction)didTouchOptionsBarButtonItem:(UIBarButtonItem *)sender
 {
-    OptionsViewController *const rootViewController = [[OptionsViewController alloc] initWithDelegate:self];
+    OptionsViewController *const rootViewController = [[OptionsViewController alloc] init];
+    [rootViewController setDelegate:self];
 
     UINavigationController *const navigationController =
         [[UINavigationController alloc] initWithRootViewController:rootViewController];
@@ -194,6 +195,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)didCloseOptionsMenu:(OptionsViewController *)sender
 {
+    [sender dismissViewControllerAnimated:YES
+                               completion:NULL];
     self.needsToUpdate = YES;
     [self recordsManager];
     [self.tableView reloadData];
