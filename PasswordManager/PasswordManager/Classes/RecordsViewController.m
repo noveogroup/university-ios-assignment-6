@@ -172,6 +172,8 @@ canEditRowAtIndexPath:(NSIndexPath *)indexPath {
 - (void)settingsViewControllerDone:(SettingsViewController *)sender {
     [self dismissViewControllerAnimated:YES
                              completion:NULL];
+    [self.recordsManager storageTypeChanged];
+    [self.tableView reloadData];
 }
 
 @end

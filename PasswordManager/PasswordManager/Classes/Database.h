@@ -10,4 +10,7 @@
 
 @interface Database : NSObject
 
+- (void)saveRecords:(NSArray *)records;
+- (NSMutableArray *)loadRecords;
+
 @end

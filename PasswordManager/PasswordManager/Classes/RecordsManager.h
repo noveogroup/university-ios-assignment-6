@@ -42,4 +42,10 @@
  */
 - (BOOL)synchronize;
 
+/**
+ *  Notify password managed that storage type is changed,
+ *  so it can reload all records from new data source
+ */
+- (void)storageTypeChanged;
+
 @end
