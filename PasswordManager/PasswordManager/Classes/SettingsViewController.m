@@ -67,7 +67,7 @@
             [NSNumber numberWithInteger:PasswordStrengthStrong]: [NSNumber numberWithInteger:2]
         };
         
-        _passwordStrength = @{
+        _storageType = @{
             [NSNumber numberWithInteger:StorageTypeCoding]: [NSNumber numberWithInteger:0],
             [NSNumber numberWithInteger:StorageTypeDatabase]: [NSNumber numberWithInteger:1]
         };
@@ -88,7 +88,10 @@
         [self.navigationItem setLeftBarButtonItem:backBarButtonItem];
     }
     
-    NSLog(@"reload");
+    NSLog(@"reload settings view: \npassword: %d, \nstorage: %d",
+        self.preferences.passwordStrength,
+        self.preferences.storageType
+    );
 }
 
 #pragma mark - TableViewDataSource implementation
@@ -117,8 +120,12 @@
             NSInteger currentStrengthValue = self.preferences.passwordStrength;
             NSNumber *currentStrength = [NSNumber numberWithInteger:currentStrengthValue];
             
-            if (indexPath.row == [self.passwordStrength[currentStrength] integerValue]) {
+            NSInteger currentStrengthIndex = [self.passwordStrength[currentStrength] integerValue];
+            
+            if (indexPath.row == currentStrengthIndex) {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            } else {
+                cell.accessoryType = UITableViewCellAccessoryNone;
             }
             
             break;
@@ -131,7 +138,10 @@
             
             if (indexPath.row == [self.storageType[currentStorageType] integerValue]) {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            } else {
+                cell.accessoryType = UITableViewCellAccessoryNone;
             }
+
             
             break;
         }
@@ -151,19 +161,34 @@
 
 #pragma mark - TableViewDeletgate implementation
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSIndexPath *oldIndexPath = self.previousIndexPaths[indexPath.section];
-    
-    UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:oldIndexPath];
-    UITableViewCell *newCell = [tableView cellForRowAtIndexPath:indexPath];
-    
-    self.selectedRowsInSections[indexPath.section] = [NSNumber numberWithInteger:indexPath.row];
-    
-    oldCell.accessoryType = UITableViewCellAccessoryNone;
-    newCell.accessoryType = UITableViewCellAccessoryCheckmark;
-    
-    self.previousIndexPaths[indexPath.section] = indexPath;
+    NSNumber *index = [NSNumber numberWithInt:indexPath.row];
+
+    switch (indexPath.section) {
+        // password strength
+        case 0: {
+            NSNumber *strength = [self.passwordStrength allKeysForObject:index][0];
+            [self.preferences setPasswordStrength:[strength intValue]];
+            
+            break;
+        }
+        
+        // storage type
+        case 1: {
+            NSNumber *type = [self.storageType allKeysForObject:index][0];
+            [self.preferences setStorageType:[type intValue]];
+            
+            break;
+        }
+
+        default:
+            break;
+    }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    [tableView beginUpdates];
+    [tableView reloadData];
+    [tableView endUpdates];
 }
 
 #pragma mark - Actions
