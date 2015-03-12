@@ -135,4 +135,12 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     }
 }
 
+- (IBAction)didTouchSettingsBarButtonItem:(UIBarButtonItem *)sender {
+    SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
+    UINavigationController *navController = [[UINavigationController alloc]
+                                             initWithRootViewController:settingsVC];
+    [self presentViewController:navController animated:YES completion:nil];
+}
+
+
 @end

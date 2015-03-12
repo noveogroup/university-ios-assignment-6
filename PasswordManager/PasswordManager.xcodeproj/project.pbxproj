@@ -24,6 +24,8 @@
 		93E767E318B5EDD90053F9F0 /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E767E218B5EDD90053F9F0 /* Preferences.m */; };
 		93E767E618B5F3790053F9F0 /* NewRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E767E518B5F3790053F9F0 /* NewRecordViewController.m */; };
 		93E767E818B5F9BA0053F9F0 /* NewRecordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */; };
+		C06D27541AB1900B00B0E1D4 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C06D27521AB1900B00B0E1D4 /* SettingsViewController.m */; };
+		C06D27551AB1900B00B0E1D4 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C06D27531AB1900B00B0E1D4 /* SettingsViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +60,9 @@
 		93E767E418B5F3790053F9F0 /* NewRecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewRecordViewController.h; sourceTree = "<group>"; };
 		93E767E518B5F3790053F9F0 /* NewRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewRecordViewController.m; sourceTree = "<group>"; };
 		93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewRecordViewController.xib; sourceTree = "<group>"; };
+		C06D27511AB1900B00B0E1D4 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		C06D27521AB1900B00B0E1D4 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		C06D27531AB1900B00B0E1D4 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +147,9 @@
 				93E767D918B5D8DE0053F9F0 /* RecordsViewController.h */,
 				93E767DA18B5D8DE0053F9F0 /* RecordsViewController.m */,
 				93E767DB18B5D8DE0053F9F0 /* RecordsViewController.xib */,
+				C06D27511AB1900B00B0E1D4 /* SettingsViewController.h */,
+				C06D27521AB1900B00B0E1D4 /* SettingsViewController.m */,
+				C06D27531AB1900B00B0E1D4 /* SettingsViewController.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -185,7 +193,7 @@
 		93DE15D718B4AA8D00A46FD2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = Noveo;
 			};
 			buildConfigurationList = 93DE15DA18B4AA8D00A46FD2 /* Build configuration list for PBXProject "PasswordManager" */;
@@ -214,6 +222,7 @@
 				93DE15ED18B4AA8D00A46FD2 /* InfoPlist.strings in Resources */,
 				93DE15F518B4AA8D00A46FD2 /* Images.xcassets in Resources */,
 				93E767DD18B5D8DE0053F9F0 /* RecordsViewController.xib in Resources */,
+				C06D27551AB1900B00B0E1D4 /* SettingsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,6 +241,7 @@
 				93DE161E18B5929400A46FD2 /* NSMutableString+Exchange.m in Sources */,
 				93E767E618B5F3790053F9F0 /* NewRecordViewController.m in Sources */,
 				93E767E318B5EDD90053F9F0 /* Preferences.m in Sources */,
+				C06D27541AB1900B00B0E1D4 /* SettingsViewController.m in Sources */,
 				93E767E018B5DA9A0053F9F0 /* RecordsManager.m in Sources */,
 				93DE15EF18B4AA8D00A46FD2 /* main.m in Sources */,
 			);
