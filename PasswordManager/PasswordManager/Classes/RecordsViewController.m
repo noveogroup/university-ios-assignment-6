@@ -113,4 +113,26 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
                              completion:NULL];
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.tableView.allowsMultipleSelection = NO;
+    self.tableView.allowsMultipleSelectionDuringEditing = NO;
+}
+
+- (void)tableView:(UITableView *)tableView
+commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        NSDictionary *record = @{kServiceName: cell.textLabel.text,
+                                 kPassword: cell.detailTextLabel.text};
+        [self.recordsManager deleteRecord:record];
+        [self.recordsManager synchronize];
+        [tableView deleteRowsAtIndexPaths:@[indexPath]
+                         withRowAnimation:UITableViewRowAnimationRight];
+    }
+}
+
 @end

@@ -48,6 +48,11 @@
     }
 }
 
+- (void)deleteRecord:(NSDictionary *)record
+{
+    [self.mutableRecords removeObject:record];
+}
+
 - (NSMutableArray *)mutableRecords
 {
     if (!mutableRecords_) {
