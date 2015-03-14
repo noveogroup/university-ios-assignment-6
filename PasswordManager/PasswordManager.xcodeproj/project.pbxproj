@@ -23,7 +23,9 @@
 		93E767E018B5DA9A0053F9F0 /* RecordsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E767DF18B5DA9A0053F9F0 /* RecordsManager.m */; };
 		93E767E318B5EDD90053F9F0 /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E767E218B5EDD90053F9F0 /* Preferences.m */; };
 		93E767E618B5F3790053F9F0 /* NewRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E767E518B5F3790053F9F0 /* NewRecordViewController.m */; };
-		93E767E818B5F9BA0053F9F0 /* NewRecordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */; };
+		B577345F1AB41AE10024B1BD /* RecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B577345E1AB41AE10024B1BD /* RecordViewController.m */; };
+		B57734611AB431BA0024B1BD /* RecordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B57734601AB431BA0024B1BD /* RecordViewController.xib */; };
+		B57734641AB438C00024B1BD /* EditRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B57734631AB438C00024B1BD /* EditRecordViewController.m */; };
 		C06D27541AB1900B00B0E1D4 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C06D27521AB1900B00B0E1D4 /* SettingsViewController.m */; };
 		C06D27551AB1900B00B0E1D4 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C06D27531AB1900B00B0E1D4 /* SettingsViewController.xib */; };
 /* End PBXBuildFile section */
@@ -59,7 +61,11 @@
 		93E767E218B5EDD90053F9F0 /* Preferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Preferences.m; sourceTree = "<group>"; };
 		93E767E418B5F3790053F9F0 /* NewRecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewRecordViewController.h; sourceTree = "<group>"; };
 		93E767E518B5F3790053F9F0 /* NewRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewRecordViewController.m; sourceTree = "<group>"; };
-		93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewRecordViewController.xib; sourceTree = "<group>"; };
+		B577345D1AB41AE10024B1BD /* RecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordViewController.h; sourceTree = "<group>"; };
+		B577345E1AB41AE10024B1BD /* RecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordViewController.m; sourceTree = "<group>"; };
+		B57734601AB431BA0024B1BD /* RecordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecordViewController.xib; sourceTree = "<group>"; };
+		B57734621AB438C00024B1BD /* EditRecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditRecordViewController.h; sourceTree = "<group>"; };
+		B57734631AB438C00024B1BD /* EditRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditRecordViewController.m; sourceTree = "<group>"; };
 		C06D27511AB1900B00B0E1D4 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		C06D27521AB1900B00B0E1D4 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		C06D27531AB1900B00B0E1D4 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
@@ -134,9 +140,13 @@
 				93DE162218B5955400A46FD2 /* Categories */,
 				93DE161218B4AAD800A46FD2 /* AppDelegate.h */,
 				93DE161318B4AAD800A46FD2 /* AppDelegate.m */,
+				B577345D1AB41AE10024B1BD /* RecordViewController.h */,
+				B577345E1AB41AE10024B1BD /* RecordViewController.m */,
+				B57734601AB431BA0024B1BD /* RecordViewController.xib */,
 				93E767E418B5F3790053F9F0 /* NewRecordViewController.h */,
 				93E767E518B5F3790053F9F0 /* NewRecordViewController.m */,
-				93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */,
+				B57734621AB438C00024B1BD /* EditRecordViewController.h */,
+				B57734631AB438C00024B1BD /* EditRecordViewController.m */,
 				93DE161618B4AB7F00A46FD2 /* PasswordGenerator.h */,
 				93DE161718B4AB7F00A46FD2 /* PasswordGenerator.m */,
 				93E767E118B5EDD90053F9F0 /* Preferences.h */,
@@ -218,8 +228,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				93E767E818B5F9BA0053F9F0 /* NewRecordViewController.xib in Resources */,
 				93DE15ED18B4AA8D00A46FD2 /* InfoPlist.strings in Resources */,
+				B57734611AB431BA0024B1BD /* RecordViewController.xib in Resources */,
 				93DE15F518B4AA8D00A46FD2 /* Images.xcassets in Resources */,
 				93E767DD18B5D8DE0053F9F0 /* RecordsViewController.xib in Resources */,
 				C06D27551AB1900B00B0E1D4 /* SettingsViewController.xib in Resources */,
@@ -236,12 +246,14 @@
 				93DE161418B4AAD800A46FD2 /* AppDelegate.m in Sources */,
 				93DE161B18B591E900A46FD2 /* NSMutableString+Shuffling.m in Sources */,
 				93E767DC18B5D8DE0053F9F0 /* RecordsViewController.m in Sources */,
+				B577345F1AB41AE10024B1BD /* RecordViewController.m in Sources */,
 				93DE162118B5955100A46FD2 /* NSString+Shuffling.m in Sources */,
 				93DE161818B4AB7F00A46FD2 /* PasswordGenerator.m in Sources */,
 				93DE161E18B5929400A46FD2 /* NSMutableString+Exchange.m in Sources */,
 				93E767E618B5F3790053F9F0 /* NewRecordViewController.m in Sources */,
 				93E767E318B5EDD90053F9F0 /* Preferences.m in Sources */,
 				C06D27541AB1900B00B0E1D4 /* SettingsViewController.m in Sources */,
+				B57734641AB438C00024B1BD /* EditRecordViewController.m in Sources */,
 				93E767E018B5DA9A0053F9F0 /* RecordsManager.m in Sources */,
 				93DE15EF18B4AA8D00A46FD2 /* main.m in Sources */,
 			);

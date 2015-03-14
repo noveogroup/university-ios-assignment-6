@@ -53,6 +53,12 @@
     [self.mutableRecords removeObject:record];
 }
 
+- (void)modifyRecord:(NSDictionary *)recordToBeModified byRecord:(NSDictionary *)newRecord
+{
+    NSInteger recordIndex = [self.mutableRecords indexOfObject:recordToBeModified];
+    self.mutableRecords[recordIndex] = newRecord;
+}
+
 - (NSMutableArray *)mutableRecords
 {
     if (!mutableRecords_) {

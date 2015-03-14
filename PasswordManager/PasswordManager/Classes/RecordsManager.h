@@ -31,6 +31,11 @@
 - (void)deleteRecord:(NSDictionary *)record;
 
 /**
+ *  Modifies the specified record by the new record.
+ */
+- (void)modifyRecord:(NSDictionary *)recordToBeModified byRecord:(NSDictionary *)newRecord;
+
+/**
  *  Returns the records the receiver manages.
  */
 - (NSArray *)records;
