@@ -49,6 +49,7 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 {
     NSUInteger passwordLength = 0;
     NSString *alphabet = LowercaseLetterAlphabet;
+
     switch ([[Preferences standardPreferences] passwordStrength]) {
         case PasswordStrengthStrong: {
             passwordLength = PasswordLengthLong;
@@ -63,10 +64,11 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
         }
         case PasswordStrengthWeak:
         default: {
-            passwordLength = PasswordLengthShort;
+                passwordLength = PasswordStrengthDefault;
             break;
         }
     }
+    
     self.passwordLabel.text =
         [PasswordGenerator generatePasswordOfLength:passwordLength
                                       usingAlphabet:alphabet];

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Preferences.h"
 
 @interface RecordsManager : NSObject
 
@@ -18,7 +19,8 @@
 /**
  *  Initializes a newly created instance with the specifed URL.
  */
-- (instancetype)initWithURL:(NSURL *)url;
+- (instancetype)initWithURL:(NSURL *)url
+        passwordStorageMode:(PasswordStorageMethod*) mode;
 
 /**
  *  Registers the specified record.

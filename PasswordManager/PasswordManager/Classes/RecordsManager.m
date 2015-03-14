@@ -7,11 +7,14 @@
 //
 
 #import "RecordsManager.h"
+#import "FMDBHandler.h"
+#import "Preferences.h"
 
 @interface RecordsManager ()
 
 @property (nonatomic, strong) NSMutableArray *mutableRecords;
 @property (nonatomic, strong) NSURL *url;
+@property (nonatomic, strong) FMDBHandler *dbHeandler;
 
 @end
 
@@ -19,21 +22,27 @@
 
 @synthesize url = url_;
 @synthesize mutableRecords = mutableRecords_;
+@synthesize dbHeandler = dbHeandler_;
 
 #pragma mark - Initialization
 
 - (id)init
 {
     NSLog(@"Please use -initWithURL: instead.");
+    
     [self doesNotRecognizeSelector:_cmd];
 
+    
     return nil;
 }
 
-- (instancetype)initWithURL:(NSURL *)url
+-(instancetype) initWithURL:(NSURL *)url passwordStorageMode:(PasswordStorageMethod *)mode
 {
     if ((self = [super init])) {
         url_ = url;
+        
+        if (mode == PasswordStorageMethodDataBase)
+            dbHeandler_ = [[FMDBHandler alloc] initDBWithUrl:url_];
     }
 
     return self;
@@ -51,7 +60,18 @@
 - (NSMutableArray *)mutableRecords
 {
     if (!mutableRecords_) {
-        mutableRecords_ = [NSMutableArray arrayWithContentsOfURL:self.url];
+        
+        switch ([[Preferences standardPreferences] passwordStorageMethod]){
+                
+            case PasswordStorageMethodDataBase:
+                mutableRecords_ = [dbHeandler_ loadPasswordArray];
+                break;
+                
+            case PasswordStorageMethodMuttableArray:
+                mutableRecords_ = [NSMutableArray arrayWithContentsOfURL:self.url];
+                break;
+        }
+        
         if (!mutableRecords_) {
             mutableRecords_ = [NSMutableArray array];
         }
@@ -69,7 +89,20 @@
 
 - (BOOL)synchronize
 {
-    return [self.mutableRecords writeToURL:self.url atomically:YES];
+    switch ([[Preferences standardPreferences] passwordStorageMethod]){
+            
+        case PasswordStorageMethodDataBase:
+            [dbHeandler_ savePasswordArray:[self records]];
+            return TRUE;
+            break;
+            
+        case PasswordStorageMethodMuttableArray:
+            [self.mutableRecords writeToURL:self.url atomically:YES];
+            return TRUE;
+            break;
+    }
+    
+    return FALSE;
 }
 
 @end

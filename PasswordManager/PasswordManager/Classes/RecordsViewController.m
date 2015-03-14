@@ -10,15 +10,20 @@
 #import "Record.h"
 #import "RecordsManager.h"
 #import "RecordsViewController.h"
+#import "PasswordManagerSettingsViewController.h"
+#import "Preferences.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
+static NSString *const DefaultFileNameForDB = @"DataBase.db";
 
 @interface RecordsViewController ()
     <UITableViewDataSource,
      UITableViewDelegate,
-     NewRecordViewControllerDelegate>
+     NewRecordViewControllerDelegate,
+     PasswordManagerSettingsVCDelegat>
 
 @property (nonatomic, readonly) RecordsManager *recordsManager;
+@property (nonatomic, readonly) RecordsManager *recordManagerDB;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
@@ -29,24 +34,49 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 @implementation RecordsViewController
 
 @synthesize recordsManager = recordsManager_;
+@synthesize recordManagerDB = recordsManagerDB_;
 
 @synthesize tableView = tableView_;
+
+-(id) init
+{
+    self = [super init];
+    
+    if(self)
+    {
+        NSURL *const documentDirectoryURL =
+        [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                inDomains:NSUserDomainMask] lastObject];
+        
+        // default recordMeneger
+        NSURL *const fileURLForLocalStore =
+        [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
+        
+        recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore
+                           passwordStorageMode:PasswordStorageMethodDefault];
+        
+        // record manager for DB
+        NSURL *const fileURLForDB =
+        [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForDB];
+        
+        recordsManagerDB_ = [[RecordsManager alloc] initWithURL:fileURLForDB
+                             passwordStorageMode:PasswordStorageMethodDataBase];
+        
+    }
+    
+    return self;
+}
+
+
 
 #pragma mark - Getters
 
 - (RecordsManager *)recordsManager
 {
-    if (!recordsManager_) {
-        NSURL *const documentDirectoryURL =
-            [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
-                                                    inDomains:NSUserDomainMask] lastObject];
-        NSURL *const fileURLForLocalStore =
-            [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
-
-        recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
-    }
-
-    return recordsManager_;
+    if ([[Preferences standardPreferences] passwordStorageMethod] == PasswordStorageMethodDataBase)
+        return recordsManagerDB_;
+    else
+        return recordsManager_;
 }
 
 #pragma mark - Actions
@@ -58,6 +88,15 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
     UINavigationController *const navigationController =
         [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    [self presentViewController:navigationController animated:YES completion:NULL];
+}
+- (IBAction)didTouchSettingsBarItem:(UIBarButtonItem *)sender {
+    PasswordManagerSettingsViewController *const rootViewController = [[PasswordManagerSettingsViewController alloc] init];
+    rootViewController.delegate = self;
+    
+    
+    UINavigationController *const navigationController =
+    [[UINavigationController alloc] initWithRootViewController:rootViewController];
     [self presentViewController:navigationController animated:YES completion:NULL];
 }
 
@@ -109,6 +148,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 
         [self.tableView reloadData];
     }
+    [self dismissViewControllerAnimated:YES
+                             completion:NULL];
+}
+
+#pragma mark - NewRecordViewControllerDelegate implementation
+
+-(void)newSettingsViewController:(PasswordManagerSettingsViewController *)sender
+{
     [self dismissViewControllerAnimated:YES
                              completion:NULL];
 }
