@@ -27,4 +27,5 @@ typedef NS_ENUM(NSInteger, PasswordStrength) {
  */
 + (instancetype)standardPreferences;
 
+
 @end

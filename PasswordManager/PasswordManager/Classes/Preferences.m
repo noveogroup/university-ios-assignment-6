@@ -87,6 +87,7 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
     [[NSUserDefaults standardUserDefaults] synchronize];
+
 }
 
 @end
