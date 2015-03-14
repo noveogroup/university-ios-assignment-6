@@ -38,6 +38,27 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
     return [[NSUserDefaults standardUserDefaults] integerForKey:kPasswordStrength];
 }
 
+- (NSInteger) indexOfPasswordStrength
+{
+    
+    NSInteger result;
+    
+    switch([self passwordStrength]) {
+        case PasswordStrengthWeak:
+            result = 0;
+            break;
+        case PasswordStrengthMedium:
+            result = 1;
+            break;
+        case PasswordStrengthStrong:
+            result = 2;
+            break;
+            
+    }
+    
+    return result;
+}
+
 #pragma mark - Setters
 
 - (void)setPasswordStrength:(NSInteger)passwordStrength
@@ -46,6 +67,29 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
                                                forKey:kPasswordStrength];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
+
+- (void) setPasswordStrengthFromIndex:(NSInteger)index
+{
+    NSInteger result;
+    
+    switch(index) {
+        case 0:
+            result = PasswordStrengthWeak;
+            break;
+        case 1:
+            result = PasswordStrengthMedium;
+            break;
+        case 2:
+            result = PasswordStrengthStrong;
+            break;
+            
+        default:
+            result = PasswordStrengthDefault;
+    }
+    
+    self.passwordStrength = result;
+}
+
 
 #pragma mark - Initialization
 

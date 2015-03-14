@@ -61,6 +61,14 @@
     if (indexPath.section == 0)
     {
         tableViewCell.textLabel.text = self.passwords[indexPath.row];
+        if ([[Preferences standardPreferences] indexOfPasswordStrength] == indexPath.row)
+        {
+            tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+        else
+        {
+            tableViewCell.accessoryType = UITableViewCellAccessoryNone;
+        }
 
     }
     else
@@ -90,7 +98,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    if (indexPath.section == 0)
+    {
+        [[Preferences standardPreferences]setPasswordStrengthFromIndex:indexPath.row];
+        [tableView reloadData];
+        
+    }
 }
 
 - (void)didReceiveMemoryWarning {

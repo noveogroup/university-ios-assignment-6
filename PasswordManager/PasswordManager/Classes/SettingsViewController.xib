@@ -16,7 +16,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Wdl-gx-f1V">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Wdl-gx-f1V">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     <connections>
@@ -26,6 +26,12 @@
                 </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="Wdl-gx-f1V" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="5CC-zd-hg6"/>
+                <constraint firstAttribute="trailing" secondItem="Wdl-gx-f1V" secondAttribute="trailing" id="Mkv-p7-KlZ"/>
+                <constraint firstAttribute="bottom" secondItem="Wdl-gx-f1V" secondAttribute="bottom" id="rc5-WS-byZ"/>
+                <constraint firstItem="Wdl-gx-f1V" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="sl1-sh-R6x"/>
+            </constraints>
             <point key="canvasLocation" x="580" y="494"/>
         </view>
     </objects>
