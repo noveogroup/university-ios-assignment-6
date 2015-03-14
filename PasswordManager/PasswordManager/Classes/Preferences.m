@@ -33,14 +33,14 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
 
 #pragma mark - Getters
 
-- (NSInteger)passwordStrength
+- (PasswordStrength)passwordStrength
 {
     return [[NSUserDefaults standardUserDefaults] integerForKey:kPasswordStrength];
 }
 
 #pragma mark - Setters
 
-- (void)setPasswordStrength:(NSInteger)passwordStrength
+- (void)setPasswordStrength:(PasswordStrength)passwordStrength
 {
     [[NSUserDefaults standardUserDefaults] setInteger:passwordStrength
                                                forKey:kPasswordStrength];

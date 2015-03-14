@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, PasswordStrength) {
 /**
  *  Returns the strength rate of the passwords the applications generates.
  */
-@property (nonatomic, readwrite) NSInteger passwordStrength;
+@property (nonatomic, readwrite) PasswordStrength passwordStrength;
 
 /**
  *  Returns the shared preferences object.
