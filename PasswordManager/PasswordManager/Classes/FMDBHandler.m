@@ -17,11 +17,14 @@
     if (self)
     {
         dbQueue_ = [FMDatabaseQueue databaseQueueWithPath:[url path]];
+        
         [dbQueue_ inDatabase:^(FMDatabase *db){
             [db executeUpdate:@"CREATE TABLE IF NOT EXISTS PasswordTable2("
                                 "ServiceName TEXT,"
                                 "Password TEXT)"];
         }];
+        
+        [dbQueue_ close];
     }
     
     return self;
@@ -30,13 +33,16 @@
 -(void) savePasswordArray:(NSArray *)records
 {
     [dbQueue_ inDatabase:^(FMDatabase *db){
-        [db executeQuery:@"DELETE FROM PasswordTable2"];
+        
+        [db executeUpdate:@"DELETE FROM PasswordTable2"];
+        
         for (NSDictionary *record in records){
-            [db executeQuery:@"INSERT INTO PasswordTable1 (ServiceName, Password)"
+            [db executeUpdate:@"INSERT INTO PasswordTable2 (ServiceName, Password)"
                                 "VALUES (?,?)", record[kServiceName], record[kPassword]];
         }
         
     }];
+    [dbQueue_ close];
 }
 
 -(NSMutableArray*) loadPasswordArray
@@ -53,6 +59,7 @@
         }
     }];
     
+    [dbQueue_ close];
     return resultArray;
 }
 

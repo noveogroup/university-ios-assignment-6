@@ -139,8 +139,8 @@ static NSString *const DefaultFileNameForDB = @"DataBase.db";
 -       (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *record = [[recordsManager_ records] objectAtIndex:indexPath.row];
-    [recordsManager_ deleteRecord:record];
+    NSDictionary *record = [[self.recordsManager records] objectAtIndex:indexPath.row];
+    [self.recordsManager deleteRecord:record];
     
     NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] initWithRecord:record];
     rootViewController.delegate = self;
@@ -156,10 +156,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        NSDictionary *record = [[recordsManager_ records] objectAtIndex:indexPath.row];
+        NSDictionary *record = [[self.recordsManager records] objectAtIndex:indexPath.row];
         
-        [recordsManager_ deleteRecord:record];
-        [recordsManager_ synchronize];
+        [self.recordsManager deleteRecord:record];
+        [self.recordsManager synchronize];
         
         [tableView reloadData];
     }
