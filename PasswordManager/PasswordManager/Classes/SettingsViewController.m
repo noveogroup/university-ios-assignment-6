@@ -122,7 +122,7 @@
 
 - (void)didTouchCancelBarButtonItem:(UIBarButtonItem *)sender
 {
-    [self.presentingViewController dismissViewControllerAnimated:self completion:nil];
+    [self.delegate didCloseSettingsMenu:self];
 }
 
 @end

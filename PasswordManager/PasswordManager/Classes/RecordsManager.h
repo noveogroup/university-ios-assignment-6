@@ -38,4 +38,8 @@
  */
 - (BOOL)synchronize;
 
+- (void)deleteRecordAtIndex:(NSInteger) index;
+
+-(void)replaceRecord:(NSDictionary*)oldRecord withRecord:(NSDictionary*)newRecord;
+
 @end

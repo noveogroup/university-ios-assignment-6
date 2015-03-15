@@ -65,7 +65,7 @@
 {
     if (!mutableRecords_)
     {
-        if ([[Preferences standardPreferences] storage] == 0)
+        if ([[Preferences standardPreferences] storage] == StorageFile)
         {
             mutableRecords_ = [NSMutableArray arrayWithContentsOfURL:self.url];
             if (!mutableRecords_)
@@ -76,9 +76,8 @@
         else
         {
             mutableRecords_ = [NSMutableArray array];
-            //self.db = [FMDatabase databaseWithPath:self.path];
             [self.db open];
-            [self.db executeUpdate:@"CREATE TABLE records (ServiceName TEXT PRIMARY KEY DEFAULT NULL, Password TEXT DEFAULT NULL)"];
+            [self.db executeUpdate:@"CREATE TABLE IF NOT EXISTS records (ServiceName TEXT PRIMARY KEY DEFAULT NULL, Password TEXT DEFAULT NULL)"];
             FMResultSet *results = [self.db executeQuery:@"SELECT * FROM records"];
             while ([results next])
             {
@@ -98,25 +97,45 @@
     return [self.mutableRecords copy];
 }
 
+- (void)deleteRecordAtIndex:(NSInteger) index
+{
+    [self.mutableRecords removeObjectAtIndex:index];
+}
+
+- (void)replaceRecord:(NSDictionary*)oldRecord withRecord:(NSDictionary*)newRecord
+{
+    if([self.mutableRecords containsObject:oldRecord])
+    {
+        NSInteger index = [self.mutableRecords indexOfObject:oldRecord];
+        [self.mutableRecords removeObject:oldRecord];
+        [self.mutableRecords insertObject:newRecord atIndex:index];
+    }
+}
+
 #pragma mark - Synchronisation
 
 - (BOOL)synchronize
 {
-    if ([[Preferences standardPreferences] storage] == 0)
+    if ([[Preferences standardPreferences] storage] == StorageFile)
     {
         return [self.mutableRecords writeToURL:self.url atomically:YES];
     }
     else
     {
-        [self.db open];
-        [self.db beginTransaction];
-        for (NSDictionary *record in self.mutableRecords)
-        {
-            
-            [self.db executeUpdate:@"INSERT INTO records (ServiceName, Password) VALUES (?, ?)", [record valueForKey:kServiceName], [record valueForKey:kPassword]];
-        }
-        [self.db commit];
-        return [self.db close];
+        FMDatabaseQueue *queue = [[FMDatabaseQueue alloc]initWithPath:self.path];
+        [queue inDatabase:^(FMDatabase *db){
+            [db beginTransaction];
+            [db executeUpdate:@"DELETE FROM records"];
+            for (NSDictionary *record in self.mutableRecords)
+            {
+                
+                [db executeUpdate:@"INSERT INTO records (ServiceName, Password) VALUES (?, ?)", [record valueForKey:kServiceName], [record valueForKey:kPassword]];
+            }
+            [db commit];
+         
+        }];
+        
+        return YES;
     }
 }
 

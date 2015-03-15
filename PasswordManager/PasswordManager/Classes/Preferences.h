@@ -33,6 +33,8 @@ typedef NS_ENUM(NSInteger, Storage) {
  *  Returns the shared preferences object.
  */
 + (instancetype)standardPreferences;
+
+//Returns the index of passwordStrength in shared preferences
 - (NSInteger) indexOfPasswordStrength;
 - (void) setPasswordStrengthFromIndex:(NSInteger)index;
 
