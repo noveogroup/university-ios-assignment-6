@@ -74,6 +74,14 @@
     else
     {
         tableViewCell.textLabel.text = self.storages[indexPath.row];
+        if ([[Preferences standardPreferences] storage] == indexPath.row)
+        {
+            tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+        else
+        {
+            tableViewCell.accessoryType = UITableViewCellAccessoryNone;
+        }
     }
     
     return tableViewCell;
@@ -104,12 +112,13 @@
         [tableView reloadData];
         
     }
+    else
+    {
+        [[Preferences standardPreferences]setStorage:indexPath.row];
+        [tableView reloadData];
+    }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 - (void)didTouchCancelBarButtonItem:(UIBarButtonItem *)sender
 {

@@ -13,6 +13,7 @@
 #import "SettingsViewController.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
+static NSString *const DefaultDBNameForLocalStore = @"AwesomeDBName.db";
 
 @interface RecordsViewController ()
     <UITableViewDataSource,
@@ -44,8 +45,11 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
                                                     inDomains:NSUserDomainMask] lastObject];
         NSURL *const fileURLForLocalStore =
             [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
+        
+        NSArray *libDirs = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+        NSString *libDir = [[libDirs objectAtIndex:0] stringByAppendingString:DefaultDBNameForLocalStore];
 
-        recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
+        recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore andPath:libDir];
     }
 
     return recordsManager_;

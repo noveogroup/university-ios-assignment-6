@@ -19,7 +19,7 @@
 /**
  *  Initializes a newly created instance with the specifed URL.
  */
-- (instancetype)initWithURL:(NSURL *)url;
+- (instancetype)initWithURL:(NSURL *)url andPath:(NSString *)path;
 
 /**
  *  Registers the specified record.
