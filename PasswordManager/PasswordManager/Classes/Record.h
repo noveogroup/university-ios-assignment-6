@@ -8,3 +8,4 @@
 
 static NSString *const kServiceName = @"ServiceName";
 static NSString *const kPassword = @"Password";
+static NSString *const kSyncType = @"SynchronizationType";

@@ -11,8 +11,11 @@
 #import "RecordsManager.h"
 #import "RecordsViewController.h"
 #import "EditRecordViewController.h"
+#import "StorageController.h"
+#import "RecordsManagerFMDB.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
+static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
 
 @interface RecordsViewController ()
     <UITableViewDataSource,
@@ -20,7 +23,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
      NewRecordViewControllerDelegate,
      EditRecordViewControllerDelegate>
 
-@property (nonatomic, readonly) RecordsManager *recordsManager;
+@property (nonatomic, readonly) id<StorageController> recordsManager;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
@@ -45,19 +48,33 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 #pragma mark - Getters
 
-- (RecordsManager *)recordsManager
+- (id<StorageController>)recordsManager
 {
     if (!recordsManager_) {
         NSURL *const documentDirectoryURL =
             [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
                                                     inDomains:NSUserDomainMask] lastObject];
-        NSURL *const fileURLForLocalStore =
-            [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
-
-        recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
+        NSURL *const fileURLForDataBase =
+            [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForDataBase];
+        
+        recordsManager_ = [[RecordsManagerFMDB alloc] initWithDbPath:[fileURLForDataBase path]];
     }
-
+    
     return recordsManager_;
+    
+#warning Resolve TODO mark
+// This block is commented due to unimplemented switch storage mathod. TODO: implement the switching
+//    if (!recordsManager_) {
+//        NSURL *const documentDirectoryURL =
+//            [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+//                                                    inDomains:NSUserDomainMask] lastObject];
+//        NSURL *const fileURLForLocalStore =
+//            [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
+//
+//        recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
+//    }
+//
+//    return recordsManager_;
 }
 
 #pragma mark - Actions
