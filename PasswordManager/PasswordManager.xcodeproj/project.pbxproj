@@ -26,6 +26,7 @@
 		93E767E818B5F9BA0053F9F0 /* NewRecordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */; };
 		A806F7011AB46D4200462F40 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A806F6FF1AB46D4200462F40 /* SettingsViewController.m */; };
 		A8EB18B41AB5E72000C0593C /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A8EB18B61AB5E72000C0593C /* SettingsViewController.xib */; };
+		A8EB18B81AB5F2A300C0593C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A8EB18B71AB5F2A300C0593C /* Settings.bundle */; };
 		C37B342A61301497ABC489FF /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B9C4F589FC3A3029FA82DD1B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +67,7 @@
 		A806F6FE1AB46D4200462F40 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		A806F6FF1AB46D4200462F40 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		A8EB18B51AB5E72000C0593C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SettingsViewController.xib; sourceTree = "<group>"; };
+		A8EB18B71AB5F2A300C0593C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		B9C4F589FC3A3029FA82DD1B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -157,6 +159,7 @@
 				A806F6FE1AB46D4200462F40 /* SettingsViewController.h */,
 				A806F6FF1AB46D4200462F40 /* SettingsViewController.m */,
 				A8EB18B61AB5E72000C0593C /* SettingsViewController.xib */,
+				A8EB18B71AB5F2A300C0593C /* Settings.bundle */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 				93DE15ED18B4AA8D00A46FD2 /* InfoPlist.strings in Resources */,
 				93DE15F518B4AA8D00A46FD2 /* Images.xcassets in Resources */,
 				93E767DD18B5D8DE0053F9F0 /* RecordsViewController.xib in Resources */,
+				A8EB18B81AB5F2A300C0593C /* Settings.bundle in Resources */,
 				A8EB18B41AB5E72000C0593C /* SettingsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
