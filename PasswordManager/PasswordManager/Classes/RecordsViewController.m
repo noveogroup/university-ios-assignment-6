@@ -129,12 +129,40 @@ static NSString *const DefaultFileNameForDB = @"DataBase.db";
 #undef REUSABLE_CELL_ID
 }
 
+-(BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
 #pragma mark - UITableViewDelegate implementation
 
 -       (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSDictionary *record = [[recordsManager_ records] objectAtIndex:indexPath.row];
+    [recordsManager_ deleteRecord:record];
+    
+    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] initWithRecord:record];
+    rootViewController.delegate = self;
+    
+    UINavigationController *const navigationController =
+    [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    [self presentViewController:navigationController animated:YES completion:NULL];
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+-(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        NSDictionary *record = [[recordsManager_ records] objectAtIndex:indexPath.row];
+        
+        [recordsManager_ deleteRecord:record];
+        [recordsManager_ synchronize];
+        
+        [tableView reloadData];
+    }
 }
 
 #pragma mark - NewRecordViewControllerDelegate implementation

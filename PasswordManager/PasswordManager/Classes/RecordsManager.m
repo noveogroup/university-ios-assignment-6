@@ -85,6 +85,14 @@
     return [self.mutableRecords copy];
 }
 
+-(void) deleteRecord:(NSDictionary *)record
+{
+    if ([record count] > 0)
+    {
+        [self.mutableRecords removeObject:record];
+    }
+}
+
 #pragma mark - Synchronisation
 
 - (BOOL)synchronize
@@ -93,16 +101,16 @@
             
         case PasswordStorageMethodDataBase:
             [dbHeandler_ savePasswordArray:[self records]];
-            return TRUE;
+            return YES;
             break;
             
         case PasswordStorageMethodMuttableArray:
             [self.mutableRecords writeToURL:self.url atomically:YES];
-            return TRUE;
+            return YES;
             break;
     }
     
-    return FALSE;
+    return NO;
 }
 
 @end

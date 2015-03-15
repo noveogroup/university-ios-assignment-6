@@ -31,6 +31,7 @@
  *  Returns the records the receiver manages.
  */
 - (NSArray *)records;
+- (void)deleteRecord:(NSDictionary*) record;
 
 /**
  *  Writes any modifications to the persistent domains to disk.

@@ -35,4 +35,6 @@
  */
 @property (nonatomic, weak) id<NewRecordViewControllerDelegate> delegate;
 
+-(id) initWithRecord:(NSDictionary*) record;
+
 @end
