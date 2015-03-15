@@ -5,9 +5,9 @@
 
 
 typedef NS_ENUM(NSInteger, SynchronizationType) {
-    Insert,
-    Delete,
-    Update
+    SyncTypeInsert,
+    SyncTypeDelete,
+    SyncTypeUpdate
 };
 
 
@@ -66,7 +66,7 @@ typedef NS_ENUM(NSInteger, SynchronizationType) {
     if ([record count] > 0) {
         [self.mutableRecords addObject:record];
         NSMutableDictionary *recordToBeSynchronized = [record mutableCopy];
-        recordToBeSynchronized[kSyncType] = @(Insert);
+        recordToBeSynchronized[kSyncType] = @(SyncTypeInsert);
         @synchronized(self.unsynchronizedRecordsQueue) {
             [self.unsynchronizedRecordsQueue addObject:recordToBeSynchronized];
         }
@@ -76,7 +76,7 @@ typedef NS_ENUM(NSInteger, SynchronizationType) {
 - (void)deleteRecord:(NSDictionary *)record {
     [self.mutableRecords removeObject:record];
     NSMutableDictionary *recordToBeSynchronized = [record mutableCopy];
-    recordToBeSynchronized[kSyncType] = @(Delete);
+    recordToBeSynchronized[kSyncType] = @(SyncTypeDelete);
     @synchronized(self.unsynchronizedRecordsQueue) {
         [self.unsynchronizedRecordsQueue addObject:recordToBeSynchronized];
     }
@@ -86,7 +86,7 @@ typedef NS_ENUM(NSInteger, SynchronizationType) {
     NSInteger recordIndex = [self.mutableRecords indexOfObject:recordToBeModified];
     self.mutableRecords[recordIndex] = newRecord;
     NSMutableDictionary *recordToBeSynchronized = [newRecord mutableCopy];
-    recordToBeSynchronized[kSyncType] = @(Update);
+    recordToBeSynchronized[kSyncType] = @(SyncTypeUpdate);
     @synchronized(self.unsynchronizedRecordsQueue) {
         [self.unsynchronizedRecordsQueue addObject:recordToBeSynchronized];
     }
@@ -105,6 +105,12 @@ typedef NS_ENUM(NSInteger, SynchronizationType) {
     return [self.mutableRecords copy];
 }
 
+- (void)setRecords:(NSArray *)records
+{
+    self.mutableRecords = [records mutableCopy];
+    self.unsynchronizedRecordsQueue = [records mutableCopy];
+}
+
 #pragma mark - Synchronisation
 
 - (BOOL)synchronize {
@@ -118,13 +124,13 @@ typedef NS_ENUM(NSInteger, SynchronizationType) {
             for (NSDictionary *record in self.unsynchronizedRecordsQueue) {
                 SynchronizationType syncType = [(NSNumber *)record[kSyncType] integerValue];
                 switch (syncType) {
-                    case Insert:
+                    case SyncTypeInsert:
                         [DBHelper insertRecord:record intoDB:db];
                         break;
-                    case Update:
+                    case SyncTypeUpdate:
                         [DBHelper updateRecord:record intoDB:db];
                         break;
-                    case Delete:
+                    case SyncTypeDelete:
                         [DBHelper deleteRecord:record intoDB:db];
                         break;
                     default:

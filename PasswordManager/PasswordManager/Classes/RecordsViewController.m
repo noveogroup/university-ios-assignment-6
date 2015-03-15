@@ -27,6 +27,9 @@ static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
+@property (strong, nonatomic) NSURL *fileURLForLocalStore;
+@property (strong, nonatomic) NSURL *fileURLForDataBase;
+
 - (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender;
 
 @end
@@ -51,30 +54,36 @@ static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
 - (id<StorageController>)recordsManager
 {
     if (!recordsManager_) {
-        NSURL *const documentDirectoryURL =
-            [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
-                                                    inDomains:NSUserDomainMask] lastObject];
-        NSURL *const fileURLForDataBase =
-            [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForDataBase];
-        
-        recordsManager_ = [[RecordsManagerFMDB alloc] initWithDbPath:[fileURLForDataBase path]];
+        StorageMethod storageMethod = [[Preferences standardPreferences] storageMethod];
+        NSLog(@"Storage method is set to '%@'", storageMethod ? @"Database" : @"File");
+        switch (storageMethod) {
+            case StorageMethodFile: {
+                NSURL *const documentDirectoryURL =
+                    [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                        inDomains:NSUserDomainMask] lastObject];
+                self.fileURLForLocalStore =
+                    [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
+                
+                recordsManager_ = [[RecordsManager alloc] initWithURL:self.fileURLForLocalStore];
+                break;
+            }
+            case StorageMethodDatabase: {
+                NSURL *const documentDirectoryURL =
+                    [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                            inDomains:NSUserDomainMask] lastObject];
+                self.fileURLForDataBase =
+                    [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForDataBase];
+                
+                recordsManager_ = [[RecordsManagerFMDB alloc]
+                                   initWithDbPath:[self.fileURLForDataBase path]];
+                break;
+            }
+            default: {
+                break;
+            }
+        }
     }
-    
     return recordsManager_;
-    
-#warning Resolve TODO mark
-// This block is commented due to unimplemented switch storage mathod. TODO: implement the switching
-//    if (!recordsManager_) {
-//        NSURL *const documentDirectoryURL =
-//            [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
-//                                                    inDomains:NSUserDomainMask] lastObject];
-//        NSURL *const fileURLForLocalStore =
-//            [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
-//
-//        recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
-//    }
-//
-//    return recordsManager_;
 }
 
 #pragma mark - Actions
@@ -91,6 +100,7 @@ static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
 
 - (IBAction)didTouchSettingsBarButtonItem:(UIBarButtonItem *)sender {
     SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
+    settingsVC.recordsViewController = self;
     UINavigationController *navController = [[UINavigationController alloc]
                                              initWithRootViewController:settingsVC];
     [self presentViewController:navController animated:YES completion:nil];
@@ -184,6 +194,66 @@ static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
     }
     [self dismissViewControllerAnimated:YES
                              completion:nil];
+}
+
+#pragma mark - Switch storage method implementation
+
+- (void)switchStorageMethodTo:(StorageMethod)storageMethod {
+    NSLog(@"Switching to storage method %@...", storageMethod ? @"Database" : @"File");
+    
+    // Create "dump" of all records
+    StorageMethod previousStorageMethod = [[Preferences standardPreferences] storageMethod];
+    NSArray *allRecords = [self.recordsManager records];
+    
+    // Invalidate current record manager
+    recordsManager_ = nil;
+    
+    // Initialize new record manager and copy the all records to it
+    [[Preferences standardPreferences] setStorageMethod:storageMethod];
+    [self.recordsManager setRecords:allRecords];
+    [self.recordsManager synchronize];
+
+    // Clear previous storage
+    [self clearStorageForMethod:previousStorageMethod];
+            
+    NSLog(@"Switching to storage method %@... DONE", storageMethod ? @"Database" : @"File");
+}
+
+- (void)clearStorageForMethod:(StorageMethod)storageMethod {
+    switch (storageMethod) {
+        case StorageMethodFile: {
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            if ([fileManager fileExistsAtPath:self.fileURLForLocalStore.path]) {
+                NSError *__autoreleasing error = nil;
+                [fileManager removeItemAtURL:self.fileURLForLocalStore error:&error];
+                if (error != nil) {
+                    NSLog(@"An error occurred while trying to delete file: %@", error);
+                }
+                else {
+                    NSLog(@"The local store file previously used is successfully deleted.");
+                }
+            }
+            break;
+        }
+        case StorageMethodDatabase: {
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            if ([fileManager fileExistsAtPath:self.fileURLForDataBase.path]) {
+                NSError *__autoreleasing error = nil;
+                [fileManager removeItemAtURL:self.fileURLForDataBase error:&error];
+                if (error != nil) {
+                    NSLog(@"An error occurred while trying to delete database: %@", error);
+                }
+                else {
+                    NSLog(@"The database previously used is successfully deleted.");
+                }
+            }
+            break;
+        }
+        default:
+            NSLog(@"Clearing of storage with type %ld is not implemented yet. Please implement it.",
+                  storageMethod);
+            break;
+    }
 }
 
 @end

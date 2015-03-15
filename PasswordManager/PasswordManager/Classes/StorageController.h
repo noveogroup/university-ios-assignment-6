@@ -24,6 +24,11 @@
 - (NSArray *)records;
 
 /**
+ *  Set the records the receiver manages.
+ */
+- (void)setRecords:(NSArray *)records;
+
+/**
  *  Writes any modifications to the persistent domains to disk.
  *
  *  @return @c YES if the records were saved successfully to disk.

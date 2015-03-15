@@ -76,6 +76,11 @@
     return [self.mutableRecords copy];
 }
 
+- (void)setRecords:(NSArray *)records
+{
+    self.mutableRecords = [records mutableCopy];
+}
+
 #pragma mark - Synchronisation
 
 - (BOOL)synchronize

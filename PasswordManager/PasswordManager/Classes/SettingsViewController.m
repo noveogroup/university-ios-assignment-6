@@ -1,5 +1,6 @@
 #import "SettingsViewController.h"
 #import "Preferences.h"
+#import "RecordsViewController.h"
 
 
 static NSString *const kSectionTitle = @"SectionTitle";
@@ -8,10 +9,6 @@ static NSDictionary *localizedPasswordStrengthOptions = nil;
 static NSDictionary *localizedStorageMethodOptions = nil;
 static NSString *const passwordStrengthSectionTitle = @"Password Strength";
 static NSString *const storageMethodSectionTitle = @"Storage Method";
-typedef NS_ENUM(NSInteger, StorageMethod) {
-    File,
-    Database
-};
 
 
 @interface SettingsViewController ()
@@ -32,8 +29,8 @@ typedef NS_ENUM(NSInteger, StorageMethod) {
                                          @(PasswordStrengthStrong): @"Strong"
                                          };
     localizedStorageMethodOptions = @{
-                                      @(File): @"UserDefaults",
-                                      @(Database): @"Database"
+                                      @(StorageMethodFile): @"File",
+                                      @(StorageMethodDatabase): @"Database"
                                       };
 }
 
@@ -53,8 +50,8 @@ typedef NS_ENUM(NSInteger, StorageMethod) {
         NSDictionary *sectionStorageMethod =
             @{kSectionTitle: storageMethodSectionTitle,
               kSectionItems: @[
-                      localizedStorageMethodOptions[@(File)],
-                      localizedStorageMethodOptions[@(Database)]
+                      localizedStorageMethodOptions[@(StorageMethodFile)],
+                      localizedStorageMethodOptions[@(StorageMethodDatabase)]
             ]};
         
         // Define sections list
@@ -77,8 +74,9 @@ typedef NS_ENUM(NSInteger, StorageMethod) {
     
     // Define checked options
     PasswordStrength passwordStrength = [[Preferences standardPreferences] passwordStrength];
-    self.checkedOptions = @[localizedPasswordStrengthOptions[@(passwordStrength)]];
-    // TODO: Add storage method persisted in preferences
+    StorageMethod storageMethod = [[Preferences standardPreferences] storageMethod];
+    self.checkedOptions = @[localizedPasswordStrengthOptions[@(passwordStrength)],
+                            localizedStorageMethodOptions[@(storageMethod)]];
 }
 
 - (void)didTouchDoneBarButtonItem:(UIBarButtonItem *)sender {
@@ -138,19 +136,21 @@ typedef NS_ENUM(NSInteger, StorageMethod) {
         selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
         
         NSString *sectionTitle = (self.sections[sectionIndex])[kSectionTitle];
+        NSDictionary *section = self.sections[sectionIndex];
+        NSString *option = (section[kSectionItems])[indexPath.row];
         
         // Handle choosing of password strength
         if ([sectionTitle isEqual:passwordStrengthSectionTitle]) {
-            NSDictionary *section = self.sections[sectionIndex];
-            NSString *option = (section[kSectionItems])[indexPath.row];
             PasswordStrength passwordStrength = [((NSNumber *)[localizedPasswordStrengthOptions
-                                                 allKeysForObject:option][0]) integerValue];
+                                                        allKeysForObject:option][0]) integerValue];
             [[Preferences standardPreferences] setPasswordStrength:passwordStrength];
         }
         
         // Handle chooseing of storage method
         else if ([sectionTitle isEqual:storageMethodSectionTitle]) {
-            // TODO: Handle changing of storage method
+            StorageMethod storageMethod = [((NSNumber *)[localizedStorageMethodOptions
+                                                        allKeysForObject:option][0]) integerValue];
+            [self.recordsViewController switchStorageMethodTo:storageMethod];
         }
     }
 }
