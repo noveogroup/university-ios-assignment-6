@@ -57,6 +57,8 @@ static NSString *const kStorageMethod = @"StorageMethod";
 {
     [[NSUserDefaults standardUserDefaults] setInteger:storageMethod
                                                forKey:kStorageMethod];
+    [[NSUserDefaults standardUserDefaults] setInteger:storageMethod
+                                               forKey:kSettingsStorageMethod];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -95,9 +97,8 @@ static NSString *const kStorageMethod = @"StorageMethod";
             }
         }
     }
-    [defaultsToRegister setObject:@(PasswordStrengthDefault)
-                           forKey:kPasswordStrength];
-    [defaultsToRegister setObject:@(StorageMethodDefault)
+    
+    [defaultsToRegister setObject:[defaultsToRegister objectForKey:kSettingsStorageMethod]
                            forKey:kStorageMethod];
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];

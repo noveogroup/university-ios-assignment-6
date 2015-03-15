@@ -40,6 +40,18 @@ static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
 
 @synthesize tableView = tableView_;
 
+- (instancetype)init {
+    self = [super init];
+    if (self != nil) {
+        StorageMethod settingsStorageMethod = [[NSUserDefaults standardUserDefaults]
+                                               integerForKey:kSettingsStorageMethod];
+        if (settingsStorageMethod != [[Preferences standardPreferences] storageMethod]) {
+            [self switchStorageMethodTo:settingsStorageMethod];
+        }
+    }
+    return self;
+}
+
 #pragma mark - View's lifecycle
 
 - (void)viewDidLoad
@@ -202,8 +214,9 @@ static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
     NSLog(@"Switching to storage method %@...", storageMethod ? @"Database" : @"File");
     
     // Create "dump" of all records
-    StorageMethod previousStorageMethod = [[Preferences standardPreferences] storageMethod];
+    NSLog(@"Creating a \"dump\" of all records...");
     NSArray *allRecords = [self.recordsManager records];
+    NSLog(@"Creating a \"dump\" of all records...DONE");
     
     // Invalidate current record manager
     recordsManager_ = nil;
@@ -212,8 +225,11 @@ static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
     [[Preferences standardPreferences] setStorageMethod:storageMethod];
     [self.recordsManager setRecords:allRecords];
     [self.recordsManager synchronize];
+    NSLog(@"Records are successfully copied to the new storage");
 
     // Clear previous storage
+    StorageMethod previousStorageMethod =
+        storageMethod == StorageMethodFile ? StorageMethodDatabase : StorageMethodFile;
     [self clearStorageForMethod:previousStorageMethod];
             
     NSLog(@"Switching to storage method %@... DONE", storageMethod ? @"Database" : @"File");

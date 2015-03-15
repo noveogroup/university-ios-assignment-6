@@ -14,7 +14,8 @@ static NSString *const storageMethodSectionTitle = @"Storage Method";
 @interface SettingsViewController ()
 
 @property (strong, nonatomic) NSArray *sections;
-@property (strong, nonatomic) NSArray *checkedOptions;
+@property (strong, nonatomic) NSString *checkedPasswordStrength;
+@property (strong, nonatomic) NSString *checkedStorageMethod;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @end
@@ -75,8 +76,33 @@ static NSString *const storageMethodSectionTitle = @"Storage Method";
     // Define checked options
     PasswordStrength passwordStrength = [[Preferences standardPreferences] passwordStrength];
     StorageMethod storageMethod = [[Preferences standardPreferences] storageMethod];
-    self.checkedOptions = @[localizedPasswordStrengthOptions[@(passwordStrength)],
-                            localizedStorageMethodOptions[@(storageMethod)]];
+    self.checkedPasswordStrength = localizedPasswordStrengthOptions[@(passwordStrength)];
+    self.checkedStorageMethod = localizedStorageMethodOptions[@(storageMethod)];
+    
+    // Define behaviour when application did become active
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidBecomeActive)
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
+}
+
+- (void)applicationDidBecomeActive {
+    BOOL needReload = NO;
+    PasswordStrength passwordStrength = [[Preferences standardPreferences] passwordStrength];
+    StorageMethod storageMethod = [[Preferences standardPreferences] storageMethod];
+    NSString *passwordStrengthOption = localizedPasswordStrengthOptions[@(passwordStrength)];
+    NSString *storageMethodOption = localizedStorageMethodOptions[@(storageMethod)];
+    if (![passwordStrengthOption isEqualToString:self.checkedPasswordStrength]) {
+        self.checkedPasswordStrength = passwordStrengthOption;
+        needReload = YES;
+    }
+    if (![storageMethodOption isEqualToString:self.checkedStorageMethod]) {
+        self.checkedStorageMethod = storageMethodOption;
+        needReload = YES;
+    }
+    if (needReload) {
+        [self.tableView reloadData];
+    }
 }
 
 - (void)didTouchDoneBarButtonItem:(UIBarButtonItem *)sender {
@@ -114,8 +140,11 @@ static NSString *const storageMethodSectionTitle = @"Storage Method";
     tableViewCell.textLabel.text = option;
     
     // Mark as checked options which are persisted in preferences
-    if ([self.checkedOptions containsObject:option]) {
+    if ([self.checkedPasswordStrength isEqualToString:option] || [self.checkedStorageMethod isEqualToString:option]) {
         tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
+    else {
+        tableViewCell.accessoryType = UITableViewCellAccessoryNone;
     }
     
     return tableViewCell;
@@ -141,6 +170,7 @@ static NSString *const storageMethodSectionTitle = @"Storage Method";
         
         // Handle choosing of password strength
         if ([sectionTitle isEqual:passwordStrengthSectionTitle]) {
+            self.checkedPasswordStrength = option;
             PasswordStrength passwordStrength = [((NSNumber *)[localizedPasswordStrengthOptions
                                                         allKeysForObject:option][0]) integerValue];
             [[Preferences standardPreferences] setPasswordStrength:passwordStrength];
@@ -148,6 +178,7 @@ static NSString *const storageMethodSectionTitle = @"Storage Method";
         
         // Handle chooseing of storage method
         else if ([sectionTitle isEqual:storageMethodSectionTitle]) {
+            self.checkedStorageMethod = option;
             StorageMethod storageMethod = [((NSNumber *)[localizedStorageMethodOptions
                                                         allKeysForObject:option][0]) integerValue];
             [self.recordsViewController switchStorageMethodTo:storageMethod];

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+static NSString *const kSettingsStorageMethod = @"SettingsStorageMethod";
+
 typedef NS_ENUM(NSInteger, PasswordStrength) {
     PasswordStrengthWeak    = 5,
     PasswordStrengthMedium  = 10,

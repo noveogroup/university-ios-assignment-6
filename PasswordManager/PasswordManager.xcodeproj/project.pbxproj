@@ -29,6 +29,7 @@
 		B57734641AB438C00024B1BD /* EditRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B57734631AB438C00024B1BD /* EditRecordViewController.m */; };
 		B57734681AB45CED0024B1BD /* RecordsManagerFMDB.m in Sources */ = {isa = PBXBuildFile; fileRef = B57734671AB45CED0024B1BD /* RecordsManagerFMDB.m */; };
 		B577346B1AB578220024B1BD /* DBHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B577346A1AB578220024B1BD /* DBHelper.m */; };
+		B577346D1AB5F9DC0024B1BD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B577346C1AB5F9DC0024B1BD /* Settings.bundle */; };
 		C06D27541AB1900B00B0E1D4 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C06D27521AB1900B00B0E1D4 /* SettingsViewController.m */; };
 		C06D27551AB1900B00B0E1D4 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C06D27531AB1900B00B0E1D4 /* SettingsViewController.xib */; };
 /* End PBXBuildFile section */
@@ -76,6 +77,7 @@
 		B57734671AB45CED0024B1BD /* RecordsManagerFMDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordsManagerFMDB.m; sourceTree = "<group>"; };
 		B57734691AB578220024B1BD /* DBHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBHelper.h; sourceTree = "<group>"; };
 		B577346A1AB578220024B1BD /* DBHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBHelper.m; sourceTree = "<group>"; };
+		B577346C1AB5F9DC0024B1BD /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		C06D27511AB1900B00B0E1D4 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		C06D27521AB1900B00B0E1D4 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		C06D27531AB1900B00B0E1D4 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 		93DE15D618B4AA8D00A46FD2 = {
 			isa = PBXGroup;
 			children = (
+				B577346C1AB5F9DC0024B1BD /* Settings.bundle */,
 				93DE15E818B4AA8D00A46FD2 /* PasswordManager */,
 				93DE15E118B4AA8D00A46FD2 /* Frameworks */,
 				93DE15E018B4AA8D00A46FD2 /* Products */,
@@ -262,6 +265,7 @@
 				B57734611AB431BA0024B1BD /* RecordViewController.xib in Resources */,
 				93DE15F518B4AA8D00A46FD2 /* Images.xcassets in Resources */,
 				93E767DD18B5D8DE0053F9F0 /* RecordsViewController.xib in Resources */,
+				B577346D1AB5F9DC0024B1BD /* Settings.bundle in Resources */,
 				C06D27551AB1900B00B0E1D4 /* SettingsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -8,8 +8,11 @@
 
 #import "AppDelegate.h"
 #import "RecordsViewController.h"
+#import "Preferences.h"
 
 @interface AppDelegate ()
+
+@property (strong, nonatomic) RecordsViewController *recordsViewController;
 
 @end
 
@@ -22,9 +25,10 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
+    self.recordsViewController = [[RecordsViewController alloc] init];
+    
     self.window.rootViewController =
-        [[UINavigationController alloc]
-            initWithRootViewController:[[RecordsViewController alloc] init]];
+        [[UINavigationController alloc] initWithRootViewController:self.recordsViewController];
 
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -46,6 +50,11 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    StorageMethod settingsStorageMethod = [[NSUserDefaults standardUserDefaults]
+                                           integerForKey:kSettingsStorageMethod];
+    if (settingsStorageMethod != [[Preferences standardPreferences] storageMethod]) {
+        [self.recordsViewController switchStorageMethodTo:settingsStorageMethod];
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
