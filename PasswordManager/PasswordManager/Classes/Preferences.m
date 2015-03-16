@@ -9,6 +9,7 @@
 #import "Preferences.h"
 
 static NSString *const kPasswordStrength = @"PasswordStrength";
+static NSString *const kPasswordStorageMethod = @"PasswordStorageMethod";
 
 @interface Preferences ()
 
@@ -38,6 +39,11 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
     return [[NSUserDefaults standardUserDefaults] integerForKey:kPasswordStrength];
 }
 
+- (NSInteger)passwordStorageMethod
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kPasswordStorageMethod];
+}
+
 #pragma mark - Setters
 
 - (void)setPasswordStrength:(NSInteger)passwordStrength
@@ -46,6 +52,15 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
                                                forKey:kPasswordStrength];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
+
+- (void)setPasswordStorageMethod:(NSInteger)passwordStorageMethod
+{
+    [[NSUserDefaults standardUserDefaults] setInteger:passwordStorageMethod
+                                               forKey:kPasswordStorageMethod];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+
 
 #pragma mark - Initialization
 
@@ -67,6 +82,7 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
                                         ofType:@"bundle"];
 
     NSMutableDictionary *const defaultsToRegister = [NSMutableDictionary dictionary];
+    
     if (settingsBundlePath) {
         NSString *const rootPlistPath =
             [settingsBundlePath stringByAppendingPathComponent:@"Root.plist"];
@@ -82,9 +98,13 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
             }
         }
     }
-    [defaultsToRegister setObject:@(PasswordStrengthDefault)
-                           forKey:kPasswordStrength];
-
+    
+    if ([self passwordStorageMethod] == 0)
+        [self setPasswordStorageMethod:PasswordStorageMethodDefault];
+    
+    if ([self passwordStrength] == 0)
+        [self setPasswordStrength:PasswordStrengthDefault];
+    
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }

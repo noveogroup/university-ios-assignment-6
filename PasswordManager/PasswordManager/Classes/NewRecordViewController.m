@@ -24,6 +24,7 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 
 @property (weak, nonatomic) IBOutlet UITextField *serviceNameTextField;
 @property (weak, nonatomic) IBOutlet UILabel *passwordLabel;
+@property (strong, nonatomic) NSDictionary *record;
 
 - (void)refreshPassword;
 - (void)saveRecord;
@@ -39,9 +40,16 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 @implementation NewRecordViewController
 
 @synthesize delegate = delegate_;
+@synthesize record = record_;
 
 @synthesize serviceNameTextField = serviceNameTextField_;
 @synthesize passwordLabel = passwordLabel_;
+
+
+-(void) setRecord:(NSDictionary *)record
+{
+    record_ = record;
+}
 
 #pragma mark - Auxiliaries
 
@@ -49,6 +57,7 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 {
     NSUInteger passwordLength = 0;
     NSString *alphabet = LowercaseLetterAlphabet;
+
     switch ([[Preferences standardPreferences] passwordStrength]) {
         case PasswordStrengthStrong: {
             passwordLength = PasswordLengthLong;
@@ -63,10 +72,11 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
         }
         case PasswordStrengthWeak:
         default: {
-            passwordLength = PasswordLengthShort;
+                passwordLength = PasswordStrengthDefault;
             break;
         }
     }
+    
     self.passwordLabel.text =
         [PasswordGenerator generatePasswordOfLength:passwordLength
                                       usingAlphabet:alphabet];
@@ -109,14 +119,23 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 {
     [super viewWillAppear:animated];
 
-    [self refreshPassword];
+    if (record_)
+    {
+        self.serviceNameTextField.text = record_[kServiceName];
+        self.passwordLabel.text = record_[kPassword];
+    }
+    else
+        [self refreshPassword];
 }
 
 #pragma mark - Actions
 
 - (void)didTouchCancelBarButtonItem:(UIBarButtonItem *)sender
 {
-    [self.delegate newRecordViewController:self didFinishWithRecord:nil];
+    if (record_)
+        [self.delegate newRecordViewController:self didFinishWithRecord:record_];
+    else
+        [self.delegate newRecordViewController:self didFinishWithRecord:nil];
 }
 
 - (void)didTouchSaveBarButtonItem:(UIBarButtonItem *)sender
