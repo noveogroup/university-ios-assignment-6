@@ -142,7 +142,7 @@
 
 - (void)applicationDidBecomeActive
 {
-    if (self.checkedPassword == [[Preferences standardPreferences]indexOfPasswordStrength] || self.checkedStorage == [[Preferences standardPreferences]storage])
+    if (self.checkedPassword != [[Preferences standardPreferences]indexOfPasswordStrength] || self.checkedStorage != [[Preferences standardPreferences]storage])
     {
         [self.tableView reloadData];
     }

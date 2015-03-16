@@ -67,7 +67,7 @@
 		A806F6FE1AB46D4200462F40 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		A806F6FF1AB46D4200462F40 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		A8EB18B51AB5E72000C0593C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SettingsViewController.xib; sourceTree = "<group>"; };
-		A8EB18B71AB5F2A300C0593C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		A8EB18B71AB5F2A300C0593C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Settings.bundle; path = Classes/Settings.bundle; sourceTree = "<group>"; };
 		B9C4F589FC3A3029FA82DD1B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -122,6 +122,7 @@
 				93DE161118B4AAD800A46FD2 /* Classes */,
 				93DE15E918B4AA8D00A46FD2 /* Supporting Files */,
 				93DE15F418B4AA8D00A46FD2 /* Images.xcassets */,
+				A8EB18B71AB5F2A300C0593C /* Settings.bundle */,
 			);
 			path = PasswordManager;
 			sourceTree = "<group>";
@@ -159,7 +160,6 @@
 				A806F6FE1AB46D4200462F40 /* SettingsViewController.h */,
 				A806F6FF1AB46D4200462F40 /* SettingsViewController.m */,
 				A8EB18B61AB5E72000C0593C /* SettingsViewController.xib */,
-				A8EB18B71AB5F2A300C0593C /* Settings.bundle */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
