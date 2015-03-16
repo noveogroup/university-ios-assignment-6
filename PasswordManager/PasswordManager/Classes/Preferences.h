@@ -15,16 +15,28 @@ typedef NS_ENUM(NSInteger, PasswordStrength) {
     PasswordStrengthStrong  = 15
 };
 
+typedef NS_ENUM(NSInteger, Storage) {
+    StorageFile    = 0,
+    StorageDB  = 1,
+    StorageDefault = StorageFile
+};
+
 @interface Preferences : NSObject
 
 /**
  *  Returns the strength rate of the passwords the applications generates.
  */
 @property (nonatomic, readwrite) NSInteger passwordStrength;
+@property (nonatomic, readwrite) NSInteger storage;
 
 /**
  *  Returns the shared preferences object.
  */
 + (instancetype)standardPreferences;
+
+//Returns the index of passwordStrength in shared preferences
+- (NSInteger) indexOfPasswordStrength;
+- (void) setPasswordStrengthFromIndex:(NSInteger)index;
+
 
 @end

@@ -9,6 +9,7 @@
 #import "Preferences.h"
 
 static NSString *const kPasswordStrength = @"PasswordStrength";
+static NSString *const kStorage = @"Storage";
 
 @interface Preferences ()
 
@@ -38,6 +39,34 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
     return [[NSUserDefaults standardUserDefaults] integerForKey:kPasswordStrength];
 }
 
+
+
+- (NSInteger) indexOfPasswordStrength
+{
+    
+    NSInteger result;
+    
+    switch([self passwordStrength]) {
+        case PasswordStrengthWeak:
+            result = 0;
+            break;
+        case PasswordStrengthMedium:
+            result = 1;
+            break;
+        case PasswordStrengthStrong:
+            result = 2;
+            break;
+            
+    }
+    
+    return result;
+}
+
+- (NSInteger)storage
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kStorage];
+}
+
 #pragma mark - Setters
 
 - (void)setPasswordStrength:(NSInteger)passwordStrength
@@ -46,6 +75,36 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
                                                forKey:kPasswordStrength];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
+
+- (void) setPasswordStrengthFromIndex:(NSInteger)index
+{
+    NSInteger result;
+    
+    switch(index) {
+        case 0:
+            result = PasswordStrengthWeak;
+            break;
+        case 1:
+            result = PasswordStrengthMedium;
+            break;
+        case 2:
+            result = PasswordStrengthStrong;
+            break;
+            
+        default:
+            result = PasswordStrengthDefault;
+    }
+    
+    self.passwordStrength = result;
+}
+
+- (void)setStorage:(NSInteger)storage
+{
+    [[NSUserDefaults standardUserDefaults] setInteger:storage
+                                               forKey:kStorage];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 
 #pragma mark - Initialization
 
@@ -84,9 +143,12 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
     }
     [defaultsToRegister setObject:@(PasswordStrengthDefault)
                            forKey:kPasswordStrength];
+    [defaultsToRegister setObject:@(StorageDefault)
+                           forKey:kStorage];
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
     [[NSUserDefaults standardUserDefaults] synchronize];
+
 }
 
 @end

@@ -25,6 +25,7 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 @property (weak, nonatomic) IBOutlet UITextField *serviceNameTextField;
 @property (weak, nonatomic) IBOutlet UILabel *passwordLabel;
 
+
 - (void)refreshPassword;
 - (void)saveRecord;
 
@@ -39,9 +40,11 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 @implementation NewRecordViewController
 
 @synthesize delegate = delegate_;
-
+@synthesize record = record_;
 @synthesize serviceNameTextField = serviceNameTextField_;
 @synthesize passwordLabel = passwordLabel_;
+
+
 
 #pragma mark - Auxiliaries
 
@@ -109,7 +112,16 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 {
     [super viewWillAppear:animated];
 
-    [self refreshPassword];
+    if (self.record == nil)
+    {
+        [self refreshPassword];
+    }
+    else
+    {
+        self.serviceNameTextField.text = [self.record valueForKey:kServiceName];
+        self.passwordLabel.text = [self.record valueForKey:kPassword];
+    }
+
 }
 
 #pragma mark - Actions

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface RecordsManager : NSObject
 
 /**
@@ -18,7 +19,7 @@
 /**
  *  Initializes a newly created instance with the specifed URL.
  */
-- (instancetype)initWithURL:(NSURL *)url;
+- (instancetype)initWithURL:(NSURL *)url andPath:(NSString *)path;
 
 /**
  *  Registers the specified record.
@@ -36,5 +37,9 @@
  *  @return @c YES if the records were saved successfully to disk.
  */
 - (BOOL)synchronize;
+
+- (void)deleteRecordAtIndex:(NSInteger) index;
+
+-(void)replaceRecord:(NSDictionary*)oldRecord withRecord:(NSDictionary*)newRecord;
 
 @end
