@@ -13,6 +13,8 @@
 
 @property (nonatomic) NSArray *passwords;
 @property (nonatomic) NSArray *storages;
+@property (nonatomic) NSInteger checkedPassword;
+@property (nonatomic) NSInteger checkedStorage;
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @end
@@ -32,6 +34,10 @@
     }
     self.passwords = @[@"Weak", @"Medium", @"Strong"];
     self.storages = @[@"Files", @"Data base"];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidBecomeActive)
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
 }
 
 
@@ -106,23 +112,50 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0)
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if (cell.accessoryType == UITableViewCellAccessoryNone)
     {
-        [[Preferences standardPreferences]setPasswordStrengthFromIndex:indexPath.row];
-        [tableView reloadData];
+        [self uncheckRowsInSection:indexPath.section];
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
         
+        if (indexPath.section == 0)
+        {
+            [[Preferences standardPreferences]setPasswordStrengthFromIndex:indexPath.row];
+            self.checkedPassword = indexPath.row;
+            
+        }
+        else
+        {
+            [[Preferences standardPreferences]setStorage:indexPath.row];
+            self.checkedStorage = indexPath.row;
+        }
     }
-    else
-    {
-        [[Preferences standardPreferences]setStorage:indexPath.row];
-        [tableView reloadData];
-    }
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
 }
 
 
 - (void)didTouchCancelBarButtonItem:(UIBarButtonItem *)sender
 {
     [self.delegate didCloseSettingsMenu:self];
+}
+
+- (void)applicationDidBecomeActive
+{
+    if (self.checkedPassword == [[Preferences standardPreferences]indexOfPasswordStrength] || self.checkedStorage == [[Preferences standardPreferences]storage])
+    {
+        [self.tableView reloadData];
+    }
+}
+
+- (void)uncheckRowsInSection:(NSInteger)section
+{
+    for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:section]; i++)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:section];
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
 }
 
 @end
