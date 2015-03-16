@@ -34,7 +34,5 @@
  *  Returns the object that handles the delegated duties.
  */
 @property (nonatomic, weak) id<NewRecordViewControllerDelegate> delegate;
-
--(id) initWithRecord:(NSDictionary*) record;
-
+-(void) setRecord:(NSDictionary*) record;
 @end

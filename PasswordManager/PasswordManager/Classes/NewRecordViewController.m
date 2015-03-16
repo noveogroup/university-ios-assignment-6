@@ -24,7 +24,7 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 
 @property (weak, nonatomic) IBOutlet UITextField *serviceNameTextField;
 @property (weak, nonatomic) IBOutlet UILabel *passwordLabel;
-@property (copy, nonatomic) NSDictionary *record;
+@property (strong, nonatomic) NSDictionary *record;
 
 - (void)refreshPassword;
 - (void)saveRecord;
@@ -45,25 +45,11 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 @synthesize serviceNameTextField = serviceNameTextField_;
 @synthesize passwordLabel = passwordLabel_;
 
-#pragma mark - Inits
--(id) initWithRecord:(NSDictionary *)record
+
+-(void) setRecord:(NSDictionary *)record
 {
-    self = [super init];
-    
-    if (self)
-    {
-        record_ = record;
-    }
-    
-    return self;
+    record_ = record;
 }
-
--(id) init
-{
-    return [self initWithRecord:nil];
-}
-
-
 
 #pragma mark - Auxiliaries
 

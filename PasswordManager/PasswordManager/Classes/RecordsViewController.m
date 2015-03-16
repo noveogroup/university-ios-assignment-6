@@ -142,7 +142,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     NSDictionary *record = [[self.recordsManager records] objectAtIndex:indexPath.row];
     [self.recordsManager deleteRecord:record];
     
-    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] initWithRecord:record];
+    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] init];
+    [rootViewController setRecord:record];
     rootViewController.delegate = self;
     
     UINavigationController *const navigationController =

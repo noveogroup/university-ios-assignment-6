@@ -23,8 +23,6 @@
                                 "ServiceName TEXT,"
                                 "Password TEXT)"];
         }];
-        
-        [dbQueue_ close];
     }
     
     return self;
@@ -42,7 +40,6 @@
         }
         
     }];
-    [dbQueue_ close];
 }
 
 -(NSMutableArray*) loadPasswordArray
@@ -58,8 +55,6 @@
             
         }
     }];
-    
-    [dbQueue_ close];
     return resultArray;
 }
 
