@@ -102,7 +102,8 @@ static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
 
 - (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender
 {
-    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] init];
+    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc]
+        initWithNibName:@"RecordViewController" bundle:[NSBundle mainBundle]];
     rootViewController.delegate = self;
 
     UINavigationController *const navigationController =
@@ -155,7 +156,8 @@ static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
     
     NSDictionary *const record = [[self.recordsManager records] objectAtIndex:indexPath.row];
     
-    EditRecordViewController *const rootViewController = [[EditRecordViewController alloc] init];
+    EditRecordViewController *const rootViewController = [[EditRecordViewController alloc]
+        initWithNibName:@"RecordViewController" bundle:[NSBundle mainBundle]];
     rootViewController.record = record;
     rootViewController.delegate = self;
     
