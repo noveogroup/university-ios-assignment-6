@@ -13,14 +13,24 @@
 
 #pragma mark - Class methods
 
-+ (NSString *)generatePasswordOfLength:(NSUInteger)length
++ (NSString *)generatePasswordOfStrength:(NSUInteger)strength
                          usingAlphabet:(NSString *)alphabet
+                           cryptoLevel:(NSInteger)cryptoLevel
 {
     const NSUInteger alphabetPower = [alphabet length];
-    const NSUInteger randomLocation = arc4random() % (alphabetPower - length);
-    const NSRange randomRange = (NSRange){randomLocation, length};
-
-    return [[alphabet shuffledString] substringWithRange:randomRange];
+    
+    NSUInteger newStrength = strength + 5;
+    char result[newStrength];
+    
+    for (NSUInteger i = 0; i < newStrength; i++)
+    {
+        if(i % 2 == 0)
+            result[i] = [alphabet characterAtIndex:((arc4random() % (strength+cryptoLevel+i*2)) + (i*strength >> cryptoLevel)) % alphabetPower];
+        else
+            result[i] = [alphabet characterAtIndex:((arc4random() % (strength+cryptoLevel+i*3)) - (i*strength << cryptoLevel)) % alphabetPower];
+    }
+    
+    return [NSString stringWithUTF8String:result];
 }
 
 @end

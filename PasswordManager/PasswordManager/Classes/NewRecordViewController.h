@@ -29,10 +29,15 @@
 @end
 
 @interface NewRecordViewController : UIViewController
+{
+    UITableView *tableView;
+}
 
 /**
  *  Returns the object that handles the delegated duties.
  */
 @property (nonatomic, weak) id<NewRecordViewControllerDelegate> delegate;
+
+- (IBAction)didSettingsButtonTouchUp:(UIButton *)sender;
 
 @end

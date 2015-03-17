@@ -14,7 +14,8 @@
  *  Generates a password of the specified length using
  *  characters of the particular alphabet.
  */
-+ (NSString *)generatePasswordOfLength:(NSUInteger)length
-                         usingAlphabet:(NSString *)alphabet;
++ (NSString *)generatePasswordOfStrength:(NSUInteger)strength
+                         usingAlphabet:(NSString *)alphabet
+                           cryptoLevel:(NSInteger)cryptoLevel;
 
 @end
