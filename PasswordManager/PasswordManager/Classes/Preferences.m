@@ -9,6 +9,7 @@
 #import "Preferences.h"
 
 static NSString *const kPasswordStrength = @"PasswordStrength";
+static NSString *const kCryptoVariable = @"CryptoVariable";
 
 @interface Preferences ()
 
@@ -38,12 +39,24 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
     return [[NSUserDefaults standardUserDefaults] integerForKey:kPasswordStrength];
 }
 
+- (NSInteger)cryptoVariable
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kCryptoVariable];
+}
+
 #pragma mark - Setters
 
 - (void)setPasswordStrength:(NSInteger)passwordStrength
 {
     [[NSUserDefaults standardUserDefaults] setInteger:passwordStrength
                                                forKey:kPasswordStrength];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)setCryptoVariable:(NSInteger)cryptoVariable
+{
+    [[NSUserDefaults standardUserDefaults] setInteger:cryptoVariable
+                                               forKey:kCryptoVariable];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -67,23 +80,33 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
                                         ofType:@"bundle"];
 
     NSMutableDictionary *const defaultsToRegister = [NSMutableDictionary dictionary];
-    if (settingsBundlePath) {
+    
+    if (settingsBundlePath)
+    {
         NSString *const rootPlistPath =
             [settingsBundlePath stringByAppendingPathComponent:@"Root.plist"];
+        
         NSDictionary *const preferences =
             [NSDictionary dictionaryWithContentsOfFile:rootPlistPath];
+        
         NSArray *const preferenceSpecifiers =
             [preferences objectForKey:@"PreferenceSpecifiers"];
-        for (NSDictionary *specifier in preferenceSpecifiers) {
+        
+        for (NSDictionary *specifier in preferenceSpecifiers)
+        {
             NSString *const key = [specifier objectForKey:@"Key"];
-            if (key) {
+            if (key)
+            {
                 [defaultsToRegister setValue:[specifier objectForKey:@"DefaultValue"]
                                       forKey:key];
             }
         }
     }
+
     [defaultsToRegister setObject:@(PasswordStrengthDefault)
                            forKey:kPasswordStrength];
+    [defaultsToRegister setObject:@(CryptoLevelDefault)
+                           forKey:kCryptoVariable];
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
     [[NSUserDefaults standardUserDefaults] synchronize];
