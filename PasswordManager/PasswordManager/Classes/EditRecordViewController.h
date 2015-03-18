@@ -28,7 +28,7 @@
 /**
  *  Returns the object that handles the delegated duties.
  */
-@property (nonatomic, weak) id<EditRecordViewControllerDelegate> delegate;
+@property (weak, nonatomic) id<EditRecordViewControllerDelegate> delegate;
 
 @property (strong, nonatomic) NSDictionary *record;
 

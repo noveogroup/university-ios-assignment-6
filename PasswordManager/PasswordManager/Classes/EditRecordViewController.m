@@ -17,7 +17,7 @@
         [[UIBarButtonItem alloc]
          initWithBarButtonSystemItem:UIBarButtonSystemItemSave
          target:self
-         action:@selector(didTouchSaveBarButtonItem:)];
+         action:@selector(didTapSaveBarButtonItem:)];
         [self.navigationItem setRightBarButtonItem:saveBarButtonItem];
     }
     
@@ -42,7 +42,7 @@
 
 #pragma mark - Actions
 
-- (void)didTouchSaveBarButtonItem:(UIBarButtonItem *)sender
+- (void)didTapSaveBarButtonItem:(UIBarButtonItem *)sender
 {
     [self saveRecord];
 }

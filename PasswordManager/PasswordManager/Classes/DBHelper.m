@@ -1,5 +1,6 @@
 #import "DBHelper.h"
 #import "Record.h"
+#import "FMDB.h"
 
 
 static NSString *const recordsTableName = @"records";

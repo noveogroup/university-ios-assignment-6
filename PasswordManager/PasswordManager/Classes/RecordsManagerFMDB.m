@@ -5,9 +5,9 @@
 
 
 typedef NS_ENUM(NSInteger, SynchronizationType) {
-    SyncTypeInsert,
-    SyncTypeDelete,
-    SyncTypeUpdate
+    syncTypeInsert,
+    syncTypeDelete,
+    syncTypeUpdate
 };
 
 
@@ -27,7 +27,7 @@ typedef NS_ENUM(NSInteger, SynchronizationType) {
 
 #pragma mark - Initialization
 
-- (id)init
+- (id)__unavailable init
 {
     NSLog(@"Please use -initWithDbPath: instead.");
     [self doesNotRecognizeSelector:_cmd];
@@ -66,7 +66,7 @@ typedef NS_ENUM(NSInteger, SynchronizationType) {
     if ([record count] > 0) {
         [self.mutableRecords addObject:record];
         NSMutableDictionary *recordToBeSynchronized = [record mutableCopy];
-        recordToBeSynchronized[kSyncType] = @(SyncTypeInsert);
+        recordToBeSynchronized[kSyncType] = @(syncTypeInsert);
         @synchronized(self.unsynchronizedRecordsQueue) {
             [self.unsynchronizedRecordsQueue addObject:recordToBeSynchronized];
         }
@@ -76,7 +76,7 @@ typedef NS_ENUM(NSInteger, SynchronizationType) {
 - (void)deleteRecord:(NSDictionary *)record {
     [self.mutableRecords removeObject:record];
     NSMutableDictionary *recordToBeSynchronized = [record mutableCopy];
-    recordToBeSynchronized[kSyncType] = @(SyncTypeDelete);
+    recordToBeSynchronized[kSyncType] = @(syncTypeDelete);
     @synchronized(self.unsynchronizedRecordsQueue) {
         [self.unsynchronizedRecordsQueue addObject:recordToBeSynchronized];
     }
@@ -86,7 +86,7 @@ typedef NS_ENUM(NSInteger, SynchronizationType) {
     NSInteger recordIndex = [self.mutableRecords indexOfObject:recordToBeModified];
     self.mutableRecords[recordIndex] = newRecord;
     NSMutableDictionary *recordToBeSynchronized = [newRecord mutableCopy];
-    recordToBeSynchronized[kSyncType] = @(SyncTypeUpdate);
+    recordToBeSynchronized[kSyncType] = @(syncTypeUpdate);
     @synchronized(self.unsynchronizedRecordsQueue) {
         [self.unsynchronizedRecordsQueue addObject:recordToBeSynchronized];
     }
@@ -124,13 +124,13 @@ typedef NS_ENUM(NSInteger, SynchronizationType) {
             for (NSDictionary *record in self.unsynchronizedRecordsQueue) {
                 SynchronizationType syncType = [(NSNumber *)record[kSyncType] integerValue];
                 switch (syncType) {
-                    case SyncTypeInsert:
+                    case syncTypeInsert:
                         [DBHelper insertRecord:record intoDB:db];
                         break;
-                    case SyncTypeUpdate:
+                    case syncTypeUpdate:
                         [DBHelper updateRecord:record intoDB:db];
                         break;
-                    case SyncTypeDelete:
+                    case syncTypeDelete:
                         [DBHelper deleteRecord:record intoDB:db];
                         break;
                     default:

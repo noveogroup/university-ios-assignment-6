@@ -13,6 +13,7 @@
 #import "EditRecordViewController.h"
 #import "StorageController.h"
 #import "RecordsManagerFMDB.h"
+#import "SettingsViewController.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
@@ -69,7 +70,7 @@ static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
         StorageMethod storageMethod = [[Preferences standardPreferences] storageMethod];
         NSLog(@"Storage method is set to '%@'", storageMethod ? @"Database" : @"File");
         switch (storageMethod) {
-            case StorageMethodFile: {
+            case storageMethodFile: {
                 NSURL *const documentDirectoryURL =
                     [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
                                                         inDomains:NSUserDomainMask] lastObject];
@@ -79,7 +80,7 @@ static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
                 recordsManager_ = [[RecordsManager alloc] initWithURL:self.fileURLForLocalStore];
                 break;
             }
-            case StorageMethodDatabase: {
+            case storageMethodDatabase: {
                 NSURL *const documentDirectoryURL =
                     [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
                                                             inDomains:NSUserDomainMask] lastObject];
@@ -171,9 +172,7 @@ static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
         forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-        NSDictionary *record = @{kServiceName: cell.textLabel.text,
-                                 kPassword: cell.detailTextLabel.text};
+        NSDictionary *record = [[self.recordsManager records] objectAtIndex:indexPath.row];
         [self.recordsManager deleteRecord:record];
         [self.recordsManager synchronize];
         [tableView deleteRowsAtIndexPaths:@[indexPath]
@@ -231,7 +230,7 @@ static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
 
     // Clear previous storage
     StorageMethod previousStorageMethod =
-        storageMethod == StorageMethodFile ? StorageMethodDatabase : StorageMethodFile;
+        storageMethod == storageMethodFile ? storageMethodDatabase : storageMethodFile;
     [self clearStorageForMethod:previousStorageMethod];
             
     NSLog(@"Switching to storage method %@... DONE", storageMethod ? @"Database" : @"File");
@@ -239,7 +238,7 @@ static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
 
 - (void)clearStorageForMethod:(StorageMethod)storageMethod {
     switch (storageMethod) {
-        case StorageMethodFile: {
+        case storageMethodFile: {
             NSFileManager *fileManager = [NSFileManager defaultManager];
             if ([fileManager fileExistsAtPath:self.fileURLForLocalStore.path]) {
                 NSError *__autoreleasing error = nil;
@@ -253,7 +252,7 @@ static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
             }
             break;
         }
-        case StorageMethodDatabase: {
+        case storageMethodDatabase: {
             NSFileManager *fileManager = [NSFileManager defaultManager];
             if ([fileManager fileExistsAtPath:self.fileURLForDataBase.path]) {
                 NSError *__autoreleasing error = nil;

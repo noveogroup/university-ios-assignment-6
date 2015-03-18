@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SettingsViewController.h"
 #import "Preferences.h"
 
 @interface RecordsViewController : UIViewController

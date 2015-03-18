@@ -25,13 +25,13 @@ static NSString *const storageMethodSectionTitle = @"Storage Method";
 
 + (void)initialize {
     localizedPasswordStrengthOptions = @{
-                                         @(PasswordStrengthWeak): @"Weak",
-                                         @(PasswordStrengthMedium): @"Medium",
-                                         @(PasswordStrengthStrong): @"Strong"
+                                         @(passwordStrengthWeak): NSLocalizedString(@"Weak", nil),
+                                         @(passwordStrengthMedium): NSLocalizedString(@"Medium", nil),
+                                         @(passwordStrengthStrong): NSLocalizedString(@"Strong", nil)
                                          };
     localizedStorageMethodOptions = @{
-                                      @(StorageMethodFile): @"File",
-                                      @(StorageMethodDatabase): @"Database"
+                                      @(storageMethodFile): NSLocalizedString(@"File", nil),
+                                      @(storageMethodDatabase): NSLocalizedString(@"Database", nil)
                                       };
 }
 
@@ -42,17 +42,17 @@ static NSString *const storageMethodSectionTitle = @"Storage Method";
         NSDictionary *sectionPasswordStrength =
             @{kSectionTitle: passwordStrengthSectionTitle,
               kSectionItems: @[
-                      localizedPasswordStrengthOptions[@(PasswordStrengthWeak)],
-                      localizedPasswordStrengthOptions[@(PasswordStrengthMedium)],
-                      localizedPasswordStrengthOptions[@(PasswordStrengthStrong)],
+                      localizedPasswordStrengthOptions[@(passwordStrengthWeak)],
+                      localizedPasswordStrengthOptions[@(passwordStrengthMedium)],
+                      localizedPasswordStrengthOptions[@(passwordStrengthStrong)],
             ]};
         
         // Define storage method section
         NSDictionary *sectionStorageMethod =
             @{kSectionTitle: storageMethodSectionTitle,
               kSectionItems: @[
-                      localizedStorageMethodOptions[@(StorageMethodFile)],
-                      localizedStorageMethodOptions[@(StorageMethodDatabase)]
+                      localizedStorageMethodOptions[@(storageMethodFile)],
+                      localizedStorageMethodOptions[@(storageMethodDatabase)]
             ]};
         
         // Define sections list
@@ -171,16 +171,18 @@ static NSString *const storageMethodSectionTitle = @"Storage Method";
         // Handle choosing of password strength
         if ([sectionTitle isEqual:passwordStrengthSectionTitle]) {
             self.checkedPasswordStrength = option;
-            PasswordStrength passwordStrength = [((NSNumber *)[localizedPasswordStrengthOptions
-                                                        allKeysForObject:option][0]) integerValue];
+            NSNumber *strengthNumber = [localizedPasswordStrengthOptions
+                                        allKeysForObject:option].firstObject;
+            PasswordStrength passwordStrength = strengthNumber.integerValue;
             [[Preferences standardPreferences] setPasswordStrength:passwordStrength];
         }
         
         // Handle chooseing of storage method
         else if ([sectionTitle isEqual:storageMethodSectionTitle]) {
             self.checkedStorageMethod = option;
-            StorageMethod storageMethod = [((NSNumber *)[localizedStorageMethodOptions
-                                                        allKeysForObject:option][0]) integerValue];
+            NSNumber *storageNumber = [localizedStorageMethodOptions
+                                       allKeysForObject:option].firstObject;
+            StorageMethod storageMethod = storageNumber.integerValue;
             [self.recordsViewController switchStorageMethodTo:storageMethod];
         }
     }

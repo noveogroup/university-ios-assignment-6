@@ -11,16 +11,16 @@
 static NSString *const kSettingsStorageMethod = @"SettingsStorageMethod";
 
 typedef NS_ENUM(NSInteger, PasswordStrength) {
-    PasswordStrengthWeak    = 5,
-    PasswordStrengthMedium  = 10,
-    PasswordStrengthDefault = PasswordStrengthMedium,
-    PasswordStrengthStrong  = 15
+    passwordStrengthWeak    = 5,
+    passwordStrengthMedium  = 10,
+    passwordStrengthDefault = passwordStrengthMedium,
+    passwordStrengthStrong  = 15
 };
 
 typedef NS_ENUM(NSInteger, StorageMethod) {
-    StorageMethodFile,
-    StorageMethodDatabase,
-    StorageMethodDefault = StorageMethodFile
+    storageMethodFile,
+    storageMethodDatabase,
+    storageMethodDefault = storageMethodFile
 };
 
 @interface Preferences : NSObject

@@ -1,5 +1,7 @@
 #import <Foundation/Foundation.h>
-#import "FMDB.h"
+
+
+@class FMDatabase;
 
 
 @interface DBHelper : NSObject

@@ -4,13 +4,13 @@
 #import "Record.h"
 
 
-static const NSUInteger PasswordLengthShort = 5;
-static const NSUInteger PasswordLengthMedium = 10;
-static const NSUInteger PasswordLengthLong = 15;
+static const NSUInteger passwordLengthShort = 5;
+static const NSUInteger passwordLengthMedium = 10;
+static const NSUInteger passwordLengthLong = 15;
 
-static NSString *const LowercaseLetterAlphabet = @"abcdefghijklmnopqrstuvwxyz";
-static NSString *const UppercaseLetterAlphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-static NSString *const DecimalDigitAlphabet = @"1234567890";
+static NSString *const lowercaseLetterAlphabet = @"abcdefghijklmnopqrstuvwxyz";
+static NSString *const uppercaseLetterAlphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+static NSString *const decimalDigitAlphabet = @"1234567890";
 
 
 @implementation RecordViewController
@@ -20,22 +20,22 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 - (void)refreshPassword
 {
     NSUInteger passwordLength = 0;
-    NSString *alphabet = LowercaseLetterAlphabet;
+    NSString *alphabet = lowercaseLetterAlphabet;
     switch ([[Preferences standardPreferences] passwordStrength]) {
-        case PasswordStrengthStrong: {
-            passwordLength = PasswordLengthLong;
-            alphabet = [alphabet stringByAppendingString:UppercaseLetterAlphabet];
-            alphabet = [alphabet stringByAppendingString:DecimalDigitAlphabet];
+        case passwordStrengthStrong: {
+            passwordLength = passwordLengthLong;
+            alphabet = [alphabet stringByAppendingString:uppercaseLetterAlphabet];
+            alphabet = [alphabet stringByAppendingString:decimalDigitAlphabet];
             break;
         }
-        case PasswordStrengthMedium: {
-            passwordLength = PasswordLengthMedium;
-            alphabet = [alphabet stringByAppendingString:UppercaseLetterAlphabet];
+        case passwordStrengthMedium: {
+            passwordLength = passwordLengthMedium;
+            alphabet = [alphabet stringByAppendingString:uppercaseLetterAlphabet];
             break;
         }
-        case PasswordStrengthWeak:
+        case passwordStrengthWeak:
         default: {
-            passwordLength = PasswordLengthShort;
+            passwordLength = passwordLengthShort;
             break;
         }
     }
