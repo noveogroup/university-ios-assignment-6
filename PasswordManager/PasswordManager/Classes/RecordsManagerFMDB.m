@@ -117,30 +117,30 @@ typedef NS_ENUM(NSInteger, SynchronizationType) {
     
     NSLog(@"Synchronization...");
     
-    FMDatabaseQueue *queue = [[FMDatabaseQueue alloc] initWithPath:self.dbPath];
-    [queue inDatabase:^(FMDatabase *db) {
-        @synchronized(self.unsynchronizedRecordsQueue) {
-            [db beginTransaction];
-            for (NSDictionary *record in self.unsynchronizedRecordsQueue) {
-                SynchronizationType syncType = [(NSNumber *)record[kSyncType] integerValue];
-                switch (syncType) {
-                    case syncTypeInsert:
-                        [DBHelper insertRecord:record intoDB:db];
-                        break;
-                    case syncTypeUpdate:
-                        [DBHelper updateRecord:record intoDB:db];
-                        break;
-                    case syncTypeDelete:
-                        [DBHelper deleteRecord:record intoDB:db];
-                        break;
-                    default:
-                        break;
-                }
+    FMDatabase *db = [FMDatabase databaseWithPath:self.dbPath];
+    [db open];
+    @synchronized(self.unsynchronizedRecordsQueue) {
+        [db beginTransaction];
+        for (NSDictionary *record in self.unsynchronizedRecordsQueue) {
+            SynchronizationType syncType = [(NSNumber *)record[kSyncType] integerValue];
+            switch (syncType) {
+                case syncTypeInsert:
+                    [DBHelper insertRecord:record intoDB:db];
+                    break;
+                case syncTypeUpdate:
+                    [DBHelper updateRecord:record intoDB:db];
+                    break;
+                case syncTypeDelete:
+                    [DBHelper deleteRecord:record intoDB:db];
+                    break;
+                default:
+                    break;
             }
-            [db commit];
-            [self.unsynchronizedRecordsQueue removeAllObjects];
         }
-    }];
+        [db commit];
+        [self.unsynchronizedRecordsQueue removeAllObjects];
+    }
+    [db close];
     
     NSLog(@"Synchronization... DONE");
     

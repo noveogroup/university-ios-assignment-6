@@ -86,6 +86,10 @@ static NSString *const storageMethodSectionTitle = @"Storage Method";
                                                object:nil];
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)applicationDidBecomeActive {
     BOOL needReload = NO;
     PasswordStrength passwordStrength = [[Preferences standardPreferences] passwordStrength];
