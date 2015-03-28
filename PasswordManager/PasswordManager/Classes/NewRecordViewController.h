@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Noveo. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "RecordViewController.h"
 
 @class NewRecordViewController;
 
@@ -28,7 +28,8 @@
 
 @end
 
-@interface NewRecordViewController : UIViewController
+
+@interface NewRecordViewController : RecordViewController
 
 /**
  *  Returns the object that handles the delegated duties.

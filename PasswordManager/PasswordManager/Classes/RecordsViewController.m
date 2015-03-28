@@ -10,17 +10,26 @@
 #import "Record.h"
 #import "RecordsManager.h"
 #import "RecordsViewController.h"
+#import "EditRecordViewController.h"
+#import "StorageController.h"
+#import "RecordsManagerFMDB.h"
+#import "SettingsViewController.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
+static NSString *const DefaultFileNameForDataBase = @"AwesomeDataBase";
 
 @interface RecordsViewController ()
     <UITableViewDataSource,
      UITableViewDelegate,
-     NewRecordViewControllerDelegate>
+     NewRecordViewControllerDelegate,
+     EditRecordViewControllerDelegate>
 
-@property (nonatomic, readonly) RecordsManager *recordsManager;
+@property (nonatomic, readonly) id<StorageController> recordsManager;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+@property (strong, nonatomic) NSURL *fileURLForLocalStore;
+@property (strong, nonatomic) NSURL *fileURLForDataBase;
 
 - (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender;
 
@@ -32,20 +41,61 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 @synthesize tableView = tableView_;
 
+- (instancetype)init {
+    self = [super init];
+    if (self != nil) {
+        StorageMethod settingsStorageMethod = [[NSUserDefaults standardUserDefaults]
+                                               integerForKey:kSettingsStorageMethod];
+        if (settingsStorageMethod != [[Preferences standardPreferences] storageMethod]) {
+            [self switchStorageMethodTo:settingsStorageMethod];
+        }
+    }
+    return self;
+}
+
+#pragma mark - View's lifecycle
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.tableView.allowsMultipleSelection = NO;
+    self.tableView.allowsMultipleSelectionDuringEditing = NO;
+}
+
 #pragma mark - Getters
 
-- (RecordsManager *)recordsManager
+- (id<StorageController>)recordsManager
 {
     if (!recordsManager_) {
-        NSURL *const documentDirectoryURL =
-            [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
-                                                    inDomains:NSUserDomainMask] lastObject];
-        NSURL *const fileURLForLocalStore =
-            [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
-
-        recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
+        StorageMethod storageMethod = [[Preferences standardPreferences] storageMethod];
+        NSLog(@"Storage method is set to '%@'", storageMethod ? @"Database" : @"File");
+        switch (storageMethod) {
+            case storageMethodFile: {
+                NSURL *const documentDirectoryURL =
+                    [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                        inDomains:NSUserDomainMask] lastObject];
+                self.fileURLForLocalStore =
+                    [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
+                
+                recordsManager_ = [[RecordsManager alloc] initWithURL:self.fileURLForLocalStore];
+                break;
+            }
+            case storageMethodDatabase: {
+                NSURL *const documentDirectoryURL =
+                    [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                            inDomains:NSUserDomainMask] lastObject];
+                self.fileURLForDataBase =
+                    [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForDataBase];
+                
+                recordsManager_ = [[RecordsManagerFMDB alloc]
+                                   initWithDbPath:[self.fileURLForDataBase path]];
+                break;
+            }
+            default: {
+                break;
+            }
+        }
     }
-
     return recordsManager_;
 }
 
@@ -53,12 +103,21 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 - (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender
 {
-    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] init];
+    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc]
+        initWithNibName:@"RecordViewController" bundle:[NSBundle mainBundle]];
     rootViewController.delegate = self;
 
     UINavigationController *const navigationController =
         [[UINavigationController alloc] initWithRootViewController:rootViewController];
     [self presentViewController:navigationController animated:YES completion:NULL];
+}
+
+- (IBAction)didTouchSettingsBarButtonItem:(UIBarButtonItem *)sender {
+    SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
+    settingsVC.recordsViewController = self;
+    UINavigationController *navController = [[UINavigationController alloc]
+                                             initWithRootViewController:settingsVC];
+    [self presentViewController:navController animated:YES completion:nil];
 }
 
 #pragma mark - UITableViewDataSource implementation
@@ -92,10 +151,33 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 #pragma mark - UITableViewDelegate implementation
 
--       (void)tableView:(UITableView *)tableView
-didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    NSDictionary *const record = [[self.recordsManager records] objectAtIndex:indexPath.row];
+    
+    EditRecordViewController *const rootViewController = [[EditRecordViewController alloc]
+        initWithNibName:@"RecordViewController" bundle:[NSBundle mainBundle]];
+    rootViewController.record = record;
+    rootViewController.delegate = self;
+    
+    UINavigationController *const navigationController =
+    [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    [self presentViewController:navigationController animated:YES completion:nil];
+}
+
+- (void)tableView:(UITableView *)tableView
+        commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+        forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        NSDictionary *record = [[self.recordsManager records] objectAtIndex:indexPath.row];
+        [self.recordsManager deleteRecord:record];
+        [self.recordsManager synchronize];
+        [tableView deleteRowsAtIndexPaths:@[indexPath]
+                         withRowAnimation:UITableViewRowAnimationRight];
+    }
 }
 
 #pragma mark - NewRecordViewControllerDelegate implementation
@@ -110,7 +192,85 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         [self.tableView reloadData];
     }
     [self dismissViewControllerAnimated:YES
-                             completion:NULL];
+                             completion:nil];
+}
+
+- (void)editRecordViewController:(EditRecordViewController *)sender
+             didFinishEditRecord:(NSDictionary *)editedRecord
+                        byRecord:(NSDictionary *)resultRecord
+{
+    if (![editedRecord isEqual:resultRecord]) {
+        [self.recordsManager modifyRecord:editedRecord byRecord:resultRecord];
+        [self.recordsManager synchronize];
+        
+        [self.tableView reloadData];
+    }
+    [self dismissViewControllerAnimated:YES
+                             completion:nil];
+}
+
+#pragma mark - Switch storage method implementation
+
+- (void)switchStorageMethodTo:(StorageMethod)storageMethod {
+    NSLog(@"Switching to storage method %@...", storageMethod ? @"Database" : @"File");
+    
+    // Create "dump" of all records
+    NSLog(@"Creating a \"dump\" of all records...");
+    NSArray *allRecords = [self.recordsManager records];
+    NSLog(@"Creating a \"dump\" of all records...DONE");
+    
+    // Invalidate current record manager
+    recordsManager_ = nil;
+    
+    // Initialize new record manager and copy the all records to it
+    [[Preferences standardPreferences] setStorageMethod:storageMethod];
+    [self.recordsManager setRecords:allRecords];
+    [self.recordsManager synchronize];
+    NSLog(@"Records are successfully copied to the new storage");
+
+    // Clear previous storage
+    StorageMethod previousStorageMethod =
+        storageMethod == storageMethodFile ? storageMethodDatabase : storageMethodFile;
+    [self clearStorageForMethod:previousStorageMethod];
+            
+    NSLog(@"Switching to storage method %@... DONE", storageMethod ? @"Database" : @"File");
+}
+
+- (void)clearStorageForMethod:(StorageMethod)storageMethod {
+    switch (storageMethod) {
+        case storageMethodFile: {
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            if ([fileManager fileExistsAtPath:self.fileURLForLocalStore.path]) {
+                NSError *__autoreleasing error = nil;
+                [fileManager removeItemAtURL:self.fileURLForLocalStore error:&error];
+                if (error != nil) {
+                    NSLog(@"An error occurred while trying to delete file: %@", error);
+                }
+                else {
+                    NSLog(@"The local store file previously used is successfully deleted.");
+                }
+            }
+            break;
+        }
+        case storageMethodDatabase: {
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            if ([fileManager fileExistsAtPath:self.fileURLForDataBase.path]) {
+                NSError *__autoreleasing error = nil;
+                [fileManager removeItemAtURL:self.fileURLForDataBase error:&error];
+                if (error != nil) {
+                    NSLog(@"An error occurred while trying to delete database: %@", error);
+                }
+                else {
+                    NSLog(@"The database previously used is successfully deleted.");
+                }
+            }
+            break;
+        }
+        default:
+            NSLog(@"Clearing of storage with type %ld is not implemented yet. Please implement it.",
+                  storageMethod);
+            break;
+    }
 }
 
 @end

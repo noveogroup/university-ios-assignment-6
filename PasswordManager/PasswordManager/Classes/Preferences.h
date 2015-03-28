@@ -8,11 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
+static NSString *const kSettingsStorageMethod = @"SettingsStorageMethod";
+
 typedef NS_ENUM(NSInteger, PasswordStrength) {
-    PasswordStrengthWeak    = 5,
-    PasswordStrengthMedium  = 10,
-    PasswordStrengthDefault = PasswordStrengthMedium,
-    PasswordStrengthStrong  = 15
+    passwordStrengthWeak    = 5,
+    passwordStrengthMedium  = 10,
+    passwordStrengthDefault = passwordStrengthMedium,
+    passwordStrengthStrong  = 15
+};
+
+typedef NS_ENUM(NSInteger, StorageMethod) {
+    storageMethodFile,
+    storageMethodDatabase,
+    storageMethodDefault = storageMethodFile
 };
 
 @interface Preferences : NSObject
@@ -20,7 +28,12 @@ typedef NS_ENUM(NSInteger, PasswordStrength) {
 /**
  *  Returns the strength rate of the passwords the applications generates.
  */
-@property (nonatomic, readwrite) NSInteger passwordStrength;
+@property (nonatomic, readwrite) PasswordStrength passwordStrength;
+
+/**
+ *  Returns the storage method of persisting passwords.
+ */
+@property (nonatomic, readwrite) StorageMethod storageMethod;
 
 /**
  *  Returns the shared preferences object.
