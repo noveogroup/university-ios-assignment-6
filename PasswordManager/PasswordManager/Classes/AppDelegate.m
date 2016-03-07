@@ -10,6 +10,7 @@
 #import "RecordsViewController.h"
 
 @interface AppDelegate ()
+@property (strong, nonatomic) UITabBarController *tabController;
 
 @end
 
@@ -21,16 +22,22 @@
 didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-
+    
+    
     self.window.rootViewController =
         [[UINavigationController alloc]
             initWithRootViewController:[[RecordsViewController alloc] init]];
+    
+    
+    
 
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
 
     return YES;
 }
+
+
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {

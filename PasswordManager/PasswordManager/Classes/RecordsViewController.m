@@ -15,14 +15,15 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 @interface RecordsViewController ()
     <UITableViewDataSource,
-     UITableViewDelegate,
-     NewRecordViewControllerDelegate>
+    UITableViewDelegate,
+    NewRecordViewControllerDelegate>
 
 @property (nonatomic, readonly) RecordsManager *recordsManager;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 - (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender;
+
 
 @end
 
@@ -31,6 +32,34 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 @synthesize recordsManager = recordsManager_;
 
 @synthesize tableView = tableView_;
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+
+    self.edgesForExtendedLayout = UIRectEdgeNone;
+    self.title = @"Password manager";
+    self.navigationController.navigationItem.rightBarButtonItem.title = @"tes";
+    
+    UIBarButtonItem *editButton =
+        [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
+                                                      target:self
+                                                      action:@selector(actionEdit:)];
+    
+    self.navigationItem.leftBarButtonItem = editButton;
+    UIImage *image = [UIImage imageNamed:@"settings"];
+    
+    UIBarButtonItem *settingsButton =
+        [[UIBarButtonItem alloc] initWithImage:image
+                                         style:UIBarButtonItemStyleDone
+                                        target:self
+                                        action:@selector(actionSettings:)];
+    
+    self.navigationItem.rightBarButtonItem = settingsButton;
+    
+    
+}
 
 #pragma mark - Getters
 
@@ -51,6 +80,18 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 #pragma mark - Actions
 
+- (void)actionSettings:(UIBarButtonItem *)sender
+{
+    NSLog(@"actionSettings");
+    
+}
+
+- (void)actionEdit:(UIBarButtonItem *)sender
+{
+    NSLog(@"actionEdit");
+    
+}
+
 - (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender
 {
     NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] init];
@@ -58,6 +99,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
     UINavigationController *const navigationController =
         [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    
     [self presentViewController:navigationController animated:YES completion:NULL];
 }
 

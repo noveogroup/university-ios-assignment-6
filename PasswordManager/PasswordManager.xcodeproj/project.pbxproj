@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		84E233A71C8C3744006F3B7F /* PasswordEditVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E233A51C8C3744006F3B7F /* PasswordEditVC.m */; };
+		84E233A81C8C3744006F3B7F /* PasswordEditVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84E233A61C8C3744006F3B7F /* PasswordEditVC.xib */; };
 		93DE15E318B4AA8D00A46FD2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E218B4AA8D00A46FD2 /* Foundation.framework */; };
 		93DE15E518B4AA8D00A46FD2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E418B4AA8D00A46FD2 /* CoreGraphics.framework */; };
 		93DE15E718B4AA8D00A46FD2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E618B4AA8D00A46FD2 /* UIKit.framework */; };
@@ -27,6 +29,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		84E233A41C8C3744006F3B7F /* PasswordEditVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasswordEditVC.h; sourceTree = "<group>"; };
+		84E233A51C8C3744006F3B7F /* PasswordEditVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasswordEditVC.m; sourceTree = "<group>"; };
+		84E233A61C8C3744006F3B7F /* PasswordEditVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PasswordEditVC.xib; sourceTree = "<group>"; };
 		93C1371818B602AD0021D0F2 /* Record.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Record.h; sourceTree = "<group>"; };
 		93DE15DF18B4AA8D00A46FD2 /* PasswordManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PasswordManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93DE15E218B4AA8D00A46FD2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -129,6 +134,9 @@
 				93DE162218B5955400A46FD2 /* Categories */,
 				93DE161218B4AAD800A46FD2 /* AppDelegate.h */,
 				93DE161318B4AAD800A46FD2 /* AppDelegate.m */,
+				84E233A41C8C3744006F3B7F /* PasswordEditVC.h */,
+				84E233A51C8C3744006F3B7F /* PasswordEditVC.m */,
+				84E233A61C8C3744006F3B7F /* PasswordEditVC.xib */,
 				93E767E418B5F3790053F9F0 /* NewRecordViewController.h */,
 				93E767E518B5F3790053F9F0 /* NewRecordViewController.m */,
 				93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */,
@@ -212,6 +220,7 @@
 			files = (
 				93E767E818B5F9BA0053F9F0 /* NewRecordViewController.xib in Resources */,
 				93DE15ED18B4AA8D00A46FD2 /* InfoPlist.strings in Resources */,
+				84E233A81C8C3744006F3B7F /* PasswordEditVC.xib in Resources */,
 				93DE15F518B4AA8D00A46FD2 /* Images.xcassets in Resources */,
 				93E767DD18B5D8DE0053F9F0 /* RecordsViewController.xib in Resources */,
 			);
@@ -225,6 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				93DE161418B4AAD800A46FD2 /* AppDelegate.m in Sources */,
+				84E233A71C8C3744006F3B7F /* PasswordEditVC.m in Sources */,
 				93DE161B18B591E900A46FD2 /* NSMutableString+Shuffling.m in Sources */,
 				93E767DC18B5D8DE0053F9F0 /* RecordsViewController.m in Sources */,
 				93DE162118B5955100A46FD2 /* NSString+Shuffling.m in Sources */,
@@ -331,6 +341,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PasswordManager/PasswordManager-Prefix.pch";
 				INFOPLIST_FILE = "PasswordManager/PasswordManager-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -344,6 +355,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PasswordManager/PasswordManager-Prefix.pch";
 				INFOPLIST_FILE = "PasswordManager/PasswordManager-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
