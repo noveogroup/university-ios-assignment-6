@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, PasswordLength) {
 
 
 
-@interface Preferences : UITableViewController
+@interface PreferencesTableVC : UITableViewController
 
 
 /**
@@ -42,5 +42,7 @@ typedef NS_ENUM(NSInteger, PasswordLength) {
  *  Returns the shared preferences object.
  */
 + (instancetype)standardPreferences;
+
+- (id)objectForKey:(NSString *)key;
 
 @end

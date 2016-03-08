@@ -31,6 +31,8 @@
 - (void)removeRecord:(NSDictionary *)record;
 
 
+- (void)changePasswordForRecord:(NSDictionary *)record withPrevRecord:(NSDictionary *)prevRecord;
+
 /**
  *  Returns the records the receiver manages.
  */

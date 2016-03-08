@@ -24,7 +24,7 @@
 		93E767DC18B5D8DE0053F9F0 /* RecordsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E767DA18B5D8DE0053F9F0 /* RecordsViewController.m */; };
 		93E767DD18B5D8DE0053F9F0 /* RecordsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E767DB18B5D8DE0053F9F0 /* RecordsViewController.xib */; };
 		93E767E018B5DA9A0053F9F0 /* RecordsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E767DF18B5DA9A0053F9F0 /* RecordsManager.m */; };
-		93E767E318B5EDD90053F9F0 /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E767E218B5EDD90053F9F0 /* Preferences.m */; };
+		93E767E318B5EDD90053F9F0 /* PreferencesTableVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E767E218B5EDD90053F9F0 /* PreferencesTableVC.m */; };
 		93E767E618B5F3790053F9F0 /* NewRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E767E518B5F3790053F9F0 /* NewRecordViewController.m */; };
 		93E767E818B5F9BA0053F9F0 /* NewRecordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */; };
 /* End PBXBuildFile section */
@@ -60,8 +60,8 @@
 		93E767DB18B5D8DE0053F9F0 /* RecordsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecordsViewController.xib; sourceTree = "<group>"; };
 		93E767DE18B5DA9A0053F9F0 /* RecordsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordsManager.h; sourceTree = "<group>"; };
 		93E767DF18B5DA9A0053F9F0 /* RecordsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordsManager.m; sourceTree = "<group>"; };
-		93E767E118B5EDD90053F9F0 /* Preferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Preferences.h; sourceTree = "<group>"; };
-		93E767E218B5EDD90053F9F0 /* Preferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Preferences.m; sourceTree = "<group>"; };
+		93E767E118B5EDD90053F9F0 /* PreferencesTableVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesTableVC.h; sourceTree = "<group>"; };
+		93E767E218B5EDD90053F9F0 /* PreferencesTableVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesTableVC.m; sourceTree = "<group>"; };
 		93E767E418B5F3790053F9F0 /* NewRecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewRecordViewController.h; sourceTree = "<group>"; };
 		93E767E518B5F3790053F9F0 /* NewRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewRecordViewController.m; sourceTree = "<group>"; };
 		93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewRecordViewController.xib; sourceTree = "<group>"; };
@@ -144,8 +144,8 @@
 				93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */,
 				93DE161618B4AB7F00A46FD2 /* PasswordGenerator.h */,
 				93DE161718B4AB7F00A46FD2 /* PasswordGenerator.m */,
-				93E767E118B5EDD90053F9F0 /* Preferences.h */,
-				93E767E218B5EDD90053F9F0 /* Preferences.m */,
+				93E767E118B5EDD90053F9F0 /* PreferencesTableVC.h */,
+				93E767E218B5EDD90053F9F0 /* PreferencesTableVC.m */,
 				84E233B01C8EF77A006F3B7F /* PreferencesStoryboard.storyboard */,
 				93C1371818B602AD0021D0F2 /* Record.h */,
 				93E767DE18B5DA9A0053F9F0 /* RecordsManager.h */,
@@ -245,7 +245,7 @@
 				93DE161818B4AB7F00A46FD2 /* PasswordGenerator.m in Sources */,
 				93DE161E18B5929400A46FD2 /* NSMutableString+Exchange.m in Sources */,
 				93E767E618B5F3790053F9F0 /* NewRecordViewController.m in Sources */,
-				93E767E318B5EDD90053F9F0 /* Preferences.m in Sources */,
+				93E767E318B5EDD90053F9F0 /* PreferencesTableVC.m in Sources */,
 				93E767E018B5DA9A0053F9F0 /* RecordsManager.m in Sources */,
 				93DE15EF18B4AA8D00A46FD2 /* main.m in Sources */,
 			);

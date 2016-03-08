@@ -8,14 +8,14 @@
 
 #import "NewRecordViewController.h"
 #import "PasswordGenerator.h"
-#import "Preferences.h"
+#import "PreferencesTableVC.h"
 #import "Record.h"
 
-
+static NSString *const AlphabetDefault = @"abcdefghijklmnopqrstuvwxyz";
 static NSString *const LowercaseLetterAlphabet = @"abcdefghijklmnopqrstuvwxyz";
 static NSString *const UppercaseLetterAlphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-static NSString *const DecimalDigitAlphabet = @"1234567890";
-static NSString *const SymbolsAlphabet = @"@#$%^&*";
+static NSString *const DecimalDigitAlphabet = @"12345678901234567890";
+static NSString *const SymbolsAlphabet = @"@#$%^&*@#$%^&*@#$%^&*";
 
 
 @interface NewRecordViewController ()
@@ -38,34 +38,82 @@ static NSString *const SymbolsAlphabet = @"@#$%^&*";
 @implementation NewRecordViewController
 
 @synthesize delegate = delegate_;
-
 @synthesize serviceNameTextField = serviceNameTextField_;
 @synthesize passwordLabel = passwordLabel_;
 
 #pragma mark - Auxiliaries
 
-- (void)refreshPassword
+- (NSString *)generatePassword
 {
-    NSUInteger passwordLength = [[Preferences standardPreferences] passwordLength];
+    NSUInteger passwordLength = [[PreferencesTableVC standardPreferences] passwordLength];
     
     NSString *alphabet = [NSString string];
     
-    if ([[Preferences standardPreferences] includeLowercaseChars]) {
+    if ([[PreferencesTableVC standardPreferences] includeLowercaseChars]) {
         alphabet = [alphabet stringByAppendingString:LowercaseLetterAlphabet];
     }
     
-    if ([[Preferences standardPreferences] includeUppercaseChars]) {
+    if ([[PreferencesTableVC standardPreferences] includeUppercaseChars]) {
         alphabet = [alphabet stringByAppendingString:UppercaseLetterAlphabet];
     }
-
-    if ([[Preferences standardPreferences] includeNumbers]) {
+    
+    if ([[PreferencesTableVC standardPreferences] includeNumbers]) {
         alphabet = [alphabet stringByAppendingString:DecimalDigitAlphabet];
     }
     
-    if ([[Preferences standardPreferences] includeSymbols]) {
+    if ([[PreferencesTableVC standardPreferences] includeSymbols]) {
         alphabet = [alphabet stringByAppendingString:SymbolsAlphabet];
     }
     
+    
+    if (![[PreferencesTableVC standardPreferences] includeLowercaseChars] &&
+        ![[PreferencesTableVC standardPreferences] includeUppercaseChars] &&
+        ![[PreferencesTableVC standardPreferences] includeNumbers] &&
+        ![[PreferencesTableVC standardPreferences] includeSymbols]) {
+        
+        alphabet = [alphabet stringByAppendingString:AlphabetDefault];
+    }
+    
+    
+    NSString *result = [PasswordGenerator generatePasswordOfLength:passwordLength
+                                                           usingAlphabet:alphabet];
+    
+
+    return result;
+}
+
+- (void)refreshPassword
+{
+    NSUInteger passwordLength = [[PreferencesTableVC standardPreferences] passwordLength];
+    
+    NSString *alphabet = [NSString string];
+    
+    if ([[PreferencesTableVC standardPreferences] includeLowercaseChars]) {
+        alphabet = [alphabet stringByAppendingString:LowercaseLetterAlphabet];
+    }
+    
+    if ([[PreferencesTableVC standardPreferences] includeUppercaseChars]) {
+        alphabet = [alphabet stringByAppendingString:UppercaseLetterAlphabet];
+    }
+
+    if ([[PreferencesTableVC standardPreferences] includeNumbers]) {
+        alphabet = [alphabet stringByAppendingString:DecimalDigitAlphabet];
+    }
+    
+    if ([[PreferencesTableVC standardPreferences] includeSymbols]) {
+        alphabet = [alphabet stringByAppendingString:SymbolsAlphabet];
+    }
+    
+    
+    if (![[PreferencesTableVC standardPreferences] includeLowercaseChars] &&
+        ![[PreferencesTableVC standardPreferences] includeUppercaseChars] &&
+        ![[PreferencesTableVC standardPreferences] includeNumbers] &&
+        ![[PreferencesTableVC standardPreferences] includeSymbols]) {
+        
+        alphabet = [alphabet stringByAppendingString:AlphabetDefault];
+    }
+    
+        
     self.passwordLabel.text =
         [PasswordGenerator generatePasswordOfLength:passwordLength
                                       usingAlphabet:alphabet];
@@ -81,16 +129,7 @@ static NSString *const SymbolsAlphabet = @"@#$%^&*";
     }
 }
 
-- (void)deleteRecord
-{
-    NSDictionary *const record =
-        @{kServiceName: self.serviceNameTextField.text,
-          kPassword: self.passwordLabel.text};
-    
-    
-    [self.delegate newRecordViewController:self didFinishWithRecord:record];
-    
-}
+
 
 #pragma mark - View's lifecycle
 

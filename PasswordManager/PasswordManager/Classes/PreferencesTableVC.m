@@ -6,9 +6,8 @@
 //  Copyright (c) 2014 Noveo. All rights reserved.
 //
 
-#import "Preferences.h"
+#import "PreferencesTableVC.h"
 
-NSString *const kPasswordStrength            = @"PasswordStrength";
 NSString *const kPasswordLength              = @"PasswordLength";
 NSString *const kIncludeLowercaseCharacters  = @"LowercaseCharacters";
 NSString *const kIncludeUppercaseCharacters  = @"UppercaseCharacters";
@@ -16,7 +15,7 @@ NSString *const kIncludeNumbers              = @"Numbers";
 NSString *const kInludeSymbols               = @"Symbols";
 
 
-@interface Preferences ()
+@interface PreferencesTableVC ()
 
 @property (strong, nonatomic) IBOutlet UISwitch *switchLowChar;
 @property (strong, nonatomic) IBOutlet UISwitch *switchUpChar;
@@ -38,11 +37,12 @@ NSString *const kInludeSymbols               = @"Symbols";
 
 
 
-@implementation Preferences
+@implementation PreferencesTableVC
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     
     [self loadSettings];
     
@@ -137,13 +137,18 @@ NSString *const kInludeSymbols               = @"Symbols";
     }
 }
 
+- (id)objectForKey:(NSString *)key
+{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:key];
+}
+
 
 #pragma mark - Class methods
 
 + (instancetype)standardPreferences
 {
     static dispatch_once_t onceToken = 0;
-    static Preferences *standardPreferences_ = nil;
+    static PreferencesTableVC *standardPreferences_ = nil;
     dispatch_once(&onceToken, ^{
         standardPreferences_ = [[self alloc] init];
     });
@@ -153,10 +158,7 @@ NSString *const kInludeSymbols               = @"Symbols";
 
 #pragma mark - Getters
 
-- (NSInteger)passwordStrength
-{
-    return [[NSUserDefaults standardUserDefaults] integerForKey:kPasswordStrength];
-}
+
 
 - (NSInteger)passwordLength
 {
@@ -197,20 +199,15 @@ NSString *const kInludeSymbols               = @"Symbols";
     return [[NSUserDefaults standardUserDefaults] integerForKey:kInludeSymbols];
 }
 
-#pragma mark - Setters
 
-- (void)setPasswordStrength:(NSInteger)passwordStrength
-{
-    [[NSUserDefaults standardUserDefaults] setInteger:passwordStrength
-                                               forKey:kPasswordStrength];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
 
 #pragma mark - Initialization
 
 - (id)init
 {
     if ((self = [super init])) {
+        
+        
         [self registerUserDefaultsFromSettingsBundle];
     }
 
@@ -243,6 +240,7 @@ NSString *const kInludeSymbols               = @"Symbols";
             }
         }
     }
+    
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
     [[NSUserDefaults standardUserDefaults] synchronize];

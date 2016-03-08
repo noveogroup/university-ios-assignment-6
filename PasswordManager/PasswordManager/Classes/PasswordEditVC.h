@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RecordsManager.h"
 
 @interface PasswordEditVC : UIViewController
+
+@property (copy, nonatomic) NSDictionary *passObject;
+@property (strong, nonatomic) RecordsManager *recordsManager;
 
 @end

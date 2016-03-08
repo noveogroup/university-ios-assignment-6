@@ -7,6 +7,7 @@
 //
 
 #import "RecordsManager.h"
+#import "Record.h"
 
 @interface RecordsManager ()
 
@@ -53,6 +54,21 @@
     if ([record count] > 0) {
         [self.mutableRecords removeObject:record];
     }
+}
+
+- (void)changePasswordForRecord:(NSDictionary *)record withPrevRecord:(NSDictionary *)prevRecord
+
+{
+    NSMutableArray *tempArray = self.mutableRecords;
+    [tempArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+       
+        if ([prevRecord isEqual:obj]) {
+            [self.mutableRecords removeObject:self.mutableRecords[idx]];
+        }
+        
+    }];
+    [self registerRecord:record];
+    [self synchronize];
 }
 
 - (NSMutableArray *)mutableRecords

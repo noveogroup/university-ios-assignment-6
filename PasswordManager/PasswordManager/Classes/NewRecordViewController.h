@@ -27,9 +27,6 @@
             didFinishWithRecord:(NSDictionary *)record;
 
 
-- (void)deleteRecordViewController:(NewRecordViewController *)sender
-            didFinishWithRecord:(NSDictionary *)record;
-
 @end
 
 @interface NewRecordViewController : UIViewController
@@ -38,5 +35,8 @@
  *  Returns the object that handles the delegated duties.
  */
 @property (nonatomic, weak) id<NewRecordViewControllerDelegate> delegate;
+
+- (NSString *)generatePassword;
+
 
 @end

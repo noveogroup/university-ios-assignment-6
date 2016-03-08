@@ -8,9 +8,9 @@
 
 #import "NewRecordViewController.h"
 #import "Record.h"
-#import "RecordsManager.h"
 #import "RecordsViewController.h"
-#import "Preferences.h"
+#import "PreferencesTableVC.h"
+#import "PasswordEditVC.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
@@ -19,7 +19,6 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
     UITableViewDelegate,
     NewRecordViewControllerDelegate>
 
-@property (nonatomic, readonly) RecordsManager *recordsManager;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
@@ -33,6 +32,13 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 @synthesize recordsManager = recordsManager_;
 
 @synthesize tableView = tableView_;
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.tableView reloadData]; 
+}
+
 
 - (void)viewDidLoad
 {
@@ -50,8 +56,8 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
                                                       action:@selector(actionEdit:)];
     
     self.navigationItem.leftBarButtonItem = editButton;
-    UIImage *image = [UIImage imageNamed:@"settings"];
     
+    UIImage *image = [UIImage imageNamed:@"settings"];
     UIBarButtonItem *settingsButton =
         [[UIBarButtonItem alloc] initWithImage:image
                                          style:UIBarButtonItemStyleDone
@@ -88,7 +94,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
         [UIStoryboard storyboardWithName:@"PreferencesStoryboard"
                                   bundle:[NSBundle mainBundle]];
     
-    Preferences *preferences = [storyBoard instantiateViewControllerWithIdentifier:@"Preferences"];
+    PreferencesTableVC *preferences = [storyBoard instantiateViewControllerWithIdentifier:@"Preferences"];
     
     [self presentViewController:preferences animated:YES completion:NULL];
     
@@ -156,6 +162,19 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 -       (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    PasswordEditVC *passEditVC =
+        [[PasswordEditVC alloc] initWithNibName:NSStringFromClass([PasswordEditVC class])
+                                         bundle:[NSBundle mainBundle]];
+    
+    NSDictionary *record = [[self.recordsManager records] objectAtIndex:indexPath.row];
+    
+    passEditVC.passObject = record;
+    passEditVC.recordsManager = self.recordsManager;
+    
+    [self.navigationController pushViewController:passEditVC animated:YES];
+    
+    
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
