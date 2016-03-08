@@ -12,11 +12,80 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
 
 @interface Preferences ()
 
+@property (strong, nonatomic) IBOutlet UISwitch *switchLowChar;
+@property (strong, nonatomic) IBOutlet UISwitch *switchUpChar;
+@property (strong, nonatomic) IBOutlet UISwitch *switchNum;
+@property (strong, nonatomic) IBOutlet UISwitch *switchSymb;
+@property (strong, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
+
+- (IBAction)actionCancel:(UIButton *)sender;
+- (IBAction)actionSave:(UIButton *)sender;
+
+
 - (void)registerUserDefaultsFromSettingsBundle;
 
 @end
 
+NSString *const kSettingsPasswordLength              = @"PasswordLength";
+NSString *const kSettingsIncludeLowercaseCharacters  = @"LowercaseCharacters";
+NSString *const kSettingsIncludeUppercaseCharacters  = @"UppercaseCharacters";
+NSString *const kSettingsIncludeNumbers              = @"Numbers";
+NSString *const kSettingsInludeSymbols               = @"Symbols";
+
 @implementation Preferences
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [self loadSettings];
+    self.title = @"Settings";
+    self.navigationItem.backBarButtonItem.title = @"Back";
+    
+    
+}
+
+#pragma mark - Save and Load settings
+
+- (void)saveSettings
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    [userDefaults setInteger:self.segmentedControl.selectedSegmentIndex forKey:kSettingsPasswordLength];
+    [userDefaults setBool:self.switchLowChar.isOn forKey:kSettingsIncludeLowercaseCharacters];
+    [userDefaults setBool:self.switchUpChar.isOn forKey:kSettingsIncludeUppercaseCharacters];
+    [userDefaults setBool:self.switchNum.isOn forKey:kSettingsIncludeNumbers];
+    [userDefaults setBool:self.switchSymb.isOn forKey:kSettingsInludeSymbols];
+    
+    [userDefaults synchronize];
+    
+}
+
+- (void)loadSettings
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    self.segmentedControl.selectedSegmentIndex = [userDefaults integerForKey:kSettingsPasswordLength];
+    self.switchLowChar.on = [userDefaults boolForKey:kSettingsIncludeLowercaseCharacters];
+    self.switchUpChar.on = [userDefaults boolForKey:kSettingsIncludeUppercaseCharacters];
+    self.switchNum.on = [userDefaults boolForKey:kSettingsIncludeNumbers];
+    self.switchSymb.on = [userDefaults boolForKey:kSettingsInludeSymbols];
+    
+}
+
+
+#pragma mark - Actions
+
+- (IBAction)actionCancel:(UIButton *)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)actionSave:(UIButton *)sender
+{
+    [self saveSettings];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 #pragma mark - Class methods
 

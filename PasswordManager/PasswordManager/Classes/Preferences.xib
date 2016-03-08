@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingsVC">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="Preferences">
             <connections>
                 <outlet property="segmentedControl" destination="Ok8-UF-cQE" id="ucf-9u-Jbm"/>
                 <outlet property="switchLowChar" destination="Mqx-U7-EoN" id="ncF-nZ-iLP"/>

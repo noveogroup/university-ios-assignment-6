@@ -15,7 +15,13 @@ typedef NS_ENUM(NSInteger, PasswordStrength) {
     PasswordStrengthStrong  = 15
 };
 
-@interface Preferences : NSObject
+extern NSString *const kSettingsPasswordLength;
+extern NSString *const kSettingsIncludeLowercaseCharacters;
+extern NSString *const kSettingsIncludeUppercaseCharacters;
+extern NSString *const kSettingsIncludeNumbers;
+extern NSString *const kSettingsInludeSymbols;
+
+@interface Preferences : UIViewController
 
 /**
  *  Returns the strength rate of the passwords the applications generates.
