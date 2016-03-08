@@ -8,25 +8,35 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSInteger, PasswordStrength) {
-    PasswordStrengthWeak    = 5,
-    PasswordStrengthMedium  = 10,
-    PasswordStrengthDefault = PasswordStrengthMedium,
-    PasswordStrengthStrong  = 15
+
+
+extern NSString *const kPasswordLength;
+extern NSString *const kIncludeLowercaseCharacters;
+extern NSString *const kIncludeUppercaseCharacters;
+extern NSString *const kIncludeNumbers;
+extern NSString *const kInludeSymbols;
+
+typedef NS_ENUM(NSInteger, PasswordLength) {
+    PasswordLengthShort    = 5,
+    PasswordLengthSMedium  = 10,
+    PasswordLengthDefault = PasswordLengthShort,
+    PasswordLengthLong  = 15
 };
 
-extern NSString *const kSettingsPasswordLength;
-extern NSString *const kSettingsIncludeLowercaseCharacters;
-extern NSString *const kSettingsIncludeUppercaseCharacters;
-extern NSString *const kSettingsIncludeNumbers;
-extern NSString *const kSettingsInludeSymbols;
+
 
 @interface Preferences : UIViewController
 
+
 /**
- *  Returns the strength rate of the passwords the applications generates.
+ *  Returns the length of the passwords the applications generates.
  */
-@property (nonatomic, readwrite) NSInteger passwordStrength;
+@property (nonatomic, readwrite) NSInteger passwordLength;
+
+@property (nonatomic) BOOL includeLowercaseChars;
+@property (nonatomic) BOOL includeUppercaseChars;
+@property (nonatomic) BOOL includeNumbers;
+@property (nonatomic) BOOL includeSymbols;
 
 /**
  *  Returns the shared preferences object.

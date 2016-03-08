@@ -8,7 +8,13 @@
 
 #import "Preferences.h"
 
-static NSString *const kPasswordStrength = @"PasswordStrength";
+NSString *const kPasswordStrength            = @"PasswordStrength";
+NSString *const kPasswordLength              = @"PasswordLength";
+NSString *const kIncludeLowercaseCharacters  = @"LowercaseCharacters";
+NSString *const kIncludeUppercaseCharacters  = @"UppercaseCharacters";
+NSString *const kIncludeNumbers              = @"Numbers";
+NSString *const kInludeSymbols               = @"Symbols";
+
 
 @interface Preferences ()
 
@@ -18,19 +24,19 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
 @property (strong, nonatomic) IBOutlet UISwitch *switchSymb;
 @property (strong, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 
+@property (strong, nonatomic) NSArray <UISwitch *>* switches;
+
+
 - (IBAction)actionCancel:(UIButton *)sender;
 - (IBAction)actionSave:(UIButton *)sender;
+
 
 
 - (void)registerUserDefaultsFromSettingsBundle;
 
 @end
 
-NSString *const kSettingsPasswordLength              = @"PasswordLength";
-NSString *const kSettingsIncludeLowercaseCharacters  = @"LowercaseCharacters";
-NSString *const kSettingsIncludeUppercaseCharacters  = @"UppercaseCharacters";
-NSString *const kSettingsIncludeNumbers              = @"Numbers";
-NSString *const kSettingsInludeSymbols               = @"Symbols";
+
 
 @implementation Preferences
 
@@ -39,6 +45,9 @@ NSString *const kSettingsInludeSymbols               = @"Symbols";
     [super viewDidLoad];
     
     [self loadSettings];
+    
+    self.switches = @[self.switchLowChar, self.switchUpChar, self.switchNum, self.switchSymb];
+    
     self.title = @"Settings";
     self.navigationItem.backBarButtonItem.title = @"Back";
     
@@ -51,11 +60,11 @@ NSString *const kSettingsInludeSymbols               = @"Symbols";
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    [userDefaults setInteger:self.segmentedControl.selectedSegmentIndex forKey:kSettingsPasswordLength];
-    [userDefaults setBool:self.switchLowChar.isOn forKey:kSettingsIncludeLowercaseCharacters];
-    [userDefaults setBool:self.switchUpChar.isOn forKey:kSettingsIncludeUppercaseCharacters];
-    [userDefaults setBool:self.switchNum.isOn forKey:kSettingsIncludeNumbers];
-    [userDefaults setBool:self.switchSymb.isOn forKey:kSettingsInludeSymbols];
+    [userDefaults setInteger:self.segmentedControl.selectedSegmentIndex forKey:kPasswordLength];
+    [userDefaults setBool:self.switchLowChar.isOn forKey:kIncludeLowercaseCharacters];
+    [userDefaults setBool:self.switchUpChar.isOn forKey:kIncludeUppercaseCharacters];
+    [userDefaults setBool:self.switchNum.isOn forKey:kIncludeNumbers];
+    [userDefaults setBool:self.switchSymb.isOn forKey:kInludeSymbols];
     
     [userDefaults synchronize];
     
@@ -65,11 +74,11 @@ NSString *const kSettingsInludeSymbols               = @"Symbols";
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    self.segmentedControl.selectedSegmentIndex = [userDefaults integerForKey:kSettingsPasswordLength];
-    self.switchLowChar.on = [userDefaults boolForKey:kSettingsIncludeLowercaseCharacters];
-    self.switchUpChar.on = [userDefaults boolForKey:kSettingsIncludeUppercaseCharacters];
-    self.switchNum.on = [userDefaults boolForKey:kSettingsIncludeNumbers];
-    self.switchSymb.on = [userDefaults boolForKey:kSettingsInludeSymbols];
+    self.segmentedControl.selectedSegmentIndex = [userDefaults integerForKey:kPasswordLength];
+    self.switchLowChar.on = [userDefaults boolForKey:kIncludeLowercaseCharacters];
+    self.switchUpChar.on = [userDefaults boolForKey:kIncludeUppercaseCharacters];
+    self.switchNum.on = [userDefaults boolForKey:kIncludeNumbers];
+    self.switchSymb.on = [userDefaults boolForKey:kInludeSymbols];
     
 }
 
@@ -83,9 +92,51 @@ NSString *const kSettingsInludeSymbols               = @"Symbols";
 
 - (IBAction)actionSave:(UIButton *)sender
 {
-    [self saveSettings];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    if ([self enabledSwitch]) {
+        [self saveSettings];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        UIAlertController *alertController =
+            [UIAlertController alertControllerWithTitle:@"Warning!"
+                                                message:@"At least one switch must be selected."
+                                         preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *cancelAction =
+            [UIAlertAction actionWithTitle:@"Cancel"
+                                     style:UIAlertActionStyleCancel
+                                   handler:nil];
+        
+        [alertController addAction:cancelAction];
+        
+        [self presentViewController:alertController
+                           animated:YES
+                         completion:nil];
+    }
+    
 }
+
+#pragma mark - Methods
+
+- (BOOL)enabledSwitch
+{
+    
+    __block NSInteger count = 0;
+    
+    [self.switches enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        UISwitch *swtch = (UISwitch *)obj;
+        
+        count = swtch.isOn ? count + 1 : count;
+        
+    }];
+    
+    if (count == 0) {
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
 
 #pragma mark - Class methods
 
@@ -105,6 +156,45 @@ NSString *const kSettingsInludeSymbols               = @"Symbols";
 - (NSInteger)passwordStrength
 {
     return [[NSUserDefaults standardUserDefaults] integerForKey:kPasswordStrength];
+}
+
+- (NSInteger)passwordLength
+{
+    switch ([[NSUserDefaults standardUserDefaults] integerForKey:kPasswordLength]) {
+        case 0:
+            return PasswordLengthShort;
+            break;
+            
+        case 1:
+            return PasswordLengthSMedium;
+            break;
+            
+        case 2:
+            return PasswordLengthLong;
+            break;
+    }
+    
+    return PasswordLengthDefault;
+}
+
+- (BOOL)includeLowercaseChars
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kIncludeLowercaseCharacters];
+}
+
+- (BOOL)includeUppercaseChars
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kIncludeUppercaseCharacters];
+}
+
+- (BOOL)includeNumbers
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kIncludeNumbers];
+}
+
+- (BOOL)includeSymbols
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kInludeSymbols];
 }
 
 #pragma mark - Setters
@@ -127,6 +217,7 @@ NSString *const kSettingsInludeSymbols               = @"Symbols";
     return self;
 }
 
+
 #pragma mark - Registering settings bundle
 
 - (void)registerUserDefaultsFromSettingsBundle
@@ -136,6 +227,7 @@ NSString *const kSettingsInludeSymbols               = @"Symbols";
                                         ofType:@"bundle"];
 
     NSMutableDictionary *const defaultsToRegister = [NSMutableDictionary dictionary];
+    
     if (settingsBundlePath) {
         NSString *const rootPlistPath =
             [settingsBundlePath stringByAppendingPathComponent:@"Root.plist"];
@@ -151,9 +243,7 @@ NSString *const kSettingsInludeSymbols               = @"Symbols";
             }
         }
     }
-    [defaultsToRegister setObject:@(PasswordStrengthDefault)
-                           forKey:kPasswordStrength];
-
+    
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }

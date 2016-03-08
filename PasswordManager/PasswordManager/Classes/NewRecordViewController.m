@@ -11,14 +11,11 @@
 #import "Preferences.h"
 #import "Record.h"
 
-static const NSUInteger PasswordLengthShort = 5;
-static const NSUInteger PasswordLengthMedium = 10;
-static const NSUInteger PasswordLengthLong = 15;
 
 static NSString *const LowercaseLetterAlphabet = @"abcdefghijklmnopqrstuvwxyz";
 static NSString *const UppercaseLetterAlphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 static NSString *const DecimalDigitAlphabet = @"1234567890";
-static NSString *const SymbolsAlpabet = @"@#$%^&*";
+static NSString *const SymbolsAlphabet = @"@#$%^&*";
 
 
 @interface NewRecordViewController ()
@@ -49,26 +46,28 @@ static NSString *const SymbolsAlpabet = @"@#$%^&*";
 
 - (void)refreshPassword
 {
-    NSUInteger passwordLength = 0;
-    NSString *alphabet = LowercaseLetterAlphabet;
-    switch ([[Preferences standardPreferences] passwordStrength]) {
-        case PasswordStrengthStrong: {
-            passwordLength = PasswordLengthLong;
-            alphabet = [alphabet stringByAppendingString:UppercaseLetterAlphabet];
-            alphabet = [alphabet stringByAppendingString:DecimalDigitAlphabet];
-            break;
-        }
-        case PasswordStrengthMedium: {
-            passwordLength = PasswordLengthMedium;
-            alphabet = [alphabet stringByAppendingString:UppercaseLetterAlphabet];
-            break;
-        }
-        case PasswordStrengthWeak:
-        default: {
-            passwordLength = PasswordLengthShort;
-            break;
-        }
+    NSUInteger passwordLength = [[Preferences standardPreferences] passwordLength];
+    
+    
+    
+    NSString *alphabet = [NSString string];
+    
+    if ([[Preferences standardPreferences] includeLowercaseChars]) {
+        alphabet = [alphabet stringByAppendingString:LowercaseLetterAlphabet];
     }
+    
+    if ([[Preferences standardPreferences] includeUppercaseChars]) {
+        alphabet = [alphabet stringByAppendingString:UppercaseLetterAlphabet];
+    }
+
+    if ([[Preferences standardPreferences] includeNumbers]) {
+        alphabet = [alphabet stringByAppendingString:DecimalDigitAlphabet];
+    }
+    
+    if ([[Preferences standardPreferences] includeSymbols]) {
+        alphabet = [alphabet stringByAppendingString:SymbolsAlphabet];
+    }
+    
     self.passwordLabel.text =
         [PasswordGenerator generatePasswordOfLength:passwordLength
                                       usingAlphabet:alphabet];
