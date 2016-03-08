@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, PasswordLength) {
 
 
 
-@interface Preferences : UIViewController
+@interface Preferences : UITableViewController
 
 
 /**

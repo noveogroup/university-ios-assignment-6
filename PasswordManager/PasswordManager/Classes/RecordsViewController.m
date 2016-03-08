@@ -83,9 +83,11 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 - (void)actionSettings:(UIBarButtonItem *)sender
 {
-    Preferences *preferences =
-        [[Preferences alloc] initWithNibName:NSStringFromClass([Preferences class])
-                                     bundle:nil];
+    UIStoryboard *storyBoard =
+        [UIStoryboard storyboardWithName:@"PreferencesStoryboard"
+                                  bundle:[NSBundle mainBundle]];
+    
+    Preferences *preferences = [storyBoard instantiateViewControllerWithIdentifier:@"Preferences"];
     
     [self presentViewController:preferences animated:YES completion:NULL];
     

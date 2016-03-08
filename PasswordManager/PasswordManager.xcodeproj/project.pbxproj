@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		84E233A71C8C3744006F3B7F /* PasswordEditVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E233A51C8C3744006F3B7F /* PasswordEditVC.m */; };
 		84E233A81C8C3744006F3B7F /* PasswordEditVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84E233A61C8C3744006F3B7F /* PasswordEditVC.xib */; };
-		84E233AD1C8D638D006F3B7F /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84E233AB1C8D638D006F3B7F /* Preferences.xib */; };
+		84E233B11C8EF77A006F3B7F /* PreferencesStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84E233B01C8EF77A006F3B7F /* PreferencesStoryboard.storyboard */; };
 		93DE15E318B4AA8D00A46FD2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E218B4AA8D00A46FD2 /* Foundation.framework */; };
 		93DE15E518B4AA8D00A46FD2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E418B4AA8D00A46FD2 /* CoreGraphics.framework */; };
 		93DE15E718B4AA8D00A46FD2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E618B4AA8D00A46FD2 /* UIKit.framework */; };
@@ -33,7 +33,7 @@
 		84E233A41C8C3744006F3B7F /* PasswordEditVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasswordEditVC.h; sourceTree = "<group>"; };
 		84E233A51C8C3744006F3B7F /* PasswordEditVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasswordEditVC.m; sourceTree = "<group>"; };
 		84E233A61C8C3744006F3B7F /* PasswordEditVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PasswordEditVC.xib; sourceTree = "<group>"; };
-		84E233AB1C8D638D006F3B7F /* Preferences.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
+		84E233B01C8EF77A006F3B7F /* PreferencesStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PreferencesStoryboard.storyboard; sourceTree = "<group>"; };
 		93C1371818B602AD0021D0F2 /* Record.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Record.h; sourceTree = "<group>"; };
 		93DE15DF18B4AA8D00A46FD2 /* PasswordManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PasswordManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93DE15E218B4AA8D00A46FD2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -146,7 +146,7 @@
 				93DE161718B4AB7F00A46FD2 /* PasswordGenerator.m */,
 				93E767E118B5EDD90053F9F0 /* Preferences.h */,
 				93E767E218B5EDD90053F9F0 /* Preferences.m */,
-				84E233AB1C8D638D006F3B7F /* Preferences.xib */,
+				84E233B01C8EF77A006F3B7F /* PreferencesStoryboard.storyboard */,
 				93C1371818B602AD0021D0F2 /* Record.h */,
 				93E767DE18B5DA9A0053F9F0 /* RecordsManager.h */,
 				93E767DF18B5DA9A0053F9F0 /* RecordsManager.m */,
@@ -222,9 +222,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				93E767E818B5F9BA0053F9F0 /* NewRecordViewController.xib in Resources */,
+				84E233B11C8EF77A006F3B7F /* PreferencesStoryboard.storyboard in Resources */,
 				93DE15ED18B4AA8D00A46FD2 /* InfoPlist.strings in Resources */,
 				84E233A81C8C3744006F3B7F /* PasswordEditVC.xib in Resources */,
-				84E233AD1C8D638D006F3B7F /* Preferences.xib in Resources */,
 				93DE15F518B4AA8D00A46FD2 /* Images.xcassets in Resources */,
 				93E767DD18B5D8DE0053F9F0 /* RecordsViewController.xib in Resources */,
 			);
