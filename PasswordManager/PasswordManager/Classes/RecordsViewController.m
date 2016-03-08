@@ -38,7 +38,8 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 {
     [super viewDidLoad];
     
-
+    
+    self.tableView.editing = NO;
     self.edgesForExtendedLayout = UIRectEdgeNone;
     self.title = @"Password manager";
     self.navigationController.navigationItem.rightBarButtonItem.title = @"tes";
@@ -95,7 +96,17 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 - (void)actionEdit:(UIBarButtonItem *)sender
 {
-    NSLog(@"actionEdit");
+    BOOL isEditing = self.tableView.editing;
+    [self.tableView setEditing:!isEditing animated:YES];
+    UIBarButtonSystemItem item = UIBarButtonSystemItemEdit;
+    
+    if (self.tableView.editing) {
+        item = UIBarButtonSystemItemDone;
+    }
+    
+    
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:item target:self action:@selector(actionEdit:)];
+    [self.navigationItem setLeftBarButtonItem:editButton animated:YES];
     
 }
 
@@ -148,6 +159,31 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+                                            forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        
+        
+        NSDictionary *record = [[self.recordsManager records] objectAtIndex:indexPath.row];
+        
+        [self.recordsManager removeRecord:record];
+        [self.recordsManager synchronize];
+        
+        [tableView beginUpdates];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
+        [tableView endUpdates];
+    }
+}
+
+
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
+}
+
 #pragma mark - NewRecordViewControllerDelegate implementation
 
 - (void)newRecordViewController:(NewRecordViewController *)sender
@@ -162,5 +198,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     [self dismissViewControllerAnimated:YES
                              completion:NULL];
 }
+
+
+
 
 @end

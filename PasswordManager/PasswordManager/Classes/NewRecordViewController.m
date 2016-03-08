@@ -48,8 +48,6 @@ static NSString *const SymbolsAlphabet = @"@#$%^&*";
 {
     NSUInteger passwordLength = [[Preferences standardPreferences] passwordLength];
     
-    
-    
     NSString *alphabet = [NSString string];
     
     if ([[Preferences standardPreferences] includeLowercaseChars]) {
@@ -81,6 +79,17 @@ static NSString *const SymbolsAlphabet = @"@#$%^&*";
               kPassword: self.passwordLabel.text};
         [self.delegate newRecordViewController:self didFinishWithRecord:record];
     }
+}
+
+- (void)deleteRecord
+{
+    NSDictionary *const record =
+        @{kServiceName: self.serviceNameTextField.text,
+          kPassword: self.passwordLabel.text};
+    
+    
+    [self.delegate newRecordViewController:self didFinishWithRecord:record];
+    
 }
 
 #pragma mark - View's lifecycle

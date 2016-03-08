@@ -26,6 +26,10 @@
 - (void)newRecordViewController:(NewRecordViewController *)sender
             didFinishWithRecord:(NSDictionary *)record;
 
+
+- (void)deleteRecordViewController:(NewRecordViewController *)sender
+            didFinishWithRecord:(NSDictionary *)record;
+
 @end
 
 @interface NewRecordViewController : UIViewController
