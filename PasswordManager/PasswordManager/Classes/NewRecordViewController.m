@@ -19,7 +19,6 @@ static NSString *const LowercaseLetterAlphabet = @"abcdefghijklmnopqrstuvwxyz";
 static NSString *const UppercaseLetterAlphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 static NSString *const DecimalDigitAlphabet = @"1234567890";
 static NSString *const SymbolsAlpabet = @"@#$%^&*";
-static NSString *const AmbiguousCharachetAlphabet = @"{}[]()/\\~,;:.<>";
 
 
 @interface NewRecordViewController ()

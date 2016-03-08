@@ -10,6 +10,7 @@
 #import "Record.h"
 #import "RecordsManager.h"
 #import "RecordsViewController.h"
+#import "SettingsVC.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
@@ -82,7 +83,11 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 - (void)actionSettings:(UIBarButtonItem *)sender
 {
-    NSLog(@"actionSettings");
+    SettingsVC *settingsVC =
+        [[SettingsVC alloc] initWithNibName:NSStringFromClass([SettingsVC class])
+                                     bundle:nil];
+    
+    [self presentViewController:settingsVC animated:YES completion:NULL];
     
 }
 
@@ -99,6 +104,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
     UINavigationController *const navigationController =
         [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    
     
     [self presentViewController:navigationController animated:YES completion:NULL];
 }
