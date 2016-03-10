@@ -1,13 +1,6 @@
-//
-//  AppDelegate.m
-//  PasswordManager
-//
-//  Created by Maxim Zabelin on 19/02/14.
-//  Copyright (c) 2014 Noveo. All rights reserved.
-//
-
 #import "AppDelegate.h"
 #import "RecordsViewController.h"
+#import "Preferences.h"
 
 @interface AppDelegate ()
 @property (strong, nonatomic) UITabBarController *tabController;
@@ -23,14 +16,10 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    
     self.window.rootViewController =
         [[UINavigationController alloc]
             initWithRootViewController:[[RecordsViewController alloc] init]];
     
-    
-    
-
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
 
@@ -53,6 +42,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [[Preferences standardPreferences] syncSettingsBundleAndSettingsApp];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

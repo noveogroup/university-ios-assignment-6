@@ -1,37 +1,21 @@
-//
-//  Preferences.m
-//  PasswordManager
-//
-//  Created by Maxim Zabelin on 19/02/14.
-//  Copyright (c) 2014 Noveo. All rights reserved.
-//
-
 #import "PreferencesTableVC.h"
-
-NSString *const kPasswordLength              = @"PasswordLength";
-NSString *const kIncludeLowercaseCharacters  = @"LowercaseCharacters";
-NSString *const kIncludeUppercaseCharacters  = @"UppercaseCharacters";
-NSString *const kIncludeNumbers              = @"Numbers";
-NSString *const kInludeSymbols               = @"Symbols";
+#import "Preferences.h"
 
 
-@interface PreferencesTableVC ()
+@interface PreferencesTableVC () <UITabBarControllerDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) IBOutlet UISwitch *switchLowChar;
 @property (strong, nonatomic) IBOutlet UISwitch *switchUpChar;
 @property (strong, nonatomic) IBOutlet UISwitch *switchNum;
 @property (strong, nonatomic) IBOutlet UISwitch *switchSymb;
 @property (strong, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
-
 @property (strong, nonatomic) NSArray <UISwitch *>* switches;
-
 
 - (IBAction)actionCancel:(UIButton *)sender;
 - (IBAction)actionSave:(UIButton *)sender;
 
-
-
-- (void)registerUserDefaultsFromSettingsBundle;
+- (void)saveSettings;
+- (void)loadSettings;
 
 @end
 
@@ -42,16 +26,13 @@ NSString *const kInludeSymbols               = @"Symbols";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    
+    [[NSUserDefaults standardUserDefaults] synchronize];
     [self loadSettings];
     
     self.switches = @[self.switchLowChar, self.switchUpChar, self.switchNum, self.switchSymb];
     
     self.title = @"Settings";
     self.navigationItem.backBarButtonItem.title = @"Back";
-    
-    
 }
 
 #pragma mark - Save and Load settings
@@ -60,12 +41,18 @@ NSString *const kInludeSymbols               = @"Symbols";
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    [userDefaults setInteger:self.segmentedControl.selectedSegmentIndex forKey:kPasswordLength];
-    [userDefaults setBool:self.switchLowChar.isOn forKey:kIncludeLowercaseCharacters];
-    [userDefaults setBool:self.switchUpChar.isOn forKey:kIncludeUppercaseCharacters];
-    [userDefaults setBool:self.switchNum.isOn forKey:kIncludeNumbers];
-    [userDefaults setBool:self.switchSymb.isOn forKey:kInludeSymbols];
+    [userDefaults setValue:@(self.segmentedControl.selectedSegmentIndex) forKey:kPasswordLength];
+    [userDefaults setValue:@(self.switchLowChar.isOn) forKey:kIncludeLowercaseCharacters];
+    [userDefaults setValue:@(self.switchUpChar.isOn) forKey:kIncludeUppercaseCharacters];
+    [userDefaults setValue:@(self.switchNum.isOn) forKey:kIncludeNumbers];
+    [userDefaults setValue:@(self.switchSymb.isOn) forKey:kIncludeSymbols];
     
+    [userDefaults setValue:@(self.segmentedControl.selectedSegmentIndex) forKey:kSettingsPasswordLength];
+    [userDefaults setValue:@(self.switchLowChar.isOn) forKey:kSettingsIncludeLowercaseCharacters];
+    [userDefaults setValue:@(self.switchUpChar.isOn) forKey:kSettingsIncludeUppercaseCharacters];
+    [userDefaults setValue:@(self.switchNum.isOn) forKey:kSettingsIncludeNumbers];
+    [userDefaults setValue:@(self.switchSymb.isOn) forKey:kSettingsIncludeSymbols];
+
     [userDefaults synchronize];
     
 }
@@ -74,14 +61,34 @@ NSString *const kInludeSymbols               = @"Symbols";
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    self.segmentedControl.selectedSegmentIndex = [userDefaults integerForKey:kPasswordLength];
-    self.switchLowChar.on = [userDefaults boolForKey:kIncludeLowercaseCharacters];
-    self.switchUpChar.on = [userDefaults boolForKey:kIncludeUppercaseCharacters];
-    self.switchNum.on = [userDefaults boolForKey:kIncludeNumbers];
-    self.switchSymb.on = [userDefaults boolForKey:kInludeSymbols];
+    self.segmentedControl.selectedSegmentIndex = [[userDefaults valueForKey:kPasswordLength] integerValue];
+    self.switchLowChar.on = [[userDefaults valueForKey:kIncludeLowercaseCharacters] boolValue];
+    self.switchUpChar.on = [[userDefaults valueForKey:kIncludeUppercaseCharacters] boolValue];
+    self.switchNum.on = [[userDefaults valueForKey:kIncludeNumbers] boolValue];
+    self.switchSymb.on = [[userDefaults valueForKey:kIncludeSymbols] boolValue];
     
 }
 
+- (BOOL)enabledSwitch
+{
+    
+    __block NSInteger count = 0;
+    
+    
+    [self.switches enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        UISwitch *swtch = (UISwitch *)obj;
+        
+        count = swtch.isOn ? count + 1 : count;
+        
+    }];
+    
+    if (count == 0) {
+        return NO;
+    } else {
+        return YES;
+    }
+}
 
 #pragma mark - Actions
 
@@ -115,135 +122,16 @@ NSString *const kInludeSymbols               = @"Symbols";
     
 }
 
-#pragma mark - Methods
 
-- (BOOL)enabledSwitch
+
+#pragma mark - UITableViewDelegate
+
+
+
+- (void)tableView:(UITableView *)tableView
+        didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    __block NSInteger count = 0;
-    
-    [self.switches enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        
-        UISwitch *swtch = (UISwitch *)obj;
-        
-        count = swtch.isOn ? count + 1 : count;
-        
-    }];
-    
-    if (count == 0) {
-        return NO;
-    } else {
-        return YES;
-    }
-}
-
-- (id)objectForKey:(NSString *)key
-{
-    return [[NSUserDefaults standardUserDefaults] objectForKey:key];
-}
-
-
-#pragma mark - Class methods
-
-+ (instancetype)standardPreferences
-{
-    static dispatch_once_t onceToken = 0;
-    static PreferencesTableVC *standardPreferences_ = nil;
-    dispatch_once(&onceToken, ^{
-        standardPreferences_ = [[self alloc] init];
-    });
-
-    return standardPreferences_;
-}
-
-#pragma mark - Getters
-
-
-
-- (NSInteger)passwordLength
-{
-    switch ([[NSUserDefaults standardUserDefaults] integerForKey:kPasswordLength]) {
-        case 0:
-            return PasswordLengthShort;
-            break;
-            
-        case 1:
-            return PasswordLengthSMedium;
-            break;
-            
-        case 2:
-            return PasswordLengthLong;
-            break;
-    }
-    
-    return PasswordLengthDefault;
-}
-
-- (BOOL)includeLowercaseChars
-{
-    return [[NSUserDefaults standardUserDefaults] integerForKey:kIncludeLowercaseCharacters];
-}
-
-- (BOOL)includeUppercaseChars
-{
-    return [[NSUserDefaults standardUserDefaults] integerForKey:kIncludeUppercaseCharacters];
-}
-
-- (BOOL)includeNumbers
-{
-    return [[NSUserDefaults standardUserDefaults] integerForKey:kIncludeNumbers];
-}
-
-- (BOOL)includeSymbols
-{
-    return [[NSUserDefaults standardUserDefaults] integerForKey:kInludeSymbols];
-}
-
-
-
-#pragma mark - Initialization
-
-- (id)init
-{
-    if ((self = [super init])) {
-        
-        
-        [self registerUserDefaultsFromSettingsBundle];
-    }
-
-    return self;
-}
-
-
-#pragma mark - Registering settings bundle
-
-- (void)registerUserDefaultsFromSettingsBundle
-{
-    NSString *const settingsBundlePath =
-        [[NSBundle mainBundle] pathForResource:@"Settings"
-                                        ofType:@"bundle"];
-
-    NSMutableDictionary *const defaultsToRegister = [NSMutableDictionary dictionary];
-    
-    if (settingsBundlePath) {
-        NSString *const rootPlistPath =
-            [settingsBundlePath stringByAppendingPathComponent:@"Root.plist"];
-        NSDictionary *const preferences =
-            [NSDictionary dictionaryWithContentsOfFile:rootPlistPath];
-        NSArray *const preferenceSpecifiers =
-            [preferences objectForKey:@"PreferenceSpecifiers"];
-        for (NSDictionary *specifier in preferenceSpecifiers) {
-            NSString *const key = [specifier objectForKey:@"Key"];
-            if (key) {
-                [defaultsToRegister setValue:[specifier objectForKey:@"DefaultValue"]
-                                      forKey:key];
-            }
-        }
-    }
-    
-    
-    [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

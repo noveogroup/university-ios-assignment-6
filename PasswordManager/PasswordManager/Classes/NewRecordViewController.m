@@ -1,14 +1,6 @@
-//
-//  NewRecordViewController.m
-//  PasswordManager
-//
-//  Created by Maxim Zabelin on 20/02/14.
-//  Copyright (c) 2014 Noveo. All rights reserved.
-//
-
 #import "NewRecordViewController.h"
 #import "PasswordGenerator.h"
-#import "PreferencesTableVC.h"
+#import "Preferences.h"
 #import "Record.h"
 
 static NSString *const AlphabetDefault = @"abcdefghijklmnopqrstuvwxyz";
@@ -45,31 +37,31 @@ static NSString *const SymbolsAlphabet = @"@#$%^&*@#$%^&*@#$%^&*";
 
 - (NSString *)generatePassword
 {
-    NSUInteger passwordLength = [[PreferencesTableVC standardPreferences] passwordLength];
+    NSUInteger passwordLength = [[Preferences standardPreferences] passwordLength];
     
     NSString *alphabet = [NSString string];
     
-    if ([[PreferencesTableVC standardPreferences] includeLowercaseChars]) {
+    if ([[Preferences standardPreferences] includeLowercaseChars]) {
         alphabet = [alphabet stringByAppendingString:LowercaseLetterAlphabet];
     }
     
-    if ([[PreferencesTableVC standardPreferences] includeUppercaseChars]) {
+    if ([[Preferences standardPreferences] includeUppercaseChars]) {
         alphabet = [alphabet stringByAppendingString:UppercaseLetterAlphabet];
     }
     
-    if ([[PreferencesTableVC standardPreferences] includeNumbers]) {
+    if ([[Preferences standardPreferences] includeNumbers]) {
         alphabet = [alphabet stringByAppendingString:DecimalDigitAlphabet];
     }
     
-    if ([[PreferencesTableVC standardPreferences] includeSymbols]) {
+    if ([[Preferences standardPreferences] includeSymbols]) {
         alphabet = [alphabet stringByAppendingString:SymbolsAlphabet];
     }
     
     
-    if (![[PreferencesTableVC standardPreferences] includeLowercaseChars] &&
-        ![[PreferencesTableVC standardPreferences] includeUppercaseChars] &&
-        ![[PreferencesTableVC standardPreferences] includeNumbers] &&
-        ![[PreferencesTableVC standardPreferences] includeSymbols]) {
+    if (![[Preferences standardPreferences] includeLowercaseChars] &&
+        ![[Preferences standardPreferences] includeUppercaseChars] &&
+        ![[Preferences standardPreferences] includeNumbers] &&
+        ![[Preferences standardPreferences] includeSymbols]) {
         
         alphabet = [alphabet stringByAppendingString:AlphabetDefault];
     }
@@ -84,31 +76,31 @@ static NSString *const SymbolsAlphabet = @"@#$%^&*@#$%^&*@#$%^&*";
 
 - (void)refreshPassword
 {
-    NSUInteger passwordLength = [[PreferencesTableVC standardPreferences] passwordLength];
+    NSUInteger passwordLength = [[Preferences standardPreferences] passwordLength];
     
     NSString *alphabet = [NSString string];
     
-    if ([[PreferencesTableVC standardPreferences] includeLowercaseChars]) {
+    if ([[Preferences standardPreferences] includeLowercaseChars]) {
         alphabet = [alphabet stringByAppendingString:LowercaseLetterAlphabet];
     }
     
-    if ([[PreferencesTableVC standardPreferences] includeUppercaseChars]) {
+    if ([[Preferences standardPreferences] includeUppercaseChars]) {
         alphabet = [alphabet stringByAppendingString:UppercaseLetterAlphabet];
     }
 
-    if ([[PreferencesTableVC standardPreferences] includeNumbers]) {
+    if ([[Preferences standardPreferences] includeNumbers]) {
         alphabet = [alphabet stringByAppendingString:DecimalDigitAlphabet];
     }
     
-    if ([[PreferencesTableVC standardPreferences] includeSymbols]) {
+    if ([[Preferences standardPreferences] includeSymbols]) {
         alphabet = [alphabet stringByAppendingString:SymbolsAlphabet];
     }
     
     
-    if (![[PreferencesTableVC standardPreferences] includeLowercaseChars] &&
-        ![[PreferencesTableVC standardPreferences] includeUppercaseChars] &&
-        ![[PreferencesTableVC standardPreferences] includeNumbers] &&
-        ![[PreferencesTableVC standardPreferences] includeSymbols]) {
+    if (![[Preferences standardPreferences] includeLowercaseChars] &&
+        ![[Preferences standardPreferences] includeUppercaseChars] &&
+        ![[Preferences standardPreferences] includeNumbers] &&
+        ![[Preferences standardPreferences] includeSymbols]) {
         
         alphabet = [alphabet stringByAppendingString:AlphabetDefault];
     }
@@ -182,9 +174,11 @@ static NSString *const SymbolsAlphabet = @"@#$%^&*@#$%^&*@#$%^&*";
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    [self saveRecord];
-
-    return YES;
+    if (textField) {
+        [textField resignFirstResponder];
+        
+    }
+    return NO;
 }
 
 @end

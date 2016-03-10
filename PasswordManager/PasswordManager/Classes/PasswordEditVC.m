@@ -1,13 +1,6 @@
-//
-//  PasswordEditVC.m
-//  PasswordManager
-//
-//  Created by Vik on 06.03.16.
-//  Copyright © 2016 Noveo. All rights reserved.
-//
-
 #import "PasswordEditVC.h"
 #import "PreferencesTableVC.h"
+#import "Preferences.h"
 #import "Record.h"
 #import "RecordsViewController.h"
 #import "NewRecordViewController.h"
@@ -55,7 +48,7 @@
 {
     self.labelName.text = [self.passObject objectForKey:kServiceName];
     self.textFieldPassword.text = [self.passObject objectForKey:kPassword];
-    self.previousPassword = self.textFieldPassword.text;
+    self.password = self.textFieldPassword.text;
     
 }
 
@@ -75,7 +68,7 @@
         shouldChangeCharactersInRange:(NSRange)range
         replacementString:(NSString *)string
 {
-    if ([textField.text length] < [[PreferencesTableVC standardPreferences] passwordLength]) {
+    if ([textField.text length] < [[Preferences standardPreferences] passwordLength]) {
         return YES;
     } else {
         return NO;
@@ -86,8 +79,10 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
+    self.previousPassword = self.password;
     self.password = textField.text;
 }
+
 
 
 #pragma mark - Actions
@@ -105,29 +100,28 @@
 }
 
 
-- (IBAction)actionGenerate:(UIButton *)sender {
+- (IBAction)actionGenerate:(UIButton *)sender
+{
     NewRecordViewController *vc = [[NewRecordViewController alloc] init];
     self.textFieldPassword.text = self.password = [vc generatePassword];
 }
 
 - (IBAction)actionSave:(UIButton *)sender
 {
-    if ([self.password isEqualToString:self.textFieldPassword.text]) {
+    if (![self.password isEqualToString:self.previousPassword]) {
         
-        NSDictionary *rec = @{kServiceName : self.labelName.text,
+        NSDictionary *rec = @{kServiceName : self.passObject[kServiceName],
                               kPassword : self.password};
         
-        NSDictionary *prevRec = @{kServiceName : self.labelName.text,
-                                  kPassword : self.previousPassword};
+        [self.recordsManager replaceRecord:self.passObject withNewRecord:rec];
         
-        [self.recordsManager changePasswordForRecord:rec
-                                      withPrevRecord:prevRec];
+        
         
         
         UIAlertController *alertController =
-        [UIAlertController alertControllerWithTitle:@"Success!"
-                                            message:@"Password is saved."
-                                     preferredStyle:UIAlertControllerStyleAlert];
+            [UIAlertController alertControllerWithTitle:@"Success!"
+                                                message:@"Password is saved."
+                                         preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Ok"
                                                                style:UIAlertActionStyleCancel handler:nil];

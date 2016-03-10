@@ -1,16 +1,9 @@
-//
-//  RecordsViewController.m
-//  PasswordManager
-//
-//  Created by Maxim Zabelin on 20/02/14.
-//  Copyright (c) 2014 Noveo. All rights reserved.
-//
-
 #import "NewRecordViewController.h"
 #import "Record.h"
 #import "RecordsViewController.h"
 #import "PreferencesTableVC.h"
 #import "PasswordEditVC.h"
+#import "Preferences.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
@@ -44,11 +37,9 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 {
     [super viewDidLoad];
     
-    
     self.tableView.editing = NO;
     self.edgesForExtendedLayout = UIRectEdgeNone;
     self.title = @"Password manager";
-    self.navigationController.navigationItem.rightBarButtonItem.title = @"tes";
     
     UIBarButtonItem *editButton =
         [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit

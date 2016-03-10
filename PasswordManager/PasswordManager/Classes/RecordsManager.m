@@ -1,11 +1,3 @@
-//
-//  RecordsManager.m
-//  PasswordManager
-//
-//  Created by Maxim Zabelin on 20/02/14.
-//  Copyright (c) 2014 Noveo. All rights reserved.
-//
-
 #import "RecordsManager.h"
 #import "Record.h"
 
@@ -56,18 +48,10 @@
     }
 }
 
-- (void)changePasswordForRecord:(NSDictionary *)record withPrevRecord:(NSDictionary *)prevRecord
-
+- (void)replaceRecord:(NSDictionary *)record withNewRecord:(NSDictionary *)newRecord
 {
-    NSMutableArray *tempArray = self.mutableRecords;
-    [tempArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-       
-        if ([prevRecord isEqual:obj]) {
-            [self.mutableRecords removeObject:self.mutableRecords[idx]];
-        }
-        
-    }];
-    [self registerRecord:record];
+    [self.mutableRecords removeObject:record];
+    [self registerRecord:newRecord];
     [self synchronize];
 }
 

@@ -10,6 +10,8 @@
 		84E233A71C8C3744006F3B7F /* PasswordEditVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E233A51C8C3744006F3B7F /* PasswordEditVC.m */; };
 		84E233A81C8C3744006F3B7F /* PasswordEditVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84E233A61C8C3744006F3B7F /* PasswordEditVC.xib */; };
 		84E233B11C8EF77A006F3B7F /* PreferencesStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84E233B01C8EF77A006F3B7F /* PreferencesStoryboard.storyboard */; };
+		84E233B31C8F55E5006F3B7F /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 84E233B21C8F55E5006F3B7F /* Settings.bundle */; };
+		84E233B61C91C270006F3B7F /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E233B51C91C270006F3B7F /* Preferences.m */; };
 		93DE15E318B4AA8D00A46FD2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E218B4AA8D00A46FD2 /* Foundation.framework */; };
 		93DE15E518B4AA8D00A46FD2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E418B4AA8D00A46FD2 /* CoreGraphics.framework */; };
 		93DE15E718B4AA8D00A46FD2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E618B4AA8D00A46FD2 /* UIKit.framework */; };
@@ -34,6 +36,9 @@
 		84E233A51C8C3744006F3B7F /* PasswordEditVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasswordEditVC.m; sourceTree = "<group>"; };
 		84E233A61C8C3744006F3B7F /* PasswordEditVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PasswordEditVC.xib; sourceTree = "<group>"; };
 		84E233B01C8EF77A006F3B7F /* PreferencesStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PreferencesStoryboard.storyboard; sourceTree = "<group>"; };
+		84E233B21C8F55E5006F3B7F /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		84E233B41C91C26F006F3B7F /* Preferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Preferences.h; sourceTree = "<group>"; };
+		84E233B51C91C270006F3B7F /* Preferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Preferences.m; sourceTree = "<group>"; };
 		93C1371818B602AD0021D0F2 /* Record.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Record.h; sourceTree = "<group>"; };
 		93DE15DF18B4AA8D00A46FD2 /* PasswordManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PasswordManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93DE15E218B4AA8D00A46FD2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -115,6 +120,7 @@
 				93DE161118B4AAD800A46FD2 /* Classes */,
 				93DE15E918B4AA8D00A46FD2 /* Supporting Files */,
 				93DE15F418B4AA8D00A46FD2 /* Images.xcassets */,
+				84E233B21C8F55E5006F3B7F /* Settings.bundle */,
 			);
 			path = PasswordManager;
 			sourceTree = "<group>";
@@ -146,6 +152,8 @@
 				93DE161718B4AB7F00A46FD2 /* PasswordGenerator.m */,
 				93E767E118B5EDD90053F9F0 /* PreferencesTableVC.h */,
 				93E767E218B5EDD90053F9F0 /* PreferencesTableVC.m */,
+				84E233B41C91C26F006F3B7F /* Preferences.h */,
+				84E233B51C91C270006F3B7F /* Preferences.m */,
 				84E233B01C8EF77A006F3B7F /* PreferencesStoryboard.storyboard */,
 				93C1371818B602AD0021D0F2 /* Record.h */,
 				93E767DE18B5DA9A0053F9F0 /* RecordsManager.h */,
@@ -198,6 +206,11 @@
 			attributes = {
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = Noveo;
+				TargetAttributes = {
+					93DE15DE18B4AA8D00A46FD2 = {
+						DevelopmentTeam = 62L8D25XPU;
+					};
+				};
 			};
 			buildConfigurationList = 93DE15DA18B4AA8D00A46FD2 /* Build configuration list for PBXProject "PasswordManager" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -227,6 +240,7 @@
 				84E233A81C8C3744006F3B7F /* PasswordEditVC.xib in Resources */,
 				93DE15F518B4AA8D00A46FD2 /* Images.xcassets in Resources */,
 				93E767DD18B5D8DE0053F9F0 /* RecordsViewController.xib in Resources */,
+				84E233B31C8F55E5006F3B7F /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,6 +253,7 @@
 			files = (
 				93DE161418B4AAD800A46FD2 /* AppDelegate.m in Sources */,
 				84E233A71C8C3744006F3B7F /* PasswordEditVC.m in Sources */,
+				84E233B61C91C270006F3B7F /* Preferences.m in Sources */,
 				93DE161B18B591E900A46FD2 /* NSMutableString+Shuffling.m in Sources */,
 				93E767DC18B5D8DE0053F9F0 /* RecordsViewController.m in Sources */,
 				93DE162118B5955100A46FD2 /* NSString+Shuffling.m in Sources */,
@@ -298,7 +313,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -331,7 +346,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -342,11 +357,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PasswordManager/PasswordManager-Prefix.pch";
 				INFOPLIST_FILE = "PasswordManager/PasswordManager-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -356,11 +374,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PasswordManager/PasswordManager-Prefix.pch";
 				INFOPLIST_FILE = "PasswordManager/PasswordManager-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
