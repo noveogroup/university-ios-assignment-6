@@ -1,19 +1,25 @@
-//
-//  Preferences.m
-//  PasswordManager
-//
-//  Created by Maxim Zabelin on 19/02/14.
-//  Copyright (c) 2014 Noveo. All rights reserved.
-//
-
 #import "Preferences.h"
+#import "PreferencesTableVC.h"
 
-static NSString *const kPasswordStrength = @"PasswordStrength";
+
+NSString *const kPasswordLength                         = @"kPasswordLength";
+NSString *const kIncludeLowercaseCharacters             = @"kIncludeLowercaseCharacters";
+NSString *const kIncludeUppercaseCharacters             = @"kIncludeUppercaseCharacters";
+NSString *const kIncludeNumbers                         = @"kIncludeNumbers";
+NSString *const kIncludeSymbols                         = @"kIncludeSymbols";
+NSString *const kSaveMode                               = @"kSaveMode";
+
+NSString *const kSettingsPasswordLength                 = @"kSettingsPasswordLength";
+NSString *const kSettingsIncludeLowercaseCharacters     = @"kSettingsIncludeLowercaseCharacters";
+NSString *const kSettingsIncludeUppercaseCharacters     = @"kSettingsIncludeUppercaseCharacters";
+NSString *const kSettingsIncludeNumbers                 = @"kSettingsIncludeNumbers";
+NSString *const kSettingsIncludeSymbols                 = @"kSettingsIncludeSymbols";
+NSString *const kSettingsSaveMode                       = @"kSettingsSaveMode";
+
+
 
 @interface Preferences ()
-
 - (void)registerUserDefaultsFromSettingsBundle;
-
 @end
 
 @implementation Preferences
@@ -27,53 +33,97 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
     dispatch_once(&onceToken, ^{
         standardPreferences_ = [[self alloc] init];
     });
-
+    
     return standardPreferences_;
 }
 
 #pragma mark - Getters
 
-- (NSInteger)passwordStrength
+- (SaveMode)saveMode
 {
-    return [[NSUserDefaults standardUserDefaults] integerForKey:kPasswordStrength];
+    if ([[[NSUserDefaults standardUserDefaults] valueForKey:kSaveMode] integerValue]) {
+        return SaveInDatabase;
+    } else {
+        return SaveInFile;
+    }
 }
 
-#pragma mark - Setters
 
-- (void)setPasswordStrength:(NSInteger)passwordStrength
+- (NSInteger)passwordLength
 {
-    [[NSUserDefaults standardUserDefaults] setInteger:passwordStrength
-                                               forKey:kPasswordStrength];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    switch ([[[NSUserDefaults standardUserDefaults] valueForKey:kPasswordLength] integerValue]) {
+        case 0:
+            return PasswordLengthShort;
+            break;
+            
+        case 1:
+            return PasswordLengthSMedium;
+            break;
+            
+        case 2:
+            return PasswordLengthLong;
+            break;
+    }
+    
+    return PasswordLengthDefault;
 }
+
+- (BOOL)includeLowercaseChars
+{
+    return [[[NSUserDefaults standardUserDefaults] valueForKey:kIncludeLowercaseCharacters] integerValue];
+}
+
+- (BOOL)includeUppercaseChars
+{
+    return [[[NSUserDefaults standardUserDefaults] valueForKey:kIncludeUppercaseCharacters] integerValue];
+}
+
+- (BOOL)includeNumbers
+{
+    return [[[NSUserDefaults standardUserDefaults] valueForKey:kIncludeNumbers] integerValue];
+}
+
+- (BOOL)includeSymbols
+{
+    return [[[NSUserDefaults standardUserDefaults] valueForKey:kIncludeSymbols] integerValue];
+}
+
+
 
 #pragma mark - Initialization
 
 - (id)init
 {
     if ((self = [super init])) {
+        
+        
         [self registerUserDefaultsFromSettingsBundle];
     }
-
+    
     return self;
 }
+
 
 #pragma mark - Registering settings bundle
 
 - (void)registerUserDefaultsFromSettingsBundle
 {
     NSString *const settingsBundlePath =
-        [[NSBundle mainBundle] pathForResource:@"Settings"
-                                        ofType:@"bundle"];
-
+    [[NSBundle mainBundle] pathForResource:@"Settings"
+                                    ofType:@"bundle"];
+    
     NSMutableDictionary *const defaultsToRegister = [NSMutableDictionary dictionary];
+    
     if (settingsBundlePath) {
         NSString *const rootPlistPath =
-            [settingsBundlePath stringByAppendingPathComponent:@"Root.plist"];
+        [settingsBundlePath stringByAppendingPathComponent:@"Root.plist"];
+        
         NSDictionary *const preferences =
-            [NSDictionary dictionaryWithContentsOfFile:rootPlistPath];
+        [NSDictionary dictionaryWithContentsOfFile:rootPlistPath];
+        
         NSArray *const preferenceSpecifiers =
-            [preferences objectForKey:@"PreferenceSpecifiers"];
+        [preferences objectForKey:@"PreferenceSpecifiers"];
+        
         for (NSDictionary *specifier in preferenceSpecifiers) {
             NSString *const key = [specifier objectForKey:@"Key"];
             if (key) {
@@ -82,11 +132,64 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
             }
         }
     }
-    [defaultsToRegister setObject:@(PasswordStrengthDefault)
-                           forKey:kPasswordStrength];
-
+    
+    
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+#pragma mark - Methods
+
+- (void)syncSettingsBundleAndSettingsApp
+{
+    if (![[[NSUserDefaults standardUserDefaults] valueForKey:kSettingsPasswordLength] isEqual:
+        [[NSUserDefaults standardUserDefaults] valueForKey:kPasswordLength]]) {
+        
+        id value = [[NSUserDefaults standardUserDefaults] valueForKey:kSettingsPasswordLength];
+        [[NSUserDefaults standardUserDefaults] setValue:value
+                                                 forKey:kPasswordLength];
+    }
+    
+    if (![[[NSUserDefaults standardUserDefaults] valueForKey:kSettingsIncludeLowercaseCharacters] isEqual:
+          [[NSUserDefaults standardUserDefaults] valueForKey:kIncludeLowercaseCharacters]]) {
+        
+        id value = [[NSUserDefaults standardUserDefaults] valueForKey:kSettingsIncludeLowercaseCharacters];
+        [[NSUserDefaults standardUserDefaults] setValue:value
+                                                 forKey:kIncludeLowercaseCharacters];
+    }
+    
+    if (![[[NSUserDefaults standardUserDefaults] valueForKey:kSettingsIncludeUppercaseCharacters] isEqual:
+          [[NSUserDefaults standardUserDefaults] valueForKey:kIncludeUppercaseCharacters]]) {
+        
+        id value = [[NSUserDefaults standardUserDefaults] valueForKey:kSettingsIncludeUppercaseCharacters];
+        [[NSUserDefaults standardUserDefaults] setValue:value
+                                                 forKey:kIncludeUppercaseCharacters];
+    }
+    
+    if (![[[NSUserDefaults standardUserDefaults] valueForKey:kSettingsIncludeNumbers] isEqual:
+          [[NSUserDefaults standardUserDefaults] valueForKey:kIncludeNumbers]]) {
+        
+        id value = [[NSUserDefaults standardUserDefaults] valueForKey:kSettingsIncludeNumbers];
+        [[NSUserDefaults standardUserDefaults] setValue:value
+                                                 forKey:kIncludeNumbers];
+    }
+    
+    if (![[[NSUserDefaults standardUserDefaults] valueForKey:kSettingsIncludeSymbols] isEqual:
+          [[NSUserDefaults standardUserDefaults] valueForKey:kIncludeSymbols]]) {
+        
+        id value = [[NSUserDefaults standardUserDefaults] valueForKey:kSettingsIncludeSymbols];
+        [[NSUserDefaults standardUserDefaults] setValue:value
+                                                 forKey:kIncludeSymbols];
+    }
+    
+    if (![[[NSUserDefaults standardUserDefaults] valueForKey:kSettingsSaveMode] isEqual:
+          [[NSUserDefaults standardUserDefaults] valueForKey:kSaveMode]]) {
+        
+        id value = [[NSUserDefaults standardUserDefaults] valueForKey:kSettingsSaveMode];
+        [[NSUserDefaults standardUserDefaults] setValue:value
+                                                 forKey:kSaveMode];
+    }
+
 }
 
 @end

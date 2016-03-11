@@ -1,23 +1,15 @@
-//
-//  NewRecordViewController.m
-//  PasswordManager
-//
-//  Created by Maxim Zabelin on 20/02/14.
-//  Copyright (c) 2014 Noveo. All rights reserved.
-//
-
 #import "NewRecordViewController.h"
 #import "PasswordGenerator.h"
 #import "Preferences.h"
 #import "Record.h"
+#import "DatabaseManager.h"
 
-static const NSUInteger PasswordLengthShort = 5;
-static const NSUInteger PasswordLengthMedium = 10;
-static const NSUInteger PasswordLengthLong = 15;
-
+static NSString *const AlphabetDefault = @"abcdefghijklmnopqrstuvwxyz";
 static NSString *const LowercaseLetterAlphabet = @"abcdefghijklmnopqrstuvwxyz";
 static NSString *const UppercaseLetterAlphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-static NSString *const DecimalDigitAlphabet = @"1234567890";
+static NSString *const DecimalDigitAlphabet = @"12345678901234567890";
+static NSString *const SymbolsAlphabet = @"@#$%^&*@#$%^&*@#$%^&*";
+
 
 @interface NewRecordViewController ()
     <UITextFieldDelegate>
@@ -39,34 +31,82 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 @implementation NewRecordViewController
 
 @synthesize delegate = delegate_;
-
 @synthesize serviceNameTextField = serviceNameTextField_;
 @synthesize passwordLabel = passwordLabel_;
 
 #pragma mark - Auxiliaries
 
+- (NSString *)generatePassword
+{
+    NSUInteger passwordLength = [[Preferences standardPreferences] passwordLength];
+    
+    NSString *alphabet = [NSString string];
+    
+    if ([[Preferences standardPreferences] includeLowercaseChars]) {
+        alphabet = [alphabet stringByAppendingString:LowercaseLetterAlphabet];
+    }
+    
+    if ([[Preferences standardPreferences] includeUppercaseChars]) {
+        alphabet = [alphabet stringByAppendingString:UppercaseLetterAlphabet];
+    }
+    
+    if ([[Preferences standardPreferences] includeNumbers]) {
+        alphabet = [alphabet stringByAppendingString:DecimalDigitAlphabet];
+    }
+    
+    if ([[Preferences standardPreferences] includeSymbols]) {
+        alphabet = [alphabet stringByAppendingString:SymbolsAlphabet];
+    }
+    
+    
+    if (![[Preferences standardPreferences] includeLowercaseChars] &&
+        ![[Preferences standardPreferences] includeUppercaseChars] &&
+        ![[Preferences standardPreferences] includeNumbers] &&
+        ![[Preferences standardPreferences] includeSymbols]) {
+        
+        alphabet = [alphabet stringByAppendingString:AlphabetDefault];
+    }
+    
+    
+    NSString *result = [PasswordGenerator generatePasswordOfLength:passwordLength
+                                                           usingAlphabet:alphabet];
+    
+
+    return result;
+}
+
 - (void)refreshPassword
 {
-    NSUInteger passwordLength = 0;
-    NSString *alphabet = LowercaseLetterAlphabet;
-    switch ([[Preferences standardPreferences] passwordStrength]) {
-        case PasswordStrengthStrong: {
-            passwordLength = PasswordLengthLong;
-            alphabet = [alphabet stringByAppendingString:UppercaseLetterAlphabet];
-            alphabet = [alphabet stringByAppendingString:DecimalDigitAlphabet];
-            break;
-        }
-        case PasswordStrengthMedium: {
-            passwordLength = PasswordLengthMedium;
-            alphabet = [alphabet stringByAppendingString:UppercaseLetterAlphabet];
-            break;
-        }
-        case PasswordStrengthWeak:
-        default: {
-            passwordLength = PasswordLengthShort;
-            break;
-        }
+    NSUInteger passwordLength = [[Preferences standardPreferences] passwordLength];
+    
+    NSString *alphabet = [NSString string];
+    
+    if ([[Preferences standardPreferences] includeLowercaseChars]) {
+        alphabet = [alphabet stringByAppendingString:LowercaseLetterAlphabet];
     }
+    
+    if ([[Preferences standardPreferences] includeUppercaseChars]) {
+        alphabet = [alphabet stringByAppendingString:UppercaseLetterAlphabet];
+    }
+
+    if ([[Preferences standardPreferences] includeNumbers]) {
+        alphabet = [alphabet stringByAppendingString:DecimalDigitAlphabet];
+    }
+    
+    if ([[Preferences standardPreferences] includeSymbols]) {
+        alphabet = [alphabet stringByAppendingString:SymbolsAlphabet];
+    }
+    
+    
+    if (![[Preferences standardPreferences] includeLowercaseChars] &&
+        ![[Preferences standardPreferences] includeUppercaseChars] &&
+        ![[Preferences standardPreferences] includeNumbers] &&
+        ![[Preferences standardPreferences] includeSymbols]) {
+        
+        alphabet = [alphabet stringByAppendingString:AlphabetDefault];
+    }
+    
+        
     self.passwordLabel.text =
         [PasswordGenerator generatePasswordOfLength:passwordLength
                                       usingAlphabet:alphabet];
@@ -79,8 +119,13 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
             @{kServiceName: self.serviceNameTextField.text,
               kPassword: self.passwordLabel.text};
         [self.delegate newRecordViewController:self didFinishWithRecord:record];
+        
     }
+    
+    
 }
+
+
 
 #pragma mark - View's lifecycle
 
@@ -133,9 +178,11 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    [self saveRecord];
-
-    return YES;
+    if (textField) {
+        [textField resignFirstResponder];
+        
+    }
+    return NO;
 }
 
 @end

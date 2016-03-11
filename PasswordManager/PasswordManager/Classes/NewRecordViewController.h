@@ -1,11 +1,3 @@
-//
-//  NewRecordViewController.h
-//  PasswordManager
-//
-//  Created by Maxim Zabelin on 20/02/14.
-//  Copyright (c) 2014 Noveo. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 
 @class NewRecordViewController;
@@ -26,6 +18,7 @@
 - (void)newRecordViewController:(NewRecordViewController *)sender
             didFinishWithRecord:(NSDictionary *)record;
 
+
 @end
 
 @interface NewRecordViewController : UIViewController
@@ -34,5 +27,8 @@
  *  Returns the object that handles the delegated duties.
  */
 @property (nonatomic, weak) id<NewRecordViewControllerDelegate> delegate;
+
+- (NSString *)generatePassword;
+
 
 @end

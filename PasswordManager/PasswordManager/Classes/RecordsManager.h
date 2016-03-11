@@ -1,11 +1,3 @@
-//
-//  RecordsManager.h
-//  PasswordManager
-//
-//  Created by Maxim Zabelin on 20/02/14.
-//  Copyright (c) 2014 Noveo. All rights reserved.
-//
-
 #import <Foundation/Foundation.h>
 
 @interface RecordsManager : NSObject
@@ -26,9 +18,23 @@
 - (void)registerRecord:(NSDictionary *)record;
 
 /**
+ *  Remove the specified record.
+ */
+- (void)removeRecord:(NSDictionary *)record;
+
+
+//- (void)changePasswordForRecord:(NSDictionary *)record withPrevRecord:(NSDictionary *)prevRecord;
+
+- (void)replaceRecord:(NSDictionary *)record withNewRecord:(NSDictionary *)newRecord;
+
+
+
+/**
  *  Returns the records the receiver manages.
  */
 - (NSArray *)records;
+
+- (NSArray *)recordsDB;
 
 /**
  *  Writes any modifications to the persistent domains to disk.

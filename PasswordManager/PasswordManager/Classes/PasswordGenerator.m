@@ -1,11 +1,3 @@
-//
-//  PasswordGenerator.m
-//  PasswordManager
-//
-//  Created by Maxim Zabelin on 19/02/14.
-//  Copyright (c) 2014 Noveo. All rights reserved.
-//
-
 #import "NSString+Shuffling.h"
 #import "PasswordGenerator.h"
 
