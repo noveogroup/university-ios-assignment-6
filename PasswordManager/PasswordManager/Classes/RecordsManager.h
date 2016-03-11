@@ -34,6 +34,8 @@
  */
 - (NSArray *)records;
 
+- (NSArray *)recordsDB;
+
 /**
  *  Writes any modifications to the persistent domains to disk.
  *

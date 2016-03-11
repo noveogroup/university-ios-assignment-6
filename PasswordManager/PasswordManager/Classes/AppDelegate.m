@@ -1,6 +1,7 @@
 #import "AppDelegate.h"
 #import "RecordsViewController.h"
 #import "Preferences.h"
+#import "DatabaseManager.h"
 
 @interface AppDelegate ()
 @property (strong, nonatomic) UITabBarController *tabController;
@@ -23,6 +24,8 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
 
+    [[DatabaseManager sharedManager] initializeDatabase];
+    
     return YES;
 }
 

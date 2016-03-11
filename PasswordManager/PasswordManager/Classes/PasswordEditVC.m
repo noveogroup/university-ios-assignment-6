@@ -5,7 +5,7 @@
 #import "RecordsViewController.h"
 #import "NewRecordViewController.h"
 
-@interface PasswordEditVC () <UITextFieldDelegate>
+@interface PasswordEditVC () <UITextFieldDelegate, UIGestureRecognizerDelegate>
 @property (strong, nonatomic) IBOutlet UILabel *labelName;
 @property (strong, nonatomic) IBOutlet UITextField *textFieldPassword;
 @property (strong, nonatomic) IBOutlet UISwitch *switchChangePassword;
@@ -13,6 +13,7 @@
 
 @property (copy, nonatomic) NSString *password;
 @property (copy, nonatomic) NSString *previousPassword;
+@property (copy, nonatomic) NSString *tempString;
 
 - (IBAction)actionGenerate:(UIButton *)sender;
 - (IBAction)actionSave:(UIButton *)sender;
@@ -34,6 +35,11 @@
     
     self.navigationItem.rightBarButtonItem = settingsButton;
     
+    UITapGestureRecognizer *tapGesture =
+        [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                action:@selector(handleTap:)];
+    
+    [self.view addGestureRecognizer:tapGesture];
     
     self.textFieldPassword.delegate = self;
     self.title = @"Edit password";
@@ -41,8 +47,19 @@
 }
 
 
+#pragma mark - Gestures
+
+- (void) handleTap:(UITapGestureRecognizer *) tapGesture
+{
+    if (!CGRectContainsPoint(self.textFieldPassword.frame, [tapGesture locationInView:self.view])) {
+        [self.textFieldPassword resignFirstResponder];
+        self.password = self.tempString;
+    }
+}
 
 #pragma mark - Methods
+
+
 
 - (void)refreshData
 {
@@ -69,6 +86,11 @@
         replacementString:(NSString *)string
 {
     if ([textField.text length] < [[Preferences standardPreferences] passwordLength]) {
+        
+        self.tempString = [NSString stringWithFormat:@"%@%@", textField.text, string];
+        
+        
+
         return YES;
     } else {
         return NO;

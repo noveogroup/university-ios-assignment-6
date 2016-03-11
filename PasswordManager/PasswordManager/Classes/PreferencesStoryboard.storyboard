@@ -149,12 +149,11 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" momentary="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bzC-qu-a4u">
-                                                    <rect key="frame" x="122" y="8" width="190" height="29"/>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="bzC-qu-a4u">
+                                                    <rect key="frame" x="136" y="8" width="176" height="29"/>
                                                     <segments>
-                                                        <segment title="Seg 1" enabled="NO"/>
-                                                        <segment title="Seg 2" enabled="NO"/>
-                                                        <segment title="Seg 3" enabled="NO"/>
+                                                        <segment title=".dat File"/>
+                                                        <segment title="Database"/>
                                                     </segments>
                                                 </segmentedControl>
                                             </subviews>
@@ -199,6 +198,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="segmentedControl" destination="8r0-Df-O4k" id="aow-1A-AJe"/>
+                        <outlet property="segmentedSaveMode" destination="bzC-qu-a4u" id="XoE-47-lvz"/>
                         <outlet property="switchLowChar" destination="QN1-TG-omV" id="fGM-qI-OPA"/>
                         <outlet property="switchNum" destination="6sj-l6-sOz" id="iDx-iV-xiC"/>
                         <outlet property="switchSymb" destination="f3d-8X-PlS" id="LIy-iG-reI"/>

@@ -4,6 +4,8 @@
 #import "PreferencesTableVC.h"
 #import "PasswordEditVC.h"
 #import "Preferences.h"
+#import "DatabaseManager.h"
+
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
@@ -29,7 +31,8 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.tableView reloadData]; 
+    [self.tableView reloadData];
+    
 }
 
 
@@ -39,7 +42,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
     
     self.tableView.editing = NO;
     self.edgesForExtendedLayout = UIRectEdgeNone;
-    self.title = @"Password manager";
+    self.title = @"Passbook";
     
     UIBarButtonItem *editButton =
         [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
@@ -48,6 +51,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
     
     self.navigationItem.leftBarButtonItem = editButton;
     
+ 
     UIImage *image = [UIImage imageNamed:@"settings"];
     UIBarButtonItem *settingsButton =
         [[UIBarButtonItem alloc] initWithImage:image
@@ -57,8 +61,16 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
     
     self.navigationItem.rightBarButtonItem = settingsButton;
     
-    
 }
+
+#pragma mark - Methods
+- (NSDictionary *)getDictionaryForIndexPath:(NSIndexPath *)indexPath
+{
+    return [[Preferences standardPreferences] saveMode] == SaveInFile ?
+    [[self.recordsManager records] objectAtIndex:indexPath.row] :
+    [[self.recordsManager recordsDB] objectAtIndex:indexPath.row];
+}
+
 
 #pragma mark - Getters
 
@@ -78,6 +90,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 }
 
 #pragma mark - Actions
+
 
 - (void)actionSettings:(UIBarButtonItem *)sender
 {
@@ -124,7 +137,13 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)section
 {
-    return [[self.recordsManager records] count];
+    if ([[Preferences standardPreferences] saveMode] == SaveInFile) {
+        return [[self.recordsManager records] count];
+    } else {
+        return [[self.recordsManager recordsDB] count];
+    }
+    
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
@@ -138,8 +157,9 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
         tableViewCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2
                                                reuseIdentifier:REUSABLE_CELL_ID];
     }
-    NSDictionary *const record =
-        [[self.recordsManager records] objectAtIndex:indexPath.row];
+    
+    NSDictionary *const record = [self getDictionaryForIndexPath:indexPath];
+
     tableViewCell.textLabel.text = [record valueForKey:kServiceName];
     tableViewCell.detailTextLabel.text = [record valueForKey:kPassword];
 
@@ -157,14 +177,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         [[PasswordEditVC alloc] initWithNibName:NSStringFromClass([PasswordEditVC class])
                                          bundle:[NSBundle mainBundle]];
     
-    NSDictionary *record = [[self.recordsManager records] objectAtIndex:indexPath.row];
+    NSDictionary *record = [self getDictionaryForIndexPath:indexPath];
     
     passEditVC.passObject = record;
     passEditVC.recordsManager = self.recordsManager;
     
     [self.navigationController pushViewController:passEditVC animated:YES];
-    
-    
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -177,7 +195,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         
         
         
-        NSDictionary *record = [[self.recordsManager records] objectAtIndex:indexPath.row];
+        NSDictionary *record = [self getDictionaryForIndexPath:indexPath];
         
         [self.recordsManager removeRecord:record];
         [self.recordsManager synchronize];

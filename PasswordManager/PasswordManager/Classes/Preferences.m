@@ -7,12 +7,16 @@ NSString *const kIncludeLowercaseCharacters             = @"kIncludeLowercaseCha
 NSString *const kIncludeUppercaseCharacters             = @"kIncludeUppercaseCharacters";
 NSString *const kIncludeNumbers                         = @"kIncludeNumbers";
 NSString *const kIncludeSymbols                         = @"kIncludeSymbols";
+NSString *const kSaveMode                               = @"kSaveMode";
 
 NSString *const kSettingsPasswordLength                 = @"kSettingsPasswordLength";
 NSString *const kSettingsIncludeLowercaseCharacters     = @"kSettingsIncludeLowercaseCharacters";
 NSString *const kSettingsIncludeUppercaseCharacters     = @"kSettingsIncludeUppercaseCharacters";
 NSString *const kSettingsIncludeNumbers                 = @"kSettingsIncludeNumbers";
 NSString *const kSettingsIncludeSymbols                 = @"kSettingsIncludeSymbols";
+NSString *const kSettingsSaveMode                       = @"kSettingsSaveMode";
+
+
 
 @interface Preferences ()
 - (void)registerUserDefaultsFromSettingsBundle;
@@ -35,6 +39,14 @@ NSString *const kSettingsIncludeSymbols                 = @"kSettingsIncludeSymb
 
 #pragma mark - Getters
 
+- (SaveMode)saveMode
+{
+    if ([[[NSUserDefaults standardUserDefaults] valueForKey:kSaveMode] integerValue]) {
+        return SaveInDatabase;
+    } else {
+        return SaveInFile;
+    }
+}
 
 
 - (NSInteger)passwordLength
@@ -168,6 +180,14 @@ NSString *const kSettingsIncludeSymbols                 = @"kSettingsIncludeSymb
         id value = [[NSUserDefaults standardUserDefaults] valueForKey:kSettingsIncludeSymbols];
         [[NSUserDefaults standardUserDefaults] setValue:value
                                                  forKey:kIncludeSymbols];
+    }
+    
+    if (![[[NSUserDefaults standardUserDefaults] valueForKey:kSettingsSaveMode] isEqual:
+          [[NSUserDefaults standardUserDefaults] valueForKey:kSaveMode]]) {
+        
+        id value = [[NSUserDefaults standardUserDefaults] valueForKey:kSettingsSaveMode];
+        [[NSUserDefaults standardUserDefaults] setValue:value
+                                                 forKey:kSaveMode];
     }
 
 }

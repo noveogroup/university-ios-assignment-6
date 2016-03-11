@@ -9,6 +9,8 @@
 @property (strong, nonatomic) IBOutlet UISwitch *switchNum;
 @property (strong, nonatomic) IBOutlet UISwitch *switchSymb;
 @property (strong, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
+@property (strong, nonatomic) IBOutlet UISegmentedControl *segmentedSaveMode;
+
 @property (strong, nonatomic) NSArray <UISwitch *>* switches;
 
 - (IBAction)actionCancel:(UIButton *)sender;
@@ -46,12 +48,14 @@
     [userDefaults setValue:@(self.switchUpChar.isOn) forKey:kIncludeUppercaseCharacters];
     [userDefaults setValue:@(self.switchNum.isOn) forKey:kIncludeNumbers];
     [userDefaults setValue:@(self.switchSymb.isOn) forKey:kIncludeSymbols];
-    
+    [userDefaults setValue:@(self.segmentedSaveMode.selectedSegmentIndex) forKey:kSaveMode];
+
     [userDefaults setValue:@(self.segmentedControl.selectedSegmentIndex) forKey:kSettingsPasswordLength];
     [userDefaults setValue:@(self.switchLowChar.isOn) forKey:kSettingsIncludeLowercaseCharacters];
     [userDefaults setValue:@(self.switchUpChar.isOn) forKey:kSettingsIncludeUppercaseCharacters];
     [userDefaults setValue:@(self.switchNum.isOn) forKey:kSettingsIncludeNumbers];
     [userDefaults setValue:@(self.switchSymb.isOn) forKey:kSettingsIncludeSymbols];
+    [userDefaults setValue:@(self.segmentedSaveMode.selectedSegmentIndex) forKey:kSettingsSaveMode];
 
     [userDefaults synchronize];
     
@@ -66,6 +70,8 @@
     self.switchUpChar.on = [[userDefaults valueForKey:kIncludeUppercaseCharacters] boolValue];
     self.switchNum.on = [[userDefaults valueForKey:kIncludeNumbers] boolValue];
     self.switchSymb.on = [[userDefaults valueForKey:kIncludeSymbols] boolValue];
+    self.segmentedSaveMode.selectedSegmentIndex = [[userDefaults valueForKey:kSaveMode] integerValue];
+
     
 }
 

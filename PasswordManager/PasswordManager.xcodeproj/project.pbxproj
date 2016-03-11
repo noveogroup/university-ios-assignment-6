@@ -12,6 +12,7 @@
 		84E233B11C8EF77A006F3B7F /* PreferencesStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84E233B01C8EF77A006F3B7F /* PreferencesStoryboard.storyboard */; };
 		84E233B31C8F55E5006F3B7F /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 84E233B21C8F55E5006F3B7F /* Settings.bundle */; };
 		84E233B61C91C270006F3B7F /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E233B51C91C270006F3B7F /* Preferences.m */; };
+		84E233B91C91E066006F3B7F /* DatabaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E233B81C91E066006F3B7F /* DatabaseManager.m */; };
 		93DE15E318B4AA8D00A46FD2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E218B4AA8D00A46FD2 /* Foundation.framework */; };
 		93DE15E518B4AA8D00A46FD2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E418B4AA8D00A46FD2 /* CoreGraphics.framework */; };
 		93DE15E718B4AA8D00A46FD2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E618B4AA8D00A46FD2 /* UIKit.framework */; };
@@ -42,6 +43,8 @@
 		84E233B21C8F55E5006F3B7F /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		84E233B41C91C26F006F3B7F /* Preferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Preferences.h; sourceTree = "<group>"; };
 		84E233B51C91C270006F3B7F /* Preferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Preferences.m; sourceTree = "<group>"; };
+		84E233B71C91E066006F3B7F /* DatabaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseManager.h; sourceTree = "<group>"; };
+		84E233B81C91E066006F3B7F /* DatabaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseManager.m; sourceTree = "<group>"; };
 		93C1371818B602AD0021D0F2 /* Record.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Record.h; sourceTree = "<group>"; };
 		93DE15DF18B4AA8D00A46FD2 /* PasswordManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PasswordManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93DE15E218B4AA8D00A46FD2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -171,6 +174,8 @@
 				84E233B41C91C26F006F3B7F /* Preferences.h */,
 				84E233B51C91C270006F3B7F /* Preferences.m */,
 				84E233B01C8EF77A006F3B7F /* PreferencesStoryboard.storyboard */,
+				84E233B71C91E066006F3B7F /* DatabaseManager.h */,
+				84E233B81C91E066006F3B7F /* DatabaseManager.m */,
 				93C1371818B602AD0021D0F2 /* Record.h */,
 				93E767DE18B5DA9A0053F9F0 /* RecordsManager.h */,
 				93E767DF18B5DA9A0053F9F0 /* RecordsManager.m */,
@@ -330,6 +335,7 @@
 				93E767E318B5EDD90053F9F0 /* PreferencesTableVC.m in Sources */,
 				93E767E018B5DA9A0053F9F0 /* RecordsManager.m in Sources */,
 				93DE15EF18B4AA8D00A46FD2 /* main.m in Sources */,
+				84E233B91C91E066006F3B7F /* DatabaseManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,6 +2,7 @@
 #import "PasswordGenerator.h"
 #import "Preferences.h"
 #import "Record.h"
+#import "DatabaseManager.h"
 
 static NSString *const AlphabetDefault = @"abcdefghijklmnopqrstuvwxyz";
 static NSString *const LowercaseLetterAlphabet = @"abcdefghijklmnopqrstuvwxyz";
@@ -118,7 +119,10 @@ static NSString *const SymbolsAlphabet = @"@#$%^&*@#$%^&*@#$%^&*";
             @{kServiceName: self.serviceNameTextField.text,
               kPassword: self.passwordLabel.text};
         [self.delegate newRecordViewController:self didFinishWithRecord:record];
+        
     }
+    
+    
 }
 
 
