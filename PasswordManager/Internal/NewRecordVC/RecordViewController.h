@@ -1,7 +1,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class NewRecordViewController;
+@class RecordViewController;
 
 /**
  *  The protocol describing the duties the instance of @c NewRecordViewController
@@ -16,7 +16,7 @@
  *                      If the user has pressed 'Cancel',
  *                      the @c record is @b nil.
  */
-- (void)newRecordViewController:(NewRecordViewController *)sender
+- (void)newRecordViewController:(RecordViewController *)sender
             didFinishWithRecord:(NSDictionary *)record;
 
 //- (void)newRecordViewController:(NewRecordViewController *)sender
@@ -25,7 +25,7 @@
 
 @end
 
-@interface NewRecordViewController : UIViewController
+@interface RecordViewController : UIViewController
 
 /**
  *  Returns the object that handles the delegated duties.

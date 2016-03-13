@@ -1,14 +1,14 @@
 
-#import "RecordsManager.h"
+#import "RecordsPlistStorageManager.h"
 
-@interface RecordsManager ()
+@interface RecordsPlistStorageManager ()
 
 @property (nonatomic, strong) NSMutableArray *mutableRecords;
 @property (nonatomic, strong) NSURL *url;
 
 @end
 
-@implementation RecordsManager
+@implementation RecordsPlistStorageManager
 
 @synthesize url = url_;
 @synthesize mutableRecords = mutableRecords_;
@@ -38,6 +38,22 @@
 {
     if ([record count] > 0) {
         [self.mutableRecords addObject:record];
+    }
+}
+
+
+- (void)updateRecord:(NSDictionary *)record
+{
+    if ([record count] > 0) {
+        NSInteger index = 0;
+        for (int i = 0; i < [self.mutableRecords count]; i++) {
+            NSDictionary* dict = [self.mutableRecords objectAtIndex:i];
+            if ([dict[@"id"] isEqualToString:record[@"id"]]) {
+                index = i;
+                break;
+            }
+        }
+        [self.mutableRecords replaceObjectAtIndex:index withObject:record];
     }
 }
 

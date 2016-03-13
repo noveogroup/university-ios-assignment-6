@@ -1,5 +1,5 @@
 
-#import "NewRecordViewController.h"
+#import "RecordViewController.h"
 #import "PasswordGenerator.h"
 #import "Preferences.h"
 #import "Record.h"
@@ -9,11 +9,13 @@ static NSString *const UppercaseLetterAlphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 static NSString *const DecimalDigitAlphabet = @"1234567890";
 static NSString *const AnotherSymbolsAndPunctuationsAlphabet = @"!@#$%^&*()_+{}[]|/,.±>?<";
 
-@interface NewRecordViewController ()
+@interface RecordViewController ()
     <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *serviceNameTextField;
 @property (weak, nonatomic) IBOutlet UILabel *passwordLabel;
+
+@property (nonatomic, strong) NSString *currentId;
 
 - (void)refreshPassword;
 - (void)saveRecord;
@@ -26,7 +28,7 @@ static NSString *const AnotherSymbolsAndPunctuationsAlphabet = @"!@#$%^&*()_+{}[
 
 @end
 
-@implementation NewRecordViewController
+@implementation RecordViewController
 
 @synthesize delegate = delegate_;
 
@@ -51,7 +53,8 @@ static NSString *const AnotherSymbolsAndPunctuationsAlphabet = @"!@#$%^&*()_+{}[
     if ([self.serviceNameTextField.text length] > 0) {
         NSDictionary *const record =
             @{kServiceName: self.serviceNameTextField.text,
-              kPassword: self.passwordLabel.text};
+              kPassword: self.passwordLabel.text,
+              @"id": [PasswordGenerator uuid]};
         [self.delegate newRecordViewController:self didFinishWithRecord:record];
     }
 }
@@ -60,7 +63,8 @@ static NSString *const AnotherSymbolsAndPunctuationsAlphabet = @"!@#$%^&*()_+{}[
 {
     NSDictionary *const record =
     @{kServiceName: self.serviceNameTextField.text,
-      kPassword: self.passwordLabel.text};
+      kPassword: self.passwordLabel.text,
+      @"id": self.changedRecord[@"id"]};
     [self.delegate newRecordViewController:self didFinishWithRecord:record];
 }
 
@@ -126,11 +130,13 @@ static NSString *const AnotherSymbolsAndPunctuationsAlphabet = @"!@#$%^&*()_+{}[
 
 - (void)didTouchCancelBarButtonItem:(UIBarButtonItem *)sender
 {
-    if (!self.changedRecord) {
-        [self.delegate newRecordViewController:self didFinishWithRecord:nil];
-    } else {
-        [self.delegate newRecordViewController:self didFinishWithRecord:self.changedRecord];
-    }
+    [self.delegate newRecordViewController:self didFinishWithRecord:nil];
+
+//    if (!self.changedRecord) {
+//        [self.delegate newRecordViewController:self didFinishWithRecord:nil];
+//    } else {
+//        [self.delegate newRecordViewController:self didFinishWithRecord:self.changedRecord];
+//    }
 }
 
 - (void)didTouchSaveBarButtonItem:(UIBarButtonItem *)sender

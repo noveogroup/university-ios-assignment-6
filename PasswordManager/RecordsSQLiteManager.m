@@ -1,9 +1,9 @@
 
-#import "RecordsDBManager.h"
+#import "RecordsSQLiteManager.h"
 #import "Record.h"
 #import "FMDB.h"
 
-@interface RecordsDBManager ()
+@interface RecordsSQLiteManager ()
 
 @property (nonatomic, strong) NSMutableArray *mutableRecords;
 @property (nonatomic, strong) NSString *path;
@@ -11,7 +11,7 @@
 
 @end
 
-@implementation RecordsDBManager
+@implementation RecordsSQLiteManager
 
 @synthesize path = path_;
 @synthesize mutableRecords = mutableRecords_;
@@ -35,20 +35,6 @@
     return self;
 }
 
-- (void) createDB
-{
-    NSString *dbPath = @"/records.db";
-    
-    NSString *createTableQuery = [NSString stringWithFormat:@"CREATE TABLE records (%@ TEXT DEFAULT NULL, %@ TEXT DEFAULT NULL)", kServiceName, kPassword];
-    
-    FMDatabase *database = [FMDatabase databaseWithPath:dbPath];
-    [database open];
-    
-    [database executeUpdate:createTableQuery];
-    
-    [database close];
-}
-
 #pragma mark - Management of records
 
 - (void)registerRecord:(NSDictionary *)record
@@ -56,12 +42,12 @@
     if ([record count] > 0) {
         [self.mutableRecords addObject:record];
         
-        NSString *DBMessage = [NSString stringWithFormat:@"INSERT INTO records (%@, %@) values (?, ?)", kServiceName, kPassword];
+        NSString *DBMessage = [NSString stringWithFormat:@"INSERT INTO records (%@, %@, id) values (?, ?, ?)", kServiceName, kPassword];
         
         [self.db open];
 
         
-        BOOL success = [db_ executeUpdate:DBMessage, record[kServiceName], record[kPassword]];
+        BOOL success = [db_ executeUpdate:DBMessage, record[kServiceName], record[kPassword], record[@"id"]];
         
         if (!success) {
             NSLog(@"%s: insert error: %@", __FUNCTION__, [self.db lastErrorMessage]);
@@ -74,6 +60,39 @@
     }
 }
 
+- (void)updateRecord:(NSDictionary *)record
+{
+    if ([record count] > 0) {
+        
+        NSInteger index = 0;
+        for (int i = 0; i < [self.mutableRecords count]; i++) {
+            NSDictionary* dict = [self.mutableRecords objectAtIndex:i];
+            if ([dict[@"id"] isEqualToString:record[@"id"]]) {
+                index = i;
+                break;
+            }
+        }
+        [self.mutableRecords replaceObjectAtIndex:index withObject:record];
+        
+        NSString *DBMessage = [NSString stringWithFormat:@"UPDATE records SET %@ = ?, %@ = ? WHERE id = ?", kServiceName, kPassword];
+        
+        
+        [self.db open];
+        
+        
+        BOOL success = [db_ executeUpdate:DBMessage, record[kServiceName], record[kPassword], record[@"id"]];
+        
+        if (!success) {
+            NSLog(@"%s: insert error: %@", __FUNCTION__, [self.db lastErrorMessage]);
+            
+            // do whatever you need to upon error
+        }
+        
+        [db_ close];
+        
+    }
+}
+
 - (void)removeRecord:(NSDictionary *)record
 {
     if ([record count] > 0) {
@@ -82,8 +101,8 @@
         
         [self.db open];
         
-        NSString *DBMessage = [NSString stringWithFormat:@"DELETE FROM records WHERE %@ = ?", kServiceName];
-        [db_ executeUpdate:DBMessage, record[kServiceName]];
+        NSString *DBMessage = [NSString stringWithFormat:@"DELETE FROM records WHERE id = ?"];
+        [db_ executeUpdate:DBMessage, record[@"id"]];
     
         [db_ close];
     }
@@ -109,7 +128,8 @@
         while ([rs next]) {
             NSDictionary* record = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [rs stringForColumn:kServiceName], kServiceName,
-                                    [rs stringForColumn:kPassword], kPassword, nil];
+                                    [rs stringForColumn:kPassword], kPassword,
+                                    [rs stringForColumn:@"id"], @"id", nil];
             [mutableRecords_ addObject:record];
         }
         
@@ -131,7 +151,7 @@
     if (!db_) {
         db_ = [FMDatabase databaseWithPath:path_];
         
-        NSString *createTableQuery = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS records (%@ TEXT DEFAULT NULL, %@ TEXT DEFAULT NULL)", kServiceName, kPassword];
+        NSString *createTableQuery = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS records (%@ TEXT DEFAULT NULL, %@ TEXT DEFAULT NULL, id TEXT DEFAULT NULL)", kServiceName, kPassword];
         
         [db_ open];
         BOOL success = [db_ executeUpdate:createTableQuery];
@@ -142,8 +162,6 @@
             
             // do whatever you want upon error
             return nil;
-        } else {
-            NSLog(@"db was opened");
         }
     }
     return db_;

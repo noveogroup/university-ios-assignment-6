@@ -13,6 +13,8 @@
 @property (weak, nonatomic) IBOutlet UISwitch *decimalSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *anotherSymbolsSwitch;
 
+@property (weak, nonatomic) IBOutlet UISegmentedControl *DBSwitch;
+
 @end
 
 #pragma mark - View's lifecycle
@@ -32,10 +34,18 @@
 {
     NSInteger currentSymbolsType = [[Preferences standardPreferences] passwordSymbolsType];
     
-    self.uppercaseSwitch.on = (currentSymbolsType & IncludeUppercaseSymbols)!=0?YES:NO;
-    self.lowercaseSwitch.on = (currentSymbolsType & IncludeLowercaseSymbols)!=0?YES:NO;
-    self.decimalSwitch.on = (currentSymbolsType & IncludeDecimalDigit)!=0?YES:NO;
-    self.anotherSymbolsSwitch.on = (currentSymbolsType & IncludeAnotherSymbolsAndPunctuations)!=0?YES:NO;
+    self.uppercaseSwitch.on = (currentSymbolsType & IncludeUppercaseSymbols) != 0;
+    self.lowercaseSwitch.on = (currentSymbolsType & IncludeLowercaseSymbols) != 0;
+    self.decimalSwitch.on = (currentSymbolsType & IncludeDecimalDigit) != 0;
+    self.anotherSymbolsSwitch.on = (currentSymbolsType & IncludeAnotherSymbolsAndPunctuations) != 0;
+    
+    NSInteger currentDBType = [[Preferences standardPreferences] DBType];
+    if (currentDBType == DBTypePlist) {
+        self.DBSwitch.selectedSegmentIndex = 0;
+    }
+    if (currentDBType == DBTypeSQLite) {
+        self.DBSwitch.selectedSegmentIndex = 1;
+    }
 }
 
 - (void) tuneSlider
@@ -43,10 +53,27 @@
     NSInteger currentPasswordlLength = [[Preferences standardPreferences] passwordLength];
     
     self.symbolsCountSlider.value = currentPasswordlLength;
-    self.symboldCountLabel.text = [NSString stringWithFormat:@"%@", @(currentPasswordlLength)];
+    self.symboldCountLabel.text = [@(currentPasswordlLength) stringValue];
 }
 
 #pragma mark - Actions
+- (IBAction)DBTypeChanged:(id)sender {
+    switch (self.DBSwitch.selectedSegmentIndex) {
+        case 0:
+            [[Preferences standardPreferences] setDBType:DBTypePlist];
+            break;
+           
+        case 1:
+            [[Preferences standardPreferences] setDBType:DBTypeSQLite];
+            break;
+            
+        default:
+            break;
+    }
+    
+}
+
+
 - (IBAction)complexityChanged
 {
     switch (self.complexitySegmentedControl.selectedSegmentIndex) {

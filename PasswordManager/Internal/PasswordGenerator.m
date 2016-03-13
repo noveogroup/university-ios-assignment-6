@@ -16,4 +16,12 @@
     return [[alphabet shuffledString] substringWithRange:randomRange];
 }
 
++ (NSString *)uuid
+{
+    CFUUIDRef uuidRef = CFUUIDCreate(NULL);
+    CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
+    CFRelease(uuidRef);
+    return (__bridge_transfer NSString *)uuidStringRef;
+}
+
 @end

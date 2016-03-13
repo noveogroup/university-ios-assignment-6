@@ -15,17 +15,17 @@
 		3124486A1C92EBA00026555A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3124485C1C92EBA00026555A /* AppDelegate.m */; };
 		3124486D1C92EBA00026555A /* PasswordGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 312448611C92EBA00026555A /* PasswordGenerator.m */; };
 		3124486E1C92EBA00026555A /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 312448631C92EBA00026555A /* Preferences.m */; };
-		3124486F1C92EBA00026555A /* RecordsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 312448661C92EBA00026555A /* RecordsManager.m */; };
+		3124486F1C92EBA00026555A /* RecordsPlistStorageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 312448661C92EBA00026555A /* RecordsPlistStorageManager.m */; };
 		312448761C92ECB50026555A /* AppIcon.appiconset in Resources */ = {isa = PBXBuildFile; fileRef = 312448741C92ECB50026555A /* AppIcon.appiconset */; };
 		312448771C92ECB50026555A /* LaunchImage.launchimage in Resources */ = {isa = PBXBuildFile; fileRef = 312448751C92ECB50026555A /* LaunchImage.launchimage */; };
 		312448791C92ECC70026555A /* Launch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 312448781C92ECC70026555A /* Launch.storyboard */; };
-		312448821C92ED040026555A /* NewRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3124487C1C92ED040026555A /* NewRecordViewController.m */; };
-		312448831C92ED040026555A /* NewRecordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3124487D1C92ED040026555A /* NewRecordViewController.xib */; };
+		312448821C92ED040026555A /* RecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3124487C1C92ED040026555A /* RecordViewController.m */; };
+		312448831C92ED040026555A /* RecordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3124487D1C92ED040026555A /* RecordViewController.xib */; };
 		312448841C92ED040026555A /* RecordsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 312448801C92ED040026555A /* RecordsViewController.m */; };
 		312448851C92ED040026555A /* RecordsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 312448811C92ED040026555A /* RecordsViewController.xib */; };
 		3124488A1C92F6320026555A /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 312448881C92F6320026555A /* SettingsViewController.m */; };
 		3130F5501C93D0E5001FD8C5 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3130F54F1C93D0E5001FD8C5 /* Settings.storyboard */; };
-		3130F5591C954712001FD8C5 /* RecordsDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3130F5581C954712001FD8C5 /* RecordsDBManager.m */; };
+		3130F5591C954712001FD8C5 /* RecordsSQLiteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3130F5581C954712001FD8C5 /* RecordsSQLiteManager.m */; };
 		7A4E925A383B973A4E80DDEE /* libPods-PasswordManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 033C607EFF6DE207ED9578C4 /* libPods-PasswordManager.a */; };
 		93DE15E318B4AA8D00A46FD2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E218B4AA8D00A46FD2 /* Foundation.framework */; };
 		93DE15E518B4AA8D00A46FD2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E418B4AA8D00A46FD2 /* CoreGraphics.framework */; };
@@ -51,22 +51,23 @@
 		312448621C92EBA00026555A /* Preferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Preferences.h; path = Internal/Preferences.h; sourceTree = "<group>"; };
 		312448631C92EBA00026555A /* Preferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Preferences.m; path = Internal/Preferences.m; sourceTree = "<group>"; };
 		312448641C92EBA00026555A /* Record.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Record.h; path = Internal/Record.h; sourceTree = "<group>"; };
-		312448651C92EBA00026555A /* RecordsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RecordsManager.h; path = Internal/RecordsManager.h; sourceTree = "<group>"; };
-		312448661C92EBA00026555A /* RecordsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RecordsManager.m; path = Internal/RecordsManager.m; sourceTree = "<group>"; };
+		312448651C92EBA00026555A /* RecordsPlistStorageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RecordsPlistStorageManager.h; path = Internal/RecordsPlistStorageManager.h; sourceTree = "<group>"; };
+		312448661C92EBA00026555A /* RecordsPlistStorageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RecordsPlistStorageManager.m; path = Internal/RecordsPlistStorageManager.m; sourceTree = "<group>"; };
 		312448741C92ECB50026555A /* AppIcon.appiconset */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AppIcon.appiconset; path = Resources/AppIcon.appiconset; sourceTree = "<group>"; };
 		312448751C92ECB50026555A /* LaunchImage.launchimage */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LaunchImage.launchimage; path = Resources/LaunchImage.launchimage; sourceTree = "<group>"; };
 		312448781C92ECC70026555A /* Launch.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Launch.storyboard; path = Internal/Launch.storyboard; sourceTree = "<group>"; };
-		3124487B1C92ED040026555A /* NewRecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewRecordViewController.h; sourceTree = "<group>"; };
-		3124487C1C92ED040026555A /* NewRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewRecordViewController.m; sourceTree = "<group>"; };
-		3124487D1C92ED040026555A /* NewRecordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewRecordViewController.xib; sourceTree = "<group>"; };
+		3124487B1C92ED040026555A /* RecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordViewController.h; sourceTree = "<group>"; };
+		3124487C1C92ED040026555A /* RecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordViewController.m; sourceTree = "<group>"; };
+		3124487D1C92ED040026555A /* RecordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecordViewController.xib; sourceTree = "<group>"; };
 		3124487F1C92ED040026555A /* RecordsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordsViewController.h; sourceTree = "<group>"; };
 		312448801C92ED040026555A /* RecordsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordsViewController.m; sourceTree = "<group>"; };
 		312448811C92ED040026555A /* RecordsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecordsViewController.xib; sourceTree = "<group>"; };
 		312448871C92F6320026555A /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsViewController.h; path = Internal/Settings/SettingsViewController.h; sourceTree = "<group>"; };
 		312448881C92F6320026555A /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsViewController.m; path = Internal/Settings/SettingsViewController.m; sourceTree = "<group>"; };
 		3130F54F1C93D0E5001FD8C5 /* Settings.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Settings.storyboard; path = Internal/Settings/Settings.storyboard; sourceTree = "<group>"; };
-		3130F5571C954712001FD8C5 /* RecordsDBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordsDBManager.h; sourceTree = "<group>"; };
-		3130F5581C954712001FD8C5 /* RecordsDBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordsDBManager.m; sourceTree = "<group>"; };
+		3130F5571C954712001FD8C5 /* RecordsSQLiteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordsSQLiteManager.h; sourceTree = "<group>"; };
+		3130F5581C954712001FD8C5 /* RecordsSQLiteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordsSQLiteManager.m; sourceTree = "<group>"; };
+		31A49F7A1C95AA2A009C324B /* RecordsManagerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RecordsManagerProtocol.h; sourceTree = "<group>"; };
 		505B01C2EE125047139BDEF2 /* Pods-PasswordManager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PasswordManager.release.xcconfig"; path = "Pods/Target Support Files/Pods-PasswordManager/Pods-PasswordManager.release.xcconfig"; sourceTree = "<group>"; };
 		93DE15DF18B4AA8D00A46FD2 /* PasswordManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PasswordManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93DE15E218B4AA8D00A46FD2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -139,11 +140,12 @@
 				312448621C92EBA00026555A /* Preferences.h */,
 				312448631C92EBA00026555A /* Preferences.m */,
 				312448641C92EBA00026555A /* Record.h */,
-				312448651C92EBA00026555A /* RecordsManager.h */,
-				312448661C92EBA00026555A /* RecordsManager.m */,
+				312448651C92EBA00026555A /* RecordsPlistStorageManager.h */,
+				312448661C92EBA00026555A /* RecordsPlistStorageManager.m */,
 				312448781C92ECC70026555A /* Launch.storyboard */,
-				3130F5571C954712001FD8C5 /* RecordsDBManager.h */,
-				3130F5581C954712001FD8C5 /* RecordsDBManager.m */,
+				3130F5571C954712001FD8C5 /* RecordsSQLiteManager.h */,
+				3130F5581C954712001FD8C5 /* RecordsSQLiteManager.m */,
+				31A49F7A1C95AA2A009C324B /* RecordsManagerProtocol.h */,
 			);
 			name = Internal;
 			sourceTree = "<group>";
@@ -151,9 +153,9 @@
 		3124487A1C92ED040026555A /* NewRecordVC */ = {
 			isa = PBXGroup;
 			children = (
-				3124487B1C92ED040026555A /* NewRecordViewController.h */,
-				3124487C1C92ED040026555A /* NewRecordViewController.m */,
-				3124487D1C92ED040026555A /* NewRecordViewController.xib */,
+				3124487B1C92ED040026555A /* RecordViewController.h */,
+				3124487C1C92ED040026555A /* RecordViewController.m */,
+				3124487D1C92ED040026555A /* RecordViewController.xib */,
 			);
 			name = NewRecordVC;
 			path = Internal/NewRecordVC;
@@ -268,7 +270,7 @@
 			files = (
 				312448771C92ECB50026555A /* LaunchImage.launchimage in Resources */,
 				312448571C92EB800026555A /* InfoPlist.strings in Resources */,
-				312448831C92ED040026555A /* NewRecordViewController.xib in Resources */,
+				312448831C92ED040026555A /* RecordViewController.xib in Resources */,
 				3130F5501C93D0E5001FD8C5 /* Settings.storyboard in Resources */,
 				312448791C92ECC70026555A /* Launch.storyboard in Resources */,
 				312448761C92ECB50026555A /* AppIcon.appiconset in Resources */,
@@ -333,16 +335,16 @@
 			files = (
 				3124486D1C92EBA00026555A /* PasswordGenerator.m in Sources */,
 				3124484B1C92EB630026555A /* NSString+Shuffling.m in Sources */,
-				3124486F1C92EBA00026555A /* RecordsManager.m in Sources */,
+				3124486F1C92EBA00026555A /* RecordsPlistStorageManager.m in Sources */,
 				312448841C92ED040026555A /* RecordsViewController.m in Sources */,
 				3124486E1C92EBA00026555A /* Preferences.m in Sources */,
 				3124484A1C92EB630026555A /* NSMutableString+Shuffling.m in Sources */,
 				312448491C92EB630026555A /* NSMutableString+Exchange.m in Sources */,
 				312448581C92EB800026555A /* main.m in Sources */,
-				3130F5591C954712001FD8C5 /* RecordsDBManager.m in Sources */,
+				3130F5591C954712001FD8C5 /* RecordsSQLiteManager.m in Sources */,
 				3124488A1C92F6320026555A /* SettingsViewController.m in Sources */,
 				3124486A1C92EBA00026555A /* AppDelegate.m in Sources */,
-				312448821C92ED040026555A /* NewRecordViewController.m in Sources */,
+				312448821C92ED040026555A /* RecordViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

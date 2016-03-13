@@ -1,22 +1,12 @@
 
-#import <Foundation/Foundation.h>
-
-@interface RecordsManager : NSObject
-
-/**
- *  Performs no initialization; please use @c -initWithURL: instead.
- */
-- (id)init;
-
-/**
- *  Initializes a newly created instance with the specifed URL.
- */
-- (instancetype)initWithURL:(NSURL *)url;
+@protocol RecordsManagerProtocol <NSObject>
 
 /**
  *  Registers the specified record.
  */
 - (void)registerRecord:(NSDictionary *)record;
+
+- (void)updateRecord:(NSDictionary *)record;
 
 - (void)removeRecord:(NSDictionary *)record;
 

@@ -1,10 +1,11 @@
 
-#import "NewRecordViewController.h"
+#import "RecordViewController.h"
 #import "Record.h"
-#import "RecordsManager.h"
-#import "RecordsDBManager.h"
+#import "RecordsPlistStorageManager.h"
+#import "RecordsSQLiteManager.h"
 #import "RecordsViewController.h"
 #import "SettingsViewController.h"
+#import "Preferences.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
@@ -13,9 +14,12 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
      UITableViewDelegate,
      NewRecordViewControllerDelegate>
 
-@property (nonatomic, readonly) RecordsDBManager *recordsDBManager;
+@property (nonatomic, readonly) id<RecordsManagerProtocol> recordsManager;
+@property (nonatomic, readonly) RecordsSQLiteManager *recordsSQLiteManager;
+@property (nonatomic, readonly) RecordsPlistStorageManager *recordsPlistManager;
 
-@property (nonatomic, readonly) RecordsManager *recordsManager;
+
+@property (nonatomic, assign) NSInteger changedRowIndex;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
@@ -26,8 +30,8 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 @implementation RecordsViewController
 
 @synthesize recordsManager = recordsManager_;
-
-@synthesize recordsDBManager = recordsDBManager_;
+@synthesize recordsSQLiteManager = recordsSQLiteManager_;
+@synthesize recordsPlistManager = recordsPlistManager_;
 
 
 @synthesize tableView = tableView_;
@@ -35,45 +39,68 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 #pragma mark - VC life circle
 - (void) viewDidLoad
 {
+    self.changedRowIndex = -1;
     self.navigationController.navigationBar.translucent = NO;
     UIBarButtonItem* settingsItem = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(didTouchSettingsBarButtonItem)];
     [self.navigationItem setRightBarButtonItem:settingsItem animated:NO];
 }
 
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.tableView reloadData];
+}
+
 #pragma mark - Getters
 
-- (RecordsManager *)recordsManager
+- (id<RecordsManagerProtocol>)recordsManager
 {
-    if (!recordsManager_) {
-        NSURL *const documentDirectoryURL =
-            [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
-                                                    inDomains:NSUserDomainMask] lastObject];
-        NSURL *const fileURLForLocalStore =
-            [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
-
-        recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
+    NSInteger currentDBType = [[Preferences standardPreferences] DBType];
+    if (currentDBType == DBTypePlist) {
+        
+        return self.recordsPlistManager;
+        
+    } else if (currentDBType == DBTypeSQLite) {
+        
+        return self.recordsSQLiteManager;
+        
     }
+    
+    return nil;
+    
+}
 
+- (RecordsPlistStorageManager *)recordsPlistManager
+{
+    if (!recordsPlistManager_) {
+        NSURL *const documentDirectoryURL =
+        [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                inDomains:NSUserDomainMask] lastObject];
+        NSURL *const fileURLForLocalStore =
+        [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
+        
+        recordsPlistManager_ = [[RecordsPlistStorageManager alloc] initWithURL:fileURLForLocalStore];
+    }
+    return recordsPlistManager_;
+}
+
+- (RecordsSQLiteManager *)recordsSQLiteManager
+{
+    if (!recordsSQLiteManager_){
+        NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+        NSString *filePath = [path stringByAppendingPathComponent:@"records.db"];
+        recordsManager_ = [[RecordsSQLiteManager alloc] initWithPath:filePath];
+    }
     return recordsManager_;
 }
 
-- (RecordsDBManager *)recordsDBManager
-{
-    if (!recordsDBManager_) {
-        
-        NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
-        NSString *filePath = [path stringByAppendingPathComponent:@"records.db"];
-        recordsDBManager_ = [[RecordsDBManager alloc] initWithPath:filePath];
-    }
-    
-    return recordsDBManager_;
-}
+
 
 #pragma mark - Actions
 
 - (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender
 {
-    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] init];
+    RecordViewController *const rootViewController = [[RecordViewController alloc] init];
     rootViewController.delegate = self;
 
     UINavigationController *const navigationController =
@@ -95,8 +122,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)section
 {
-    //return [[self.recordsManager records] count];
-    return [[self.recordsDBManager records] count];
+    return [[self.recordsManager records] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
@@ -110,8 +136,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
         tableViewCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2
                                                reuseIdentifier:REUSABLE_CELL_ID];
     }
-    //NSDictionary *const record = [[self.recordsManager records] objectAtIndex:indexPath.row];
-    NSDictionary *const record = [[self.recordsDBManager records] objectAtIndex:indexPath.row];
+    NSDictionary *const record = [[self.recordsManager records] objectAtIndex:indexPath.row];
     tableViewCell.textLabel.text = [record valueForKey:kServiceName];
     tableViewCell.detailTextLabel.text = [record valueForKey:kPassword];
 
@@ -127,22 +152,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    //NSDictionary *const record = [[self.recordsManager records] objectAtIndex:indexPath.row];
-    NSDictionary *const record = [[self.recordsDBManager records] objectAtIndex:indexPath.row];
+    NSDictionary *const record = [[self.recordsManager records] objectAtIndex:indexPath.row];
 
     
-    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] init];
+    RecordViewController *const rootViewController = [[RecordViewController alloc] init];
     rootViewController.delegate = self;
     rootViewController.changedRecord = record;
-
-    [self.recordsDBManager removeRecord:record];
-    [self.recordsDBManager synchronize];
     
-    [tableView beginUpdates];
-    
-    [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-    
-    [tableView endUpdates];
+    self.changedRowIndex = indexPath.row;
     
     UINavigationController *const navigationController =
     [[UINavigationController alloc] initWithRootViewController:rootViewController];
@@ -158,9 +175,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
-        NSDictionary *deletedRecord = [[self.recordsDBManager records] objectAtIndex:indexPath.row];
-        [self.recordsDBManager removeRecord:deletedRecord];
-        [self.recordsDBManager synchronize];
+        NSDictionary *deletedRecord = [[self.recordsManager records] objectAtIndex:indexPath.row];
+        [self.recordsManager removeRecord:deletedRecord];
+        [self.recordsManager synchronize];
         
         [tableView beginUpdates];
         
@@ -172,17 +189,21 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 
 #pragma mark - NewRecordViewControllerDelegate implementation
 
-- (void)newRecordViewController:(NewRecordViewController *)sender
+- (void)newRecordViewController:(RecordViewController *)sender
             didFinishWithRecord:(NSDictionary *)record
 {
     if (record) {
-        [self.recordsDBManager registerRecord:record];
-        [self.recordsDBManager synchronize];
-
-        [self.tableView reloadData];
-    } else {
-        [self.tableView reloadData];
+        if (self.changedRowIndex < 0) {
+            [self.recordsManager registerRecord:record];
+        } else {
+            [self.recordsManager updateRecord:record];
+        }
+        [self.recordsManager synchronize];
     }
+    
+    self.changedRowIndex = -1;
+    [self.tableView reloadData];
+
     [self dismissViewControllerAnimated:YES
                              completion:NULL];
 }

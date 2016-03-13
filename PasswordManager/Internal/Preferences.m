@@ -3,6 +3,8 @@
 
 static NSString *const kPasswordLength = @"PasswordLength";
 static NSString *const kPasswordSymbolsType = @"PasswordSymbolsType";
+static NSString *const kDBType = @"DBType";
+
 
 @interface Preferences ()
 
@@ -37,7 +39,19 @@ static NSString *const kPasswordSymbolsType = @"PasswordSymbolsType";
     return [[NSUserDefaults standardUserDefaults] integerForKey:kPasswordSymbolsType];
 }
 
+- (NSInteger)DBType
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kDBType];
+}
+
 #pragma mark - Setters
+
+- (void)setDBType:(NSInteger)DBType
+{
+    [[NSUserDefaults standardUserDefaults] setInteger:DBType
+                                               forKey:kDBType];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
 
 - (void)setPasswordLength:(NSInteger)passwordLength
 {
@@ -93,6 +107,9 @@ static NSString *const kPasswordSymbolsType = @"PasswordSymbolsType";
     
     [defaultsToRegister setObject:@(IncludeDefaultSymbols)
                            forKey:kPasswordSymbolsType];
+    
+    [defaultsToRegister setObject:@(DBTypeSQLite)
+                           forKey:kDBType];
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
     [[NSUserDefaults standardUserDefaults] synchronize];

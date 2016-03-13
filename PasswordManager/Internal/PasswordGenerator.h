@@ -10,4 +10,6 @@
 + (NSString *)generatePasswordOfLength:(NSUInteger)length
                          usingAlphabet:(NSString *)alphabet;
 
++ (NSString *)uuid;
+
 @end

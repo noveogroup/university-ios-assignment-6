@@ -8,7 +8,12 @@ typedef NS_ENUM(NSInteger, PasswordLength) {
     PasswordLengthStrong  = 20
 };
 
-typedef NS_OPTIONS(NSUInteger, PasswordSymbolsType) {
+typedef NS_ENUM(NSInteger, DBType) {
+    DBTypePlist    = 5,
+    DBTypeSQLite  = 10,
+};
+
+typedef NS_OPTIONS(NSUInteger, IncludeSymbols) {
     IncludeUppercaseSymbols                 = 1 <<  0,
     IncludeLowercaseSymbols                 = 1 <<  1,
     IncludeDecimalDigit                     = 1 <<  2,
@@ -24,6 +29,8 @@ typedef NS_OPTIONS(NSUInteger, PasswordSymbolsType) {
  */
 @property (nonatomic, readwrite) NSInteger passwordLength;
 @property (nonatomic, readwrite) NSInteger passwordSymbolsType;
+@property (nonatomic, readwrite) NSInteger DBType;
+
 
 /**
  *  Returns the shared preferences object.
