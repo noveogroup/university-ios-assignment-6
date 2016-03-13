@@ -158,9 +158,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
-        NSDictionary *deletedRecord = [[self.recordsManager records] objectAtIndex:indexPath.row];
-        [self.recordsManager removeRecord:deletedRecord];
-        [self.recordsManager synchronize];
+        NSDictionary *deletedRecord = [[self.recordsDBManager records] objectAtIndex:indexPath.row];
+        [self.recordsDBManager removeRecord:deletedRecord];
+        [self.recordsDBManager synchronize];
         
         [tableView beginUpdates];
         
