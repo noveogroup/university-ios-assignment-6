@@ -14,4 +14,6 @@
  */
 - (instancetype)initWithURL:(NSURL *)url;
 
+- (BOOL)synchronize;
+
 @end

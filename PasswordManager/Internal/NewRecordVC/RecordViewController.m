@@ -20,18 +20,17 @@ static NSString *const AnotherSymbolsAndPunctuationsAlphabet = @"!@#$%^&*()_+{}[
 - (void)refreshPassword;
 - (void)saveRecord;
 
-- (void)didTouchCancelBarButtonItem:(UIBarButtonItem *)sender;
+- (void)didTouchCancelBarButtonItem;
 
-- (void)didTouchSaveBarButtonItem:(UIBarButtonItem *)sender;
+- (void)didTouchSaveBarButtonItem;
 
-- (IBAction)didTouchRefreshButton:(UIButton *)sender;
+- (IBAction)didTouchRefreshButton;
 
 @end
 
 @implementation RecordViewController
 
 @synthesize delegate = delegate_;
-
 @synthesize serviceNameTextField = serviceNameTextField_;
 @synthesize passwordLabel = passwordLabel_;
 
@@ -61,11 +60,13 @@ static NSString *const AnotherSymbolsAndPunctuationsAlphabet = @"!@#$%^&*()_+{}[
 
 - (void)updateRecord
 {
-    NSDictionary *const record =
-    @{kServiceName: self.serviceNameTextField.text,
-      kPassword: self.passwordLabel.text,
-      @"id": self.changedRecord[@"id"]};
-    [self.delegate newRecordViewController:self didFinishWithRecord:record];
+    if ([self.serviceNameTextField.text length] > 0) {
+        NSDictionary *const record =
+        @{kServiceName: self.serviceNameTextField.text,
+          kPassword: self.passwordLabel.text,
+          @"id": self.changedRecord[@"id"]};
+        [self.delegate newRecordViewController:self didFinishWithRecord:record];
+    }
 }
 
 #pragma mark - CreateAlphabet
@@ -102,14 +103,14 @@ static NSString *const AnotherSymbolsAndPunctuationsAlphabet = @"!@#$%^&*()_+{}[
             [[UIBarButtonItem alloc]
                 initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                      target:self
-                                     action:@selector(didTouchCancelBarButtonItem:)];
+                                     action:@selector(didTouchCancelBarButtonItem)];
         [self.navigationItem setLeftBarButtonItem:cancelBarButtonItem];
 
         UIBarButtonItem *const saveBarButtonItem =
             [[UIBarButtonItem alloc]
                 initWithBarButtonSystemItem:UIBarButtonSystemItemSave
                                      target:self
-                                     action:@selector(didTouchSaveBarButtonItem:)];
+                                     action:@selector(didTouchSaveBarButtonItem)];
         [self.navigationItem setRightBarButtonItem:saveBarButtonItem];
     }
 }
@@ -128,18 +129,12 @@ static NSString *const AnotherSymbolsAndPunctuationsAlphabet = @"!@#$%^&*()_+{}[
 
 #pragma mark - Actions
 
-- (void)didTouchCancelBarButtonItem:(UIBarButtonItem *)sender
+- (void)didTouchCancelBarButtonItem
 {
     [self.delegate newRecordViewController:self didFinishWithRecord:nil];
-
-//    if (!self.changedRecord) {
-//        [self.delegate newRecordViewController:self didFinishWithRecord:nil];
-//    } else {
-//        [self.delegate newRecordViewController:self didFinishWithRecord:self.changedRecord];
-//    }
 }
 
-- (void)didTouchSaveBarButtonItem:(UIBarButtonItem *)sender
+- (void)didTouchSaveBarButtonItem
 {
     if (!self.changedRecord) {
         [self saveRecord];
@@ -148,7 +143,7 @@ static NSString *const AnotherSymbolsAndPunctuationsAlphabet = @"!@#$%^&*()_+{}[
     }
 }
 
-- (IBAction)didTouchRefreshButton:(UIButton *)sender
+- (IBAction)didTouchRefreshButton
 {
     [self refreshPassword];
 }

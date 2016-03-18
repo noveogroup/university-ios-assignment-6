@@ -23,7 +23,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-- (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender;
+- (IBAction)didTouchAddBarButtonItem;
 
 @end
 
@@ -67,7 +67,6 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
     }
     
     return nil;
-    
 }
 
 - (RecordsPlistStorageManager *)recordsPlistManager
@@ -89,16 +88,16 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
     if (!recordsSQLiteManager_){
         NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
         NSString *filePath = [path stringByAppendingPathComponent:@"records.db"];
-        recordsManager_ = [[RecordsSQLiteManager alloc] initWithPath:filePath];
+        recordsSQLiteManager_ = [[RecordsSQLiteManager alloc] initWithPath:filePath];
     }
-    return recordsManager_;
+    return recordsSQLiteManager_;
 }
 
 
 
 #pragma mark - Actions
 
-- (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender
+- (IBAction)didTouchAddBarButtonItem
 {
     RecordViewController *const rootViewController = [[RecordViewController alloc] init];
     rootViewController.delegate = self;
@@ -177,7 +176,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         
         NSDictionary *deletedRecord = [[self.recordsManager records] objectAtIndex:indexPath.row];
         [self.recordsManager removeRecord:deletedRecord];
-        [self.recordsManager synchronize];
+        
+        SEL synchronize = @selector(synchronize);
+        if ([self.recordsManager respondsToSelector:synchronize]) {
+            [self.recordsManager performSelector:synchronize];
+        }
         
         [tableView beginUpdates];
         
@@ -198,7 +201,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         } else {
             [self.recordsManager updateRecord:record];
         }
-        [self.recordsManager synchronize];
+        
+        SEL synchronize = @selector(synchronize);
+        if ([self.recordsManager respondsToSelector:synchronize]) {
+            [self.recordsManager performSelector:synchronize];
+        }
     }
     
     self.changedRowIndex = -1;

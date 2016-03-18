@@ -23,7 +23,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="FSQ-jM-gLH"/>
                         <barButtonItem systemItem="add" id="zu4-72-hBg">
                             <connections>
-                                <action selector="didTouchAddBarButtonItem:" destination="-1" id="fIu-NX-820"/>
+                                <action selector="didTouchAddBarButtonItem" destination="-1" id="2X0-er-AT0"/>
                             </connections>
                         </barButtonItem>
                     </items>

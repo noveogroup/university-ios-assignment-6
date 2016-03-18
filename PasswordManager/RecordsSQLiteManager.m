@@ -7,7 +7,7 @@
 
 @property (nonatomic, strong) NSMutableArray *mutableRecords;
 @property (nonatomic, strong) NSString *path;
-@property (nonatomic, strong) FMDatabase* db;
+@property (nonatomic, strong) FMDatabase *db;
 
 @end
 
@@ -45,18 +45,14 @@
         NSString *DBMessage = [NSString stringWithFormat:@"INSERT INTO records (%@, %@, id) values (?, ?, ?)", kServiceName, kPassword];
         
         [self.db open];
-
         
-        BOOL success = [db_ executeUpdate:DBMessage, record[kServiceName], record[kPassword], record[@"id"]];
+        BOOL success = [self.db executeUpdate:DBMessage, record[kServiceName], record[kPassword], record[@"id"]];
         
         if (!success) {
             NSLog(@"%s: insert error: %@", __FUNCTION__, [self.db lastErrorMessage]);
-            
-            // do whatever you need to upon error
         }
         
-        [db_ close];
-    
+        [self.db close];
     }
 }
 
@@ -80,15 +76,13 @@
         [self.db open];
         
         
-        BOOL success = [db_ executeUpdate:DBMessage, record[kServiceName], record[kPassword], record[@"id"]];
+        BOOL success = [self.db executeUpdate:DBMessage, record[kServiceName], record[kPassword], record[@"id"]];
         
         if (!success) {
             NSLog(@"%s: insert error: %@", __FUNCTION__, [self.db lastErrorMessage]);
-            
-            // do whatever you need to upon error
         }
         
-        [db_ close];
+        [self.db close];
         
     }
 }
@@ -102,9 +96,9 @@
         [self.db open];
         
         NSString *DBMessage = [NSString stringWithFormat:@"DELETE FROM records WHERE id = ?"];
-        [db_ executeUpdate:DBMessage, record[@"id"]];
+        [self.db executeUpdate:DBMessage, record[@"id"]];
     
-        [db_ close];
+        [self.db close];
     }
 }
 
@@ -115,13 +109,10 @@
         
         [self.db open];
         
-        FMResultSet *rs = [db_ executeQuery:@"SELECT * FROM records"];
+        FMResultSet *rs = [self.db executeQuery:@"SELECT * FROM records"];
         
         if (!rs) {
             NSLog(@"%s: select error: %@", __FUNCTION__, [db_ lastErrorMessage]);
-            
-            // do whatever you want upon error
-            
             return nil;
         }
         
@@ -134,7 +125,7 @@
         }
         
         [rs close];
-        [db_ close];
+        [self.db close];
         
     }
     
@@ -165,14 +156,6 @@
         }
     }
     return db_;
-}
-
-#pragma mark - Synchronisation
-
-- (BOOL)synchronize
-{
-
-    return YES;
 }
 
 

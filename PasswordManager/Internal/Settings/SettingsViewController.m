@@ -28,7 +28,6 @@
 }
 
 #pragma mark - TuneControls
-//tune - maybe it isnt best word for this
 
 - (void) tuneSwitchs
 {
@@ -70,7 +69,6 @@
         default:
             break;
     }
-    
 }
 
 
