@@ -9,8 +9,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class SettingsViewController;
+
 @protocol SettingsViewControllerDelegate <NSObject>
 
+- (void)settingsViewControllerdidFinish:(SettingsViewController *)sender;
 
 @end
 

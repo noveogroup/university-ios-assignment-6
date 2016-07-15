@@ -9,6 +9,7 @@
 #import "Preferences.h"
 
 static NSString *const kPasswordStrength = @"PasswordStrength";
+static NSString *const kPasswordStorage = @"PasswordStorage";
 
 @interface Preferences ()
 
@@ -38,6 +39,11 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
     return [[NSUserDefaults standardUserDefaults] integerForKey:kPasswordStrength];
 }
 
+- (NSInteger)passwordStorage
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kPasswordStorage];
+}
+
 #pragma mark - Setters
 
 - (void)setPasswordStrength:(NSInteger)passwordStrength
@@ -46,6 +52,14 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
                                                forKey:kPasswordStrength];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
+
+- (void)setPasswordStorage:(NSInteger)passwordStorage
+{
+    [[NSUserDefaults standardUserDefaults] setInteger:passwordStorage
+                                               forKey:kPasswordStorage];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 
 #pragma mark - Initialization
 
@@ -84,6 +98,8 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
     }
     [defaultsToRegister setObject:@(PasswordStrengthDefault)
                            forKey:kPasswordStrength];
+    [defaultsToRegister setObject:@(PasswordStorageOld)
+                           forKey:kPasswordStorage];
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
     [[NSUserDefaults standardUserDefaults] synchronize];
