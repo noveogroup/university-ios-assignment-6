@@ -10,13 +10,15 @@
 #import "Record.h"
 #import "RecordsManager.h"
 #import "RecordsViewController.h"
+#import "SettingsViewController.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 @interface RecordsViewController ()
     <UITableViewDataSource,
      UITableViewDelegate,
-     NewRecordViewControllerDelegate>
+     NewRecordViewControllerDelegate,
+     SettingsViewControllerDelegate>
 
 @property (nonatomic, readonly) RecordsManager *recordsManager;
 
@@ -61,6 +63,16 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
     [self presentViewController:navigationController animated:YES completion:NULL];
 }
 
+- (IBAction)didTouchSettingsBarButtonItem:(UIBarButtonItem *)sender
+{
+    SettingsViewController *const settingsVC = [[SettingsViewController alloc] init];
+    settingsVC.delegate = self;
+    
+    UINavigationController *const navigationController =
+    [[UINavigationController alloc] initWithRootViewController:settingsVC];
+    [self presentViewController:navigationController animated:YES completion:NULL];
+}
+
 #pragma mark - UITableViewDataSource implementation
 
 - (NSInteger)tableView:(UITableView *)tableView
@@ -92,7 +104,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 #pragma mark - UITableViewDelegate implementation
 
--       (void)tableView:(UITableView *)tableView
+- (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -113,4 +125,27 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
                              completion:NULL];
 }
 
+#pragma mark - SettingsViewControllerDelegate implementation
+
+- (void)settingsViewControllerDidFinish:(SettingsViewController *)sender
+{
+    [self dismissViewControllerAnimated:YES
+                             completion:NULL];
+}
+
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
