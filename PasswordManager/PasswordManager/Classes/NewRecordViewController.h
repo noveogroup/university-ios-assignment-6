@@ -35,4 +35,6 @@
  */
 @property (nonatomic, weak) id<NewRecordViewControllerDelegate> delegate;
 
+@property (nonatomic, strong) NSDictionary *recordToDisplay;
+
 @end

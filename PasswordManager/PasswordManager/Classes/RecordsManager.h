@@ -31,6 +31,11 @@
 - (NSArray *)records;
 
 /**
+ *  Delete the specified record.
+ */
+- (void)removeRecord:(NSDictionary *)record;
+
+/**
  *  Writes any modifications to the persistent domains to disk.
  *
  *  @return @c YES if the records were saved successfully to disk.

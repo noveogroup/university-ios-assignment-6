@@ -29,9 +29,10 @@ static NSString *const kPasswordStrengthSectionTitle = @"Password Strength";
 {
     [super viewDidLoad];
     
-    self.passwordStorageType = @[@"NSMutableArray + writeToFile", @"FMDB"];
+    self.passwordStorageType = @[@"File (dat)", @"FMDB (SQLite)"];
     self.selectedStorageType = 0;
     self.passwordStrength = @[@"Weak", @"Medium", @"Strong"];
+    
     switch ([[Preferences standardPreferences] passwordStrength]) {
         case PasswordStrengthWeak:
             self.selectedPasswordStrength = 0;
@@ -43,6 +44,16 @@ static NSString *const kPasswordStrengthSectionTitle = @"Password Strength";
             
         case PasswordStrengthStrong:
             self.selectedPasswordStrength = 2;
+            break;
+    }
+    
+    switch ([[Preferences standardPreferences] storageType]) {
+        case StorageTypeDatFile:
+            self.selectedStorageType = 0;
+            break;
+            
+        case StorageTypeFMDBSQLite:
+            self.selectedStorageType = 1;
             break;
     }
     
@@ -72,6 +83,16 @@ static NSString *const kPasswordStrengthSectionTitle = @"Password Strength";
             
         case 2:
             [Preferences standardPreferences].passwordStrength = PasswordStrengthStrong;
+            break;
+    }
+    
+    switch (self.selectedStorageType) {
+        case 0:
+            [Preferences standardPreferences].storageType = StorageTypeDatFile;
+            break;
+            
+        case 1:
+            [Preferences standardPreferences].storageType = StorageTypeFMDBSQLite;
             break;
     }
     

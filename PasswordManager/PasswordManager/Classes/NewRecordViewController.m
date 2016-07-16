@@ -103,13 +103,18 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
                                      action:@selector(didTouchSaveBarButtonItem:)];
         [self.navigationItem setRightBarButtonItem:saveBarButtonItem];
     }
+    
+    self.serviceNameTextField.text = self.recordToDisplay[kServiceName];
+    self.passwordLabel.text = self.recordToDisplay[kPassword];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
-    [self refreshPassword];
+    
+    if (!self.recordToDisplay) {
+        [self refreshPassword];
+    }
 }
 
 #pragma mark - Actions

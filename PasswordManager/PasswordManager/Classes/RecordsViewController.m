@@ -11,8 +11,9 @@
 #import "RecordsManager.h"
 #import "RecordsViewController.h"
 #import "SettingsViewController.h"
+#import "Preferences.h"
 
-static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
+static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName";
 
 @interface RecordsViewController ()
     <UITableViewDataSource,
@@ -46,6 +47,8 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
             [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
 
         recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
+        
+        [[Preferences standardPreferences] addObserver:recordsManager_ forKeyPath:@"storageType" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
     }
 
     return recordsManager_;
@@ -94,6 +97,8 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
     }
     NSDictionary *const record =
         [[self.recordsManager records] objectAtIndex:indexPath.row];
+    
+    
     tableViewCell.textLabel.text = [record valueForKey:kServiceName];
     tableViewCell.detailTextLabel.text = [record valueForKey:kPassword];
 
@@ -102,11 +107,36 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 #undef REUSABLE_CELL_ID
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        [self.recordsManager removeRecord:self.recordsManager.records[indexPath.row]];
+        [self.recordsManager synchronize];
+        [tableView reloadData];
+    }
+}
+
 #pragma mark - UITableViewDelegate implementation
 
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] init];
+    rootViewController.delegate = self;
+    
+    NSDictionary *const record = [[self.recordsManager records] objectAtIndex:indexPath.row];
+    rootViewController.recordToDisplay = record;
+    
+    UINavigationController *const navigationController =
+    [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    [self presentViewController:navigationController animated:YES completion:NULL];
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -116,6 +146,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
             didFinishWithRecord:(NSDictionary *)record
 {
     if (record) {
+        
+        if (sender.recordToDisplay) {
+            [self.recordsManager removeRecord:sender.recordToDisplay];
+        }
+        
         [self.recordsManager registerRecord:record];
         [self.recordsManager synchronize];
 
