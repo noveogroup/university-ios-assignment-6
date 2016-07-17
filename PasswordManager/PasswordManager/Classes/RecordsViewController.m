@@ -68,11 +68,11 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName";
 
 - (IBAction)didTouchSettingsBarButtonItem:(UIBarButtonItem *)sender
 {
-    SettingsViewController *const settingsVC = [[SettingsViewController alloc] init];
-    settingsVC.delegate = self;
+    SettingsViewController *const settingsViewController = [[SettingsViewController alloc] init];
+    settingsViewController.delegate = self;
     
     UINavigationController *const navigationController =
-    [[UINavigationController alloc] initWithRootViewController:settingsVC];
+    [[UINavigationController alloc] initWithRootViewController:settingsViewController];
     [self presentViewController:navigationController animated:YES completion:NULL];
 }
 
@@ -113,7 +113,6 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName";
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
         [self.recordsManager removeRecord:self.recordsManager.records[indexPath.row]];

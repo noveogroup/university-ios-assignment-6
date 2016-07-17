@@ -25,6 +25,7 @@
 		93E767E618B5F3790053F9F0 /* NewRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E767E518B5F3790053F9F0 /* NewRecordViewController.m */; };
 		93E767E818B5F9BA0053F9F0 /* NewRecordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */; };
 		CB71D4F1DEE8396574106CD4 /* libPods-PasswordManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FEBA21FED715AF27FABF020 /* libPods-PasswordManager.a */; };
+		F5597BBB1D3A92BE000A6F00 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F5597BBA1D3A92BE000A6F00 /* Settings.bundle */; };
 		F5744E6F1D3A433200832188 /* FMDBStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = F5744E6E1D3A433200832188 /* FMDBStorage.m */; };
 		F5D49EC91D38FC4F002E9CB4 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D49EC81D38FC4F002E9CB4 /* SettingsViewController.m */; };
 		F5D49ECB1D38FC98002E9CB4 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5D49ECA1D38FC98002E9CB4 /* SettingsViewController.xib */; };
@@ -65,6 +66,7 @@
 		93E767E518B5F3790053F9F0 /* NewRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewRecordViewController.m; sourceTree = "<group>"; };
 		93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewRecordViewController.xib; sourceTree = "<group>"; };
 		A91D5AB0072CC22841CD6418 /* Pods-PasswordManager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PasswordManager.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PasswordManager/Pods-PasswordManager.debug.xcconfig"; sourceTree = "<group>"; };
+		F5597BBA1D3A92BE000A6F00 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		F5744E6D1D3A433200832188 /* FMDBStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDBStorage.h; sourceTree = "<group>"; };
 		F5744E6E1D3A433200832188 /* FMDBStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDBStorage.m; sourceTree = "<group>"; };
 		F5D49EC71D38FC4F002E9CB4 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 		93DE15D618B4AA8D00A46FD2 = {
 			isa = PBXGroup;
 			children = (
+				F5597BBA1D3A92BE000A6F00 /* Settings.bundle */,
 				93DE15E818B4AA8D00A46FD2 /* PasswordManager */,
 				93DE15E118B4AA8D00A46FD2 /* Frameworks */,
 				93DE15E018B4AA8D00A46FD2 /* Products */,
@@ -246,6 +249,7 @@
 				93DE15ED18B4AA8D00A46FD2 /* InfoPlist.strings in Resources */,
 				93DE15F518B4AA8D00A46FD2 /* Images.xcassets in Resources */,
 				93E767DD18B5D8DE0053F9F0 /* RecordsViewController.xib in Resources */,
+				F5597BBB1D3A92BE000A6F00 /* Settings.bundle in Resources */,
 				F5D49ECB1D38FC98002E9CB4 /* SettingsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

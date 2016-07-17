@@ -81,12 +81,10 @@ static NSString *const kStorageType = @"StorageType";
 
     NSMutableDictionary *const defaultsToRegister = [NSMutableDictionary dictionary];
     if (settingsBundlePath) {
-        NSString *const rootPlistPath =
-            [settingsBundlePath stringByAppendingPathComponent:@"Root.plist"];
-        NSDictionary *const preferences =
-            [NSDictionary dictionaryWithContentsOfFile:rootPlistPath];
-        NSArray *const preferenceSpecifiers =
-            [preferences objectForKey:@"PreferenceSpecifiers"];
+        NSString *const rootPlistPath = [settingsBundlePath stringByAppendingPathComponent:@"Root.plist"];
+        NSDictionary *const preferences = [NSDictionary dictionaryWithContentsOfFile:rootPlistPath];
+        NSArray *const preferenceSpecifiers = [preferences objectForKey:@"PreferenceSpecifiers"];
+        
         for (NSDictionary *specifier in preferenceSpecifiers) {
             NSString *const key = [specifier objectForKey:@"Key"];
             if (key) {
