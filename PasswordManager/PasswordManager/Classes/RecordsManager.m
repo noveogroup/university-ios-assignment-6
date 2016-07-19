@@ -88,6 +88,11 @@
     [self.mutableRecords removeObject:record];
 }
 
+- (void)replaceRecord:(NSDictionary *)oldRecord withRecord:(NSDictionary *)newRecord
+{
+    [self.mutableRecords replaceObjectAtIndex:[self.mutableRecords indexOfObject:oldRecord] withObject:newRecord];
+}
+
 #pragma mark - Synchronisation
 
 - (BOOL)synchronize

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Noveo. All rights reserved.
 //
 
-#import "NewRecordViewController.h"
+#import "DetailRecordViewController.h"
 #import "PasswordGenerator.h"
 #import "Preferences.h"
 #import "Record.h"
@@ -19,7 +19,7 @@ static NSString *const LowercaseLetterAlphabet = @"abcdefghijklmnopqrstuvwxyz";
 static NSString *const UppercaseLetterAlphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 static NSString *const DecimalDigitAlphabet = @"1234567890";
 
-@interface NewRecordViewController ()
+@interface DetailRecordViewController ()
     <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *serviceNameTextField;
@@ -36,7 +36,7 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 
 @end
 
-@implementation NewRecordViewController
+@implementation DetailRecordViewController
 
 @synthesize delegate = delegate_;
 

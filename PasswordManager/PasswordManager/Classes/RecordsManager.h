@@ -42,4 +42,6 @@
  */
 - (BOOL)synchronize;
 
+- (void)replaceRecord:(NSDictionary *)oldRecord withRecord:(NSDictionary *)newRecord;
+
 @end

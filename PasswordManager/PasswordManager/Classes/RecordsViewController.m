@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Noveo. All rights reserved.
 //
 
-#import "NewRecordViewController.h"
+#import "DetailRecordViewController.h"
 #import "Record.h"
 #import "RecordsManager.h"
 #import "RecordsViewController.h"
@@ -18,7 +18,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName";
 @interface RecordsViewController ()
     <UITableViewDataSource,
      UITableViewDelegate,
-     NewRecordViewControllerDelegate,
+     DetailRecordViewControllerDelegate,
      SettingsViewControllerDelegate>
 
 @property (nonatomic, readonly) RecordsManager *recordsManager;
@@ -58,7 +58,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName";
 
 - (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender
 {
-    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] init];
+    DetailRecordViewController *const rootViewController = [[DetailRecordViewController alloc] init];
     rootViewController.delegate = self;
 
     UINavigationController *const navigationController =
@@ -126,7 +126,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName";
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] init];
+    DetailRecordViewController *const rootViewController = [[DetailRecordViewController alloc] init];
     rootViewController.delegate = self;
     
     NSDictionary *const record = [[self.recordsManager records] objectAtIndex:indexPath.row];
@@ -141,18 +141,18 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 
 #pragma mark - NewRecordViewControllerDelegate implementation
 
-- (void)newRecordViewController:(NewRecordViewController *)sender
+- (void)newRecordViewController:(DetailRecordViewController *)sender
             didFinishWithRecord:(NSDictionary *)record
 {
     if (record) {
         
         if (sender.recordToDisplay) {
-            [self.recordsManager removeRecord:sender.recordToDisplay];
+            [self.recordsManager replaceRecord:sender.recordToDisplay withRecord:record];
         }
-        
-        [self.recordsManager registerRecord:record];
+        else {
+            [self.recordsManager registerRecord:record];
+        }
         [self.recordsManager synchronize];
-
         [self.tableView reloadData];
     }
     [self dismissViewControllerAnimated:YES
