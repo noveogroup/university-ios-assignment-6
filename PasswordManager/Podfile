@@ -1,3 +1,0 @@
-target 'PasswordManager' do
-pod 'Realm'
-end
