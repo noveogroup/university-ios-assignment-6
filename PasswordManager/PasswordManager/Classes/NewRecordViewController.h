@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 @class NewRecordViewController;
 
@@ -16,23 +17,19 @@
  */
 @protocol NewRecordViewControllerDelegate <NSObject>
 
-/**
- *  Notifies the receiver that the sender has finished its job.
- *
- *  @param[in]  record  The record the user wants to register.
- *                      If the user has pressed 'Cancel',
- *                      the @c record is @b nil.
- */
 - (void)newRecordViewController:(NewRecordViewController *)sender
             didFinishWithRecord:(NSDictionary *)record;
+
+- (void)newRecordViewController:(NewRecordViewController *)sender
+        didFinishEditWithRecord:(NSDictionary *)record atIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
 @interface NewRecordViewController : UIViewController
 
-/**
- *  Returns the object that handles the delegated duties.
- */
 @property (nonatomic, weak) id<NewRecordViewControllerDelegate> delegate;
+
+- (instancetype)init;
+- (instancetype)initWithRecord:(NSDictionary *)record AtIndexPath:(NSIndexPath *)indexPath;
 
 @end
