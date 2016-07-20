@@ -31,7 +31,7 @@ typedef NS_ENUM(NSInteger, StorageType) {
 /**
  *  Storage type the application use
  */
-@property (nonatomic, readwrite) NSInteger storageType;
+@property (nonatomic, readwrite) StorageType storageType;
 
 /**
  *  Returns the shared preferences object.

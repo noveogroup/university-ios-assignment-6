@@ -39,7 +39,7 @@ static NSString *const kStorageType = @"StorageType";
     return [[NSUserDefaults standardUserDefaults] integerForKey:kPasswordStrength];
 }
 
-- (NSInteger)storageType
+- (StorageType)storageType
 {
     return [[NSUserDefaults standardUserDefaults] integerForKey:kStorageType];
 }
@@ -53,7 +53,7 @@ static NSString *const kStorageType = @"StorageType";
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (void)setStorageType:(NSInteger)storageType
+- (void)setStorageType:(StorageType)storageType
 {
     [[NSUserDefaults standardUserDefaults] setInteger:storageType
                                                forKey:kStorageType];
