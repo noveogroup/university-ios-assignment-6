@@ -28,11 +28,20 @@
 
 @end
 
+typedef NS_ENUM(NSInteger, Mode) {
+    newRecordMode,
+    changeRecordMode
+};
+
 @interface NewRecordViewController : UIViewController
 
 /**
  *  Returns the object that handles the delegated duties.
  */
 @property (nonatomic, weak) id<NewRecordViewControllerDelegate> delegate;
+@property (nonatomic, readonly) Mode mode;
+@property (nonatomic, readonly) NSIndexPath *indexPath;
+@property (nonatomic, readonly) NSDictionary *record;
+- (instancetype)initWithMode:(Mode)mode record:(NSDictionary *)record atIndexPath:(NSIndexPath *)indexPath NS_DESIGNATED_INITIALIZER;
 
 @end
