@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		15DA00948E504EF02BC84FDB /* libPods-PasswordManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A019D86E87959DC63282312 /* libPods-PasswordManager.a */; };
+		8442F6E51D3F5F040026DFB5 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8442F6E41D3F5F040026DFB5 /* Settings.bundle */; };
 		8450C3D01D3CA3C10033046C /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8450C3CF1D3CA3C10033046C /* SettingsViewController.xib */; };
 		8450C3D31D3CA6EF0033046C /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8450C3D21D3CA6EF0033046C /* SettingsViewController.m */; };
 		93DE15E318B4AA8D00A46FD2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE15E218B4AA8D00A46FD2 /* Foundation.framework */; };
@@ -32,6 +33,7 @@
 /* Begin PBXFileReference section */
 		3A019D86E87959DC63282312 /* libPods-PasswordManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PasswordManager.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B1018B4D63F0B9D52DF0ACE /* Pods-PasswordManager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PasswordManager.release.xcconfig"; path = "Pods/Target Support Files/Pods-PasswordManager/Pods-PasswordManager.release.xcconfig"; sourceTree = "<group>"; };
+		8442F6E41D3F5F040026DFB5 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		8450C3CF1D3CA3C10033046C /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
 		8450C3D11D3CA6EF0033046C /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		8450C3D21D3CA6EF0033046C /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				93DE161218B4AAD800A46FD2 /* AppDelegate.h */,
 				93DE161318B4AAD800A46FD2 /* AppDelegate.m */,
 				8450C3D11D3CA6EF0033046C /* SettingsViewController.h */,
+				8442F6E41D3F5F040026DFB5 /* Settings.bundle */,
 				8450C3D21D3CA6EF0033046C /* SettingsViewController.m */,
 				8450C3CF1D3CA3C10033046C /* SettingsViewController.xib */,
 				93E767E418B5F3790053F9F0 /* NewRecordViewController.h */,
@@ -241,6 +244,7 @@
 				93DE15ED18B4AA8D00A46FD2 /* InfoPlist.strings in Resources */,
 				93DE15F518B4AA8D00A46FD2 /* Images.xcassets in Resources */,
 				93E767DD18B5D8DE0053F9F0 /* RecordsViewController.xib in Resources */,
+				8442F6E51D3F5F040026DFB5 /* Settings.bundle in Resources */,
 				8450C3D01D3CA3C10033046C /* SettingsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
