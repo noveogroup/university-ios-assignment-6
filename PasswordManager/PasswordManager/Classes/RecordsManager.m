@@ -37,6 +37,18 @@ static NSString *const DefaultFileNameForDB = @"Storage.db";
         NSArray *docsDirs = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *docsDir = docsDirs.firstObject;
         pathSerializer_ = [docsDir stringByAppendingPathComponent:DefaultFileNameForSerializer];
+    }
+    return self;
+}
+
+#pragma mark - Management of records
+
+
+- (FMDatabase *)database
+{
+    if (database_ == nil) {
+        NSArray *docsDirs = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *docsDir = docsDirs.firstObject;
         pathDB_ = [docsDir stringByAppendingPathComponent:DefaultFileNameForDB];
         database_ = [FMDatabase databaseWithPath:self.pathDB];
         database_.logsErrors = NO;
@@ -46,10 +58,8 @@ static NSString *const DefaultFileNameForDB = @"Storage.db";
         [database_ executeUpdate:tableCreation];
         [database_ close];
     }
-    return self;
+    return database_;
 }
-
-#pragma mark - Management of records
 
 - (void)registerRecord:(NSDictionary *)record
 {
@@ -80,7 +90,6 @@ static NSString *const DefaultFileNameForDB = @"Storage.db";
         else {
             [self.database open];
             FMResultSet *records = [self.database executeQuery: @"SELECT * FROM records"];
-            records = [self.database executeQuery: @"SELECT * FROM records"];
             mutableRecords_ = [[NSMutableArray alloc] init];
             while ([records next]) {
                 NSDictionary *record = @{kServiceName: [records stringForColumn:kServiceName],
