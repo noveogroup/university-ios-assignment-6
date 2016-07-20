@@ -15,8 +15,8 @@ typedef NS_ENUM(NSInteger, PasswordStrength) {
 };
 
 typedef NS_ENUM(NSInteger, StorageType) {
-    StorageWithSerializer,
-    StorageWithDB
+    StorageWithSerializer = 0,
+    StorageWithDB = 1
 };
 
 @interface Preferences : NSObject
@@ -26,6 +26,7 @@ typedef NS_ENUM(NSInteger, StorageType) {
  */
 @property (nonatomic, readwrite) NSInteger passwordStrength;
 @property (nonatomic, readwrite) NSInteger storageType;
+@property (nonatomic, readwrite) NSInteger lastStorage;
 /**
  *  Returns the shared preferences object.
  */

@@ -151,9 +151,9 @@
 			children = (
 				93DE162218B5955400A46FD2 /* Categories */,
 				93DE161218B4AAD800A46FD2 /* AppDelegate.h */,
+				8442F6E41D3F5F040026DFB5 /* Settings.bundle */,
 				93DE161318B4AAD800A46FD2 /* AppDelegate.m */,
 				8450C3D11D3CA6EF0033046C /* SettingsViewController.h */,
-				8442F6E41D3F5F040026DFB5 /* Settings.bundle */,
 				8450C3D21D3CA6EF0033046C /* SettingsViewController.m */,
 				8450C3CF1D3CA3C10033046C /* SettingsViewController.xib */,
 				93E767E418B5F3790053F9F0 /* NewRecordViewController.h */,

@@ -115,6 +115,7 @@ NSInteger const kDefaultSectionNumber = 2;
             previousCell.accessoryType = UITableViewCellAccessoryNone;
             self.previousStorageCellIndexPath = indexPath;
             [Preferences standardPreferences].storageType = storageTypeFromString(cell.textLabel.text);
+            [Preferences standardPreferences].lastStorage = storageTypeFromString(cell.textLabel.text);
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

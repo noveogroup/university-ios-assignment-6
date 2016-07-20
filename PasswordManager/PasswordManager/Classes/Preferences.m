@@ -10,8 +10,10 @@
 
 NSInteger const PasswordStrengthDefault = PasswordStrengthMedium;
 NSInteger const StorageTypeDefault = StorageWithSerializer;
+NSInteger const LastStorageDefault = StorageWithSerializer;
 static NSString *const kPasswordStrength = @"PasswordStrength";
 static NSString *const kStorageType = @"StorageType";
+static NSString *const kLastStorage = @"LastStorage";
 
 @interface Preferences ()
 
@@ -46,6 +48,11 @@ static NSString *const kStorageType = @"StorageType";
     return [[NSUserDefaults standardUserDefaults] integerForKey:kStorageType];
 }
 
+- (NSInteger)lastStorage
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kLastStorage];
+}
+
 #pragma mark - Setters
 
 - (void)setPasswordStrength:(NSInteger)passwordStrength
@@ -59,6 +66,13 @@ static NSString *const kStorageType = @"StorageType";
 {
     [[NSUserDefaults standardUserDefaults] setInteger:storageType
                                                forKey:kStorageType];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)setLastStorage:(NSInteger)lastStorage
+{
+    [[NSUserDefaults standardUserDefaults] setInteger:lastStorage
+                                               forKey:kLastStorage];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -97,8 +111,7 @@ static NSString *const kStorageType = @"StorageType";
             }
         }
     }
-    [defaultsToRegister setObject:@(StorageTypeDefault)
-                           forKey:kStorageType];
+    [defaultsToRegister setObject:@(LastStorageDefault) forKey:kLastStorage];
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
