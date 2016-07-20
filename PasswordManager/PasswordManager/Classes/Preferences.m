@@ -9,6 +9,7 @@
 #import "Preferences.h"
 
 static NSString *const kPasswordStrength = @"PasswordStrength";
+static NSString *const kStorageType = @"StorageType";
 
 @interface Preferences ()
 
@@ -38,12 +39,24 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
     return [[NSUserDefaults standardUserDefaults] integerForKey:kPasswordStrength];
 }
 
+- (StorageType)storageType
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kStorageType];
+}
+
 #pragma mark - Setters
 
 - (void)setPasswordStrength:(NSInteger)passwordStrength
 {
     [[NSUserDefaults standardUserDefaults] setInteger:passwordStrength
                                                forKey:kPasswordStrength];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)setStorageType:(StorageType)storageType
+{
+    [[NSUserDefaults standardUserDefaults] setInteger:storageType
+                                               forKey:kStorageType];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -68,12 +81,10 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
 
     NSMutableDictionary *const defaultsToRegister = [NSMutableDictionary dictionary];
     if (settingsBundlePath) {
-        NSString *const rootPlistPath =
-            [settingsBundlePath stringByAppendingPathComponent:@"Root.plist"];
-        NSDictionary *const preferences =
-            [NSDictionary dictionaryWithContentsOfFile:rootPlistPath];
-        NSArray *const preferenceSpecifiers =
-            [preferences objectForKey:@"PreferenceSpecifiers"];
+        NSString *const rootPlistPath = [settingsBundlePath stringByAppendingPathComponent:@"Root.plist"];
+        NSDictionary *const preferences = [NSDictionary dictionaryWithContentsOfFile:rootPlistPath];
+        NSArray *const preferenceSpecifiers = [preferences objectForKey:@"PreferenceSpecifiers"];
+        
         for (NSDictionary *specifier in preferenceSpecifiers) {
             NSString *const key = [specifier objectForKey:@"Key"];
             if (key) {
@@ -82,11 +93,24 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
             }
         }
     }
-    [defaultsToRegister setObject:@(PasswordStrengthDefault)
-                           forKey:kPasswordStrength];
+    [defaultsToRegister setObject:@(PasswordStrengthDefault) forKey:kPasswordStrength];
+    [defaultsToRegister setObject:@(StorageTypeDefault) forKey:kStorageType];
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+

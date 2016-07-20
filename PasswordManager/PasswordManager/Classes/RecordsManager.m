@@ -7,18 +7,22 @@
 //
 
 #import "RecordsManager.h"
+#import "Preferences.h"
+#import "FMDBStorage.h"
 
 @interface RecordsManager ()
 
 @property (nonatomic, strong) NSMutableArray *mutableRecords;
-@property (nonatomic, strong) NSURL *url;
+@property (nonatomic, strong) NSURL *urlToFile;
+@property (nonatomic, strong) FMDBStorage *fmdbStorage;
 
 @end
 
 @implementation RecordsManager
 
-@synthesize url = url_;
+@synthesize urlToFile = urlToFile_;
 @synthesize mutableRecords = mutableRecords_;
+@synthesize fmdbStorage = fmdbStorage_;
 
 #pragma mark - Initialization
 
@@ -33,7 +37,10 @@
 - (instancetype)initWithURL:(NSURL *)url
 {
     if ((self = [super init])) {
-        url_ = url;
+        
+        urlToFile_ = [url URLByAppendingPathExtension:@"dat"];
+        
+        fmdbStorage_ = [[FMDBStorage alloc] initWithURL:[url URLByAppendingPathExtension:@"sqlite"]];
     }
 
     return self;
@@ -51,9 +58,20 @@
 - (NSMutableArray *)mutableRecords
 {
     if (!mutableRecords_) {
-        mutableRecords_ = [NSMutableArray arrayWithContentsOfURL:self.url];
-        if (!mutableRecords_) {
-            mutableRecords_ = [NSMutableArray array];
+        
+        switch ([Preferences standardPreferences].storageType) {
+            case StorageTypeDatFile:
+                
+                mutableRecords_ = [NSMutableArray arrayWithContentsOfURL:self.urlToFile];
+                if (!mutableRecords_) {
+                    mutableRecords_ = [NSMutableArray array];
+                }
+                break;
+                
+            case StorageTypeFMDBSQLite:
+                
+                mutableRecords_ = [self.fmdbStorage selectRecords];
+                break;
         }
     }
 
@@ -65,11 +83,58 @@
     return [self.mutableRecords copy];
 }
 
+- (void)removeRecord:(NSDictionary *)record
+{
+    [self.mutableRecords removeObject:record];
+}
+
+- (void)replaceRecord:(NSDictionary *)oldRecord withRecord:(NSDictionary *)newRecord
+{
+    [self.mutableRecords replaceObjectAtIndex:[self.mutableRecords indexOfObject:oldRecord] withObject:newRecord];
+}
+
 #pragma mark - Synchronisation
 
 - (BOOL)synchronize
 {
-    return [self.mutableRecords writeToURL:self.url atomically:YES];
+    switch ([Preferences standardPreferences].storageType) {
+        case StorageTypeDatFile:
+            return [self.mutableRecords writeToURL:self.urlToFile atomically:YES];
+            
+        case StorageTypeFMDBSQLite:
+            ;BOOL succeed = [self.fmdbStorage deleteAllRecords];
+            succeed = succeed && [self.fmdbStorage insertRecords:self.mutableRecords];
+            return succeed;
+    }
+    
+    return NO;
+}
+
+#pragma mark - Notification from Preferences if "storageType" was changed
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
+{
+    if (![change[@"old"] isEqual:change[@"new"]]) {
+
+        [self synchronize];
+    }
 }
 
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
