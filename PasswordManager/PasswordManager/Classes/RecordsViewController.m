@@ -10,13 +10,13 @@
 #import "Record.h"
 #import "RecordsManager.h"
 #import "RecordsViewController.h"
-
-static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
+#import "SettingsViewController.h"
 
 @interface RecordsViewController ()
     <UITableViewDataSource,
      UITableViewDelegate,
-     NewRecordViewControllerDelegate>
+     NewRecordViewControllerDelegate,
+     SettingsViewControllerDelegate>
 
 @property (nonatomic, readonly) RecordsManager *recordsManager;
 
@@ -37,15 +37,8 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 - (RecordsManager *)recordsManager
 {
     if (!recordsManager_) {
-        NSURL *const documentDirectoryURL =
-            [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
-                                                    inDomains:NSUserDomainMask] lastObject];
-        NSURL *const fileURLForLocalStore =
-            [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
-
-        recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
+        recordsManager_ = [[RecordsManager alloc] init];
     }
-
     return recordsManager_;
 }
 
@@ -60,6 +53,17 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
         [[UINavigationController alloc] initWithRootViewController:rootViewController];
     [self presentViewController:navigationController animated:YES completion:NULL];
 }
+
+- (IBAction)didTouchSettingsButton:(id)sender
+{
+    SettingsViewController *const rootViewController = [[SettingsViewController alloc] init];
+    rootViewController.delegate = self;
+    
+    UINavigationController *const navigationController =
+    [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    [self presentViewController:navigationController animated:YES completion:NULL];
+}
+
 
 #pragma mark - UITableViewDataSource implementation
 
@@ -92,10 +96,30 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 #pragma mark - UITableViewDelegate implementation
 
--       (void)tableView:(UITableView *)tableView
-didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NewRecordViewController *const rootViewController =
+    [[NewRecordViewController alloc] initWithMode:NewRecordViewControllerChangeRecordMode
+                                           record:self.recordsManager.records[indexPath.row]
+                                      atIndexPath:indexPath];
+    rootViewController.delegate = self;
+    
+    UINavigationController *const navigationController =
+    [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    [self presentViewController:navigationController animated:YES completion:NULL];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [self.recordsManager deleteRecordAtIndexPath:indexPath];
+        [self.recordsManager synchronize];
+        [self.tableView reloadData];
+    }
 }
 
 #pragma mark - NewRecordViewControllerDelegate implementation
@@ -103,14 +127,31 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 - (void)newRecordViewController:(NewRecordViewController *)sender
             didFinishWithRecord:(NSDictionary *)record
 {
-    if (record) {
-        [self.recordsManager registerRecord:record];
-        [self.recordsManager synchronize];
-
-        [self.tableView reloadData];
+    if (sender.mode == NewRecordViewControllerNewRecordMode) {
+        if (record) {
+            [self.recordsManager registerRecord:record];
+            [self.recordsManager synchronize];
+            [self.tableView reloadData];
+        }
+    }
+    else {
+        if (record) {
+            [self.recordsManager replaceRecordAtIndexPath:sender.indexPath byRecord:record];
+            [self.recordsManager synchronize];
+            [self.tableView reloadData];
+        }
     }
     [self dismissViewControllerAnimated:YES
                              completion:NULL];
+}
+
+#pragma mark - SettingsViewControllerDelegate implementation
+
+- (void)didTouchDoneButton:(SettingsViewController *)viewController
+{
+    [self dismissViewControllerAnimated:YES
+                             completion:NULL];
+    [self.recordsManager synchronize];
 }
 
 @end

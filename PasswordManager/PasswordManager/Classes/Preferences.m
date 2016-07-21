@@ -8,7 +8,12 @@
 
 #import "Preferences.h"
 
+NSInteger const PasswordStrengthDefault = PasswordStrengthMedium;
+NSInteger const StorageTypeDefault = StorageTypeWithSerializer;
+NSInteger const LastStorageDefault = StorageTypeWithSerializer;
 static NSString *const kPasswordStrength = @"PasswordStrength";
+static NSString *const kStorageType = @"StorageType";
+static NSString *const kLastStorage = @"LastStorage";
 
 @interface Preferences ()
 
@@ -31,11 +36,32 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
     return standardPreferences_;
 }
 
+#pragma mark - Initialization
+
+- (id)init
+{
+    if ((self = [super init])) {
+        [self registerUserDefaultsFromSettingsBundle];
+    }
+    
+    return self;
+}
+
 #pragma mark - Getters
 
 - (NSInteger)passwordStrength
 {
     return [[NSUserDefaults standardUserDefaults] integerForKey:kPasswordStrength];
+}
+
+- (NSInteger)storageType
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kStorageType];
+}
+
+- (NSInteger)lastStorage
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kLastStorage];
 }
 
 #pragma mark - Setters
@@ -47,15 +73,18 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-#pragma mark - Initialization
-
-- (id)init
+- (void)setStorageType:(NSInteger)storageType
 {
-    if ((self = [super init])) {
-        [self registerUserDefaultsFromSettingsBundle];
-    }
+    [[NSUserDefaults standardUserDefaults] setInteger:storageType
+                                               forKey:kStorageType];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
 
-    return self;
+- (void)setLastStorage:(NSInteger)lastStorage
+{
+    [[NSUserDefaults standardUserDefaults] setInteger:lastStorage
+                                               forKey:kLastStorage];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 #pragma mark - Registering settings bundle
@@ -82,9 +111,7 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
             }
         }
     }
-    [defaultsToRegister setObject:@(PasswordStrengthDefault)
-                           forKey:kPasswordStrength];
-
+    [defaultsToRegister setObject:@(LastStorageDefault) forKey:kLastStorage];
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
