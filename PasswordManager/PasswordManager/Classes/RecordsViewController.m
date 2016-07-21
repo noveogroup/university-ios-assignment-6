@@ -11,6 +11,7 @@
 #import "Record.h"
 #import "RecordsManager.h"
 #import "RecordsViewController.h"
+#import "Preferences.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
@@ -32,18 +33,50 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 @synthesize recordsManager = recordsManager_;
 @synthesize tableView = tableView_;
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:)
+        name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    if ([[Preferences standardPreferences] storage] == StorageDocumentDirectory) {
+        NSURL *const documentDirectoryURL =
+        [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                inDomains:NSUserDomainMask] lastObject];
+        NSURL *const fileURLForLocalStore =
+        [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
+        recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
+    } else {
+        recordsManager_ = [[RecordsManager alloc] initWithFileName:@"Passwords.plist"];
+    }
+    [self.tableView reloadData];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+        name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
 #pragma mark - Getters
 
 - (RecordsManager *)recordsManager
 {
     if (!recordsManager_) {
-        NSURL *const documentDirectoryURL =
+        if ([[Preferences standardPreferences] storage] == StorageDocumentDirectory) {
+            NSURL *const documentDirectoryURL =
             [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
                                                     inDomains:NSUserDomainMask] lastObject];
-        NSURL *const fileURLForLocalStore =
+            NSURL *const fileURLForLocalStore =
             [documentDirectoryURL URLByAppendingPathComponent:DefaultFileNameForLocalStore];
 
-        recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
+            recordsManager_ = [[RecordsManager alloc] initWithURL:fileURLForLocalStore];
+        } else {
+            recordsManager_ = [[RecordsManager alloc] initWithFileName:@"Passwords.plist"];
+        }
     }
 
     return recordsManager_;
@@ -90,8 +123,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
         tableViewCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2
                                                reuseIdentifier:REUSABLE_CELL_ID];
     }
-    NSDictionary *const record =
-        [[self.recordsManager records] objectAtIndex:indexPath.row];
+    NSDictionary *record = [[self.recordsManager records] objectAtIndex:indexPath.row];
     tableViewCell.textLabel.text = [record valueForKey:kServiceName];
     tableViewCell.detailTextLabel.text = [record valueForKey:kPassword];
 
@@ -105,7 +137,8 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
     [self.recordsManager removeObjectAtIndex:indexPath.row];
     [self.recordsManager synchronize];
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    [tableView reloadData];}
+    [tableView reloadData];
+}
 
 #pragma mark - UITableViewDelegate implementation
 

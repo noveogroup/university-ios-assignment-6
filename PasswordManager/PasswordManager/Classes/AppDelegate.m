@@ -46,7 +46,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

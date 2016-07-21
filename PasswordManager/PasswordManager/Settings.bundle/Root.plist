@@ -14,11 +14,11 @@
 			<key>Key</key>
 			<string>Storage</string>
 			<key>DefaultValue</key>
-			<string>0</string>
+			<integer>0</integer>
 			<key>Values</key>
 			<array>
-				<string>0</string>
-				<string>1</string>
+				<integer>0</integer>
+				<integer>1</integer>
 			</array>
 			<key>Titles</key>
 			<array>
@@ -34,12 +34,12 @@
 			<key>Key</key>
 			<string>PasswordStrength</string>
 			<key>DefaultValue</key>
-			<string>10</string>
+			<integer>10</integer>
 			<key>Values</key>
 			<array>
-				<string>15</string>
-				<string>10</string>
-				<string>5</string>
+				<integer>15</integer>
+				<integer>10</integer>
+				<integer>5</integer>
 			</array>
 			<key>Titles</key>
 			<array>

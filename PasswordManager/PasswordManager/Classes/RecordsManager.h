@@ -12,6 +12,7 @@
 
 - (id)init;
 - (instancetype)initWithURL:(NSURL *)url;
+- (instancetype)initWithFileName:(NSString *)fileName;
 - (void)registerRecord:(NSDictionary *)record;
 - (NSArray *)records;
 - (BOOL)synchronize;

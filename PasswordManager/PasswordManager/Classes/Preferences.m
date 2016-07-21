@@ -61,7 +61,7 @@ static NSString *const kStorage = @"Storage";
 
 - (NSArray *)storages
 {
-    return [NSArray arrayWithObjects:@"Default", @"PList", nil];
+    return [NSArray arrayWithObjects:@"Document Library", @"Property List", nil];
 }
 
 #pragma mark - Setters
@@ -116,10 +116,6 @@ static NSString *const kStorage = @"Storage";
             }
         }
     }
-//    [defaultsToRegister setObject:@(PasswordStrengthDefault)
-//                           forKey:kPasswordStrength];
-//    [defaultsToRegister setObject:@(StorageDefault)
-//                           forKey:kStorage];
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
     [[NSUserDefaults standardUserDefaults] synchronize];

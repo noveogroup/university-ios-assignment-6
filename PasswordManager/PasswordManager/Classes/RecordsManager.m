@@ -8,11 +8,31 @@
 
 #import "RecordsManager.h"
 #import "Preferences.h"
+#import "Record.h"
+
+NSString* getFilePathInLibrarySubdirectoryAndCopy(NSString *fileName, NSString *directory)
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [[paths objectAtIndex:0] stringByAppendingPathComponent:directory];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL isDir;
+    if (![fileManager fileExistsAtPath:documentsDirectory isDirectory:&isDir]) {
+        [fileManager createDirectoryAtPath:documentsDirectory withIntermediateDirectories:NO attributes:nil error:nil];
+    }
+    NSString *path = [documentsDirectory stringByAppendingPathComponent:fileName];
+    if (![fileManager fileExistsAtPath:path]) {
+        NSString *bundle = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
+        [fileManager copyItemAtPath:bundle toPath:path error:NULL];
+    }
+    
+    return path;
+}
 
 @interface RecordsManager ()
 
 @property (nonatomic, strong) NSMutableArray *mutableRecords;
 @property (nonatomic, strong) NSURL *url;
+@property (nonatomic, weak) NSString *fileName;
 
 @end
 
@@ -20,6 +40,7 @@
 
 @synthesize url = url_;
 @synthesize mutableRecords = mutableRecords_;
+@synthesize fileName = fileName_;
 
 #pragma mark - Initialization
 
@@ -34,6 +55,15 @@
     self = [super init];
     if (self) {
         url_ = url;
+    }
+    return self;
+}
+
+- (instancetype)initWithFileName:(NSString *)fileName
+{
+    self = [super init];
+    if (self) {
+        fileName_ = fileName;
     }
     return self;
 }
@@ -62,10 +92,12 @@
                 mutableRecords_ = [NSMutableArray array];
             }
         } else {
-            NSString *path = [[NSBundle mainBundle] pathForResource:@"Passwords" ofType:@"plist"];
-            
-            NSDictionary *dictionary = [[NSDictionary alloc] initWithContentsOfFile:path];
-            mutableRecords_ = (NSMutableArray *)[dictionary objectForKey:@"Password"];
+            NSString *path = getFilePathInLibrarySubdirectoryAndCopy(self.fileName, @"records");
+            NSArray *root = [[NSArray alloc] initWithContentsOfFile:path];
+            mutableRecords_ = [root mutableCopy];
+            if (!mutableRecords_) {
+                mutableRecords_ = [NSMutableArray array];
+            }
         }
     }
 
@@ -85,17 +117,8 @@
         return [self.mutableRecords writeToURL:self.url atomically:YES];
 
     } else {
-        
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"Passwords" ofType:@"plist"];
-        NSDictionary *passwords = [NSDictionary dictionaryWithObject:mutableRecords_ forKey:@"Password"];
-        NSData *plistData = [NSPropertyListSerialization dataFromPropertyList:passwords format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
-        if(plistData) {
-            return [plistData writeToFile:path atomically:YES];
-            NSLog(@"Data saved sucessfully");
-        } else {
-            NSLog(@"Data was not saved");
-            return NO;
-        }
+        NSString *path = getFilePathInLibrarySubdirectoryAndCopy(self.fileName, @"records");
+        return [self.mutableRecords writeToFile:path atomically:YES];
     }
 }
 

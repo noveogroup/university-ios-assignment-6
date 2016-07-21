@@ -7,7 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RecordsViewController">
             <connections>
-                <outlet property="tableView" destination="Ehv-vF-cXe" id="G6l-1p-hZr"/>
+                <outlet property="tableView" destination="Ehv-vF-cXe" id="H8B-7q-taq"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -21,8 +21,8 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
-                        <outlet property="dataSource" destination="-1" id="uXd-QQ-4YM"/>
-                        <outlet property="delegate" destination="-1" id="NPv-BR-GZq"/>
+                        <outlet property="dataSource" destination="-1" id="4jR-EP-d3i"/>
+                        <outlet property="delegate" destination="-1" id="vkU-zA-tXo"/>
                     </connections>
                 </tableView>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="NMa-xS-mYr">

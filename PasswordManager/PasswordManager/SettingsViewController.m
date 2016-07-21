@@ -14,13 +14,14 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
 
 @interface SettingsViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UITableView *strengthTableView;
-@property (weak, nonatomic) IBOutlet UITableView *storageTableView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic) Preferences *preferences;
 @property (weak, nonatomic) NSString *strengthName;
 @property (weak, nonatomic) NSString *storageName;
 @property (nonatomic) NSInteger selectedStorage;
 @property (nonatomic) NSInteger selectedStrength;
+@property (nonatomic) NSIndexPath *lastSelectedStorage;
+@property (nonatomic) NSIndexPath *lastSelectedStrength;
 
 @end
 
@@ -30,40 +31,12 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:UIApplicationDidBecomeActiveNotification object:nil];
+
     self.preferences = [Preferences standardPreferences];
     self.strengthName = [self.preferences passwordStrengthName];
     self.storageName = [self.preferences storageName];
-    
-    switch ([self.preferences passwordStrength]) {
-        case PasswordStrengthWeak:
-            _selectedStrength = 0;
-            break;
-        case PasswordStrengthMedium:
-            _selectedStrength = 1;
-            break;
-        case PasswordStrengthStrong:
-            _selectedStrength = 2;
-        default:
-            _selectedStrength = 0;
-            break;
-    }
-    
-    switch ([self.preferences storage]) {
-        case StorageDocumentDirectory:
-            _selectedStorage = 0;
-            break;
-        case StoragePList:
-            _selectedStrength = 1;
-        default:
-            _selectedStorage = 0;
-            break;
-    }
-  
-    [self.strengthTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:_selectedStrength inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
-    [self.storageTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:_selectedStorage inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
 
-    
     if (!!self.navigationItem) {
         UIBarButtonItem *const cancelBarButtonItem = [[UIBarButtonItem alloc]
          initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self
@@ -77,7 +50,37 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
         
         [self.navigationItem setRightBarButtonItem:saveBarButtonItem];
     }
+}
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    switch ([self.preferences passwordStrength]) {
+        case PasswordStrengthWeak:
+            _selectedStrength = 0;
+            break;
+        case PasswordStrengthMedium:
+            _selectedStrength = 1;
+            break;
+        case PasswordStrengthStrong:
+            _selectedStrength = 2;
+            break;
+    }
+    
+    switch ([self.preferences storage]) {
+        case StorageDocumentDirectory:
+            _selectedStorage = 0;
+            break;
+        case StoragePList:
+            _selectedStorage = 1;
+            break;
+    }
+    [self.tableView reloadData];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+        name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)setSelectedStorage:(NSInteger)selectedStorage
@@ -106,9 +109,6 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
         case 1:
             [[Preferences standardPreferences] setStorage:StoragePList];
             break;
-        default:
-            [[Preferences standardPreferences] setStorage:StorageDefault];
-            break;
     }
     
     switch (self.selectedStrength) {
@@ -121,8 +121,6 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
         case 2:
             [[Preferences standardPreferences] setPasswordStrength:PasswordStrengthStrong];
             break;
-        default:
-            break;
     }
     [self.delegate settingsViewController:self];
 
@@ -130,64 +128,89 @@ static NSString *const kPasswordStrength = @"PasswordStrength";
 
 #pragma mark - UITableViewDataSource implementation
 
+- (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (section == 0) {
+        return @"Password Strength";
+    }
+    else {
+        return @"Storage";
+    }
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (tableView == self.storageTableView) {
-        return [[self.preferences storages] count];
+    if (section == 0) {
+        return [[self.preferences passwordStrengths] count];
     }
     
     else {
-        return [[self.preferences passwordStrengths] count];
+        return [[self.preferences storages] count];
     }
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *passwordSettingsTableIdentifier = @"SettingsItem";
-    UITableViewCell *tableViewCell;
+    UITableViewCell *tableViewCell = [tableView dequeueReusableCellWithIdentifier:passwordSettingsTableIdentifier];
     
-    if (tableView == self.storageTableView) {
-
-        tableViewCell = [tableView dequeueReusableCellWithIdentifier:passwordSettingsTableIdentifier];
-    if (!tableViewCell) {
-        tableViewCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+    if (indexPath.section == 1) {
+        if (!tableViewCell) {
+            tableViewCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                reuseIdentifier:passwordSettingsTableIdentifier];
-    }
-        tableViewCell.textLabel.text = [[self.preferences storages] objectAtIndex:indexPath.row];
-        if ([tableViewCell.textLabel.text isEqualToString:self.storageName]) {
-            [tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
-            
+        }
+        
+        NSArray *storages = [self.preferences storages];
+        tableViewCell.textLabel.text = [storages objectAtIndex:indexPath.row];
+        
+        if ([tableViewCell.textLabel.text isEqualToString:storages[self.selectedStorage]]) {
+            self.lastSelectedStorage = indexPath;
+            tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        } else {
+            tableViewCell.accessoryType = UITableViewCellAccessoryNone;
         }
         return tableViewCell;
     }
     
     else {
-        
-        tableViewCell = [tableView dequeueReusableCellWithIdentifier:passwordSettingsTableIdentifier];
         if (!tableViewCell) {
             tableViewCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                reuseIdentifier:passwordSettingsTableIdentifier];
         }
-        tableViewCell.textLabel.text = [[self.preferences passwordStrengths] objectAtIndex:indexPath.row];
-        if ([tableViewCell.textLabel.text isEqualToString:self.strengthName]) {
-            [tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+        NSArray *passwordStrengths = [self.preferences passwordStrengths];
+        tableViewCell.textLabel.text = [passwordStrengths objectAtIndex:indexPath.row];
 
+        if ([tableViewCell.textLabel.text isEqualToString:passwordStrengths[self.selectedStrength]]) {
+            self.lastSelectedStrength = indexPath;
+            tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        } else {
+            tableViewCell.accessoryType = UITableViewCellAccessoryNone;
         }
-    
         return tableViewCell;
     }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (tableView == self.storageTableView) {
+    UITableViewCell *tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
+    tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+    
+    if (indexPath.section == 0) {
+        UITableViewCell *lastCell = [tableView cellForRowAtIndexPath:self.lastSelectedStrength];
+        lastCell.accessoryType = UITableViewCellAccessoryNone;
+        self.lastSelectedStrength = indexPath;
+        self.selectedStrength = indexPath.row;
+    } else {
+        UITableViewCell *lastCell = [tableView cellForRowAtIndexPath:self.lastSelectedStorage];
+        lastCell.accessoryType = UITableViewCellAccessoryNone;
+        self.lastSelectedStorage = indexPath;
         self.selectedStorage = indexPath.row;
     }
-    
-    else {
-        self.selectedStrength = indexPath.row;
-    }
 }
-
 
 @end

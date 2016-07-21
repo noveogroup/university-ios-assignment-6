@@ -7,8 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingsViewController">
             <connections>
-                <outlet property="storageTableView" destination="vsc-l3-8ev" id="6hn-yO-8uO"/>
-                <outlet property="strengthTableView" destination="xih-7d-060" id="dA8-gS-JoG"/>
+                <outlet property="tableView" destination="xih-7d-060" id="2Qa-1P-pyc"/>
                 <outlet property="view" destination="iN0-l3-epB" id="r0B-PI-xeR"/>
             </connections>
         </placeholder>
@@ -17,24 +16,27 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="xih-7d-060">
-                    <rect key="frame" x="0.0" y="85" width="320" height="196"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="xih-7d-060">
+                    <rect key="frame" x="0.0" y="20" width="320" height="528"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="Aq2-3p-5Vc"/>
                         <outlet property="delegate" destination="-1" id="bkd-mH-jhv"/>
                     </connections>
                 </tableView>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vsc-l3-8ev">
-                    <rect key="frame" x="0.0" y="324" width="320" height="107"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <connections>
-                        <outlet property="dataSource" destination="-1" id="24r-Uf-rOF"/>
-                        <outlet property="delegate" destination="-1" id="oHM-sc-6vx"/>
-                    </connections>
-                </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="xih-7d-060" secondAttribute="trailing" id="7QL-Ke-5Jp"/>
+                <constraint firstItem="xih-7d-060" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="GNf-xo-8xx"/>
+                <constraint firstItem="xih-7d-060" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="L6X-vv-xmk"/>
+                <constraint firstAttribute="trailing" secondItem="xih-7d-060" secondAttribute="trailing" id="bPb-4T-X7u"/>
+                <constraint firstAttribute="trailing" secondItem="xih-7d-060" secondAttribute="trailing" id="ccw-04-W9g"/>
+                <constraint firstItem="xih-7d-060" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="eDh-zI-IVN"/>
+                <constraint firstItem="xih-7d-060" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="hMV-T6-6Kw"/>
+                <constraint firstItem="xih-7d-060" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="kvP-TQ-e6N"/>
+                <constraint firstItem="xih-7d-060" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="w9a-Qy-hXX"/>
+            </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>

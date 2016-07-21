@@ -25,10 +25,10 @@
 		93E767E618B5F3790053F9F0 /* NewRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E767E518B5F3790053F9F0 /* NewRecordViewController.m */; };
 		93E767E818B5F9BA0053F9F0 /* NewRecordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */; };
 		A51503751D3E77ED00BAFBBC /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A51503741D3E77ED00BAFBBC /* SettingsViewController.m */; };
-		A51503771D3E79E500BAFBBC /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A51503761D3E79E500BAFBBC /* SettingsViewController.xib */; };
 		A515037B1D3E7F6100BAFBBC /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A515037A1D3E7F6100BAFBBC /* Settings.bundle */; };
 		A515037D1D3FA88D00BAFBBC /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A515037C1D3FA88D00BAFBBC /* Launch Screen.storyboard */; };
 		A515037F1D3FBC1F00BAFBBC /* Passwords.plist in Resources */ = {isa = PBXBuildFile; fileRef = A515037E1D3FBC1F00BAFBBC /* Passwords.plist */; };
+		A5F3FC151D4034EB00D630FA /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A5F3FC171D4034EB00D630FA /* SettingsViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,10 +65,10 @@
 		93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewRecordViewController.xib; sourceTree = "<group>"; };
 		A51503731D3E77ED00BAFBBC /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		A51503741D3E77ED00BAFBBC /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
-		A51503761D3E79E500BAFBBC /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SettingsViewController.xib; path = Classes/SettingsViewController.xib; sourceTree = "<group>"; };
 		A515037A1D3E7F6100BAFBBC /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		A515037C1D3FA88D00BAFBBC /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "../Launch Screen.storyboard"; sourceTree = "<group>"; };
-		A515037E1D3FBC1F00BAFBBC /* Passwords.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Passwords.plist; sourceTree = "<group>"; };
+		A515037E1D3FBC1F00BAFBBC /* Passwords.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Passwords.plist; path = Classes/Passwords.plist; sourceTree = "<group>"; };
+		A5F3FC161D4034EB00D630FA /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SettingsViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,10 +116,11 @@
 		93DE15E818B4AA8D00A46FD2 /* PasswordManager */ = {
 			isa = PBXGroup;
 			children = (
+				A515037E1D3FBC1F00BAFBBC /* Passwords.plist */,
 				93DE161118B4AAD800A46FD2 /* Classes */,
 				93DE15E918B4AA8D00A46FD2 /* Supporting Files */,
 				93DE15F418B4AA8D00A46FD2 /* Images.xcassets */,
-				A51503761D3E79E500BAFBBC /* SettingsViewController.xib */,
+				A5F3FC171D4034EB00D630FA /* SettingsViewController.xib */,
 				A515037C1D3FA88D00BAFBBC /* Launch Screen.storyboard */,
 				A51503731D3E77ED00BAFBBC /* SettingsViewController.h */,
 				A51503741D3E77ED00BAFBBC /* SettingsViewController.m */,
@@ -158,7 +159,6 @@
 				93E767D918B5D8DE0053F9F0 /* RecordsViewController.h */,
 				93E767DA18B5D8DE0053F9F0 /* RecordsViewController.m */,
 				93E767DB18B5D8DE0053F9F0 /* RecordsViewController.xib */,
-				A515037E1D3FBC1F00BAFBBC /* Passwords.plist */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -236,7 +236,7 @@
 				93DE15ED18B4AA8D00A46FD2 /* InfoPlist.strings in Resources */,
 				93DE15F518B4AA8D00A46FD2 /* Images.xcassets in Resources */,
 				93E767DD18B5D8DE0053F9F0 /* RecordsViewController.xib in Resources */,
-				A51503771D3E79E500BAFBBC /* SettingsViewController.xib in Resources */,
+				A5F3FC151D4034EB00D630FA /* SettingsViewController.xib in Resources */,
 				A515037B1D3E7F6100BAFBBC /* Settings.bundle in Resources */,
 				A515037D1D3FA88D00BAFBBC /* Launch Screen.storyboard in Resources */,
 				A515037F1D3FBC1F00BAFBBC /* Passwords.plist in Resources */,
@@ -273,6 +273,15 @@
 				93DE15EC18B4AA8D00A46FD2 /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		A5F3FC171D4034EB00D630FA /* SettingsViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A5F3FC161D4034EB00D630FA /* en */,
+			);
+			name = SettingsViewController.xib;
+			path = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
