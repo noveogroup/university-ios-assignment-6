@@ -46,13 +46,13 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 
 #pragma mark - Implementation
 
-- (instancetype)initWithMode:(Mode)mode
+- (instancetype)initWithMode:(NewRecordViewControllerMode)mode
                       record:(NSDictionary *)record
                  atIndexPath:(NSIndexPath *)indexPath
 {
     if (self = [super initWithNibName:nil bundle:nil]) {
         _mode = mode;
-        if (mode == changeRecordMode) {
+        if (mode == NewRecordViewControllerNewRecordMode) {
             indexPath_ = indexPath;
             record_ = record;
         }
@@ -62,17 +62,17 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 
 - (instancetype)init
 {
-    return [self initWithMode:newRecordMode record:nil atIndexPath:nil];
+    return [self initWithMode:NewRecordViewControllerNewRecordMode record:nil atIndexPath:nil];
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    return [self initWithMode:newRecordMode record:nil atIndexPath:nil];
+    return [self initWithMode:NewRecordViewControllerNewRecordMode record:nil atIndexPath:nil];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    return [self initWithMode:newRecordMode record:nil atIndexPath:nil];
+    return [self initWithMode:NewRecordViewControllerNewRecordMode record:nil atIndexPath:nil];
 }
 
 #pragma mark - Auxiliaries
@@ -128,7 +128,7 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
                                      target:self
                                      action:@selector(didTouchCancelBarButtonItem:)];
         [self.navigationItem setLeftBarButtonItem:cancelBarButtonItem];
-        if (self.mode == newRecordMode) {
+        if (self.mode == NewRecordViewControllerNewRecordMode) {
             UIBarButtonItem *const saveBarButtonItem =
             [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
                                                           target:self
@@ -149,7 +149,7 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (self.mode == newRecordMode) {
+    if (self.mode == NewRecordViewControllerNewRecordMode) {
         [self refreshPassword];
     }
 }

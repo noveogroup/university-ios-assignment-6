@@ -28,10 +28,10 @@ NSString *stringFromPasswordStrength(PasswordStrength strenght) {
 
 NSString *stringFromStorageType(StorageType type) {
     switch (type) {
-        case StorageWithSerializer:
+        case StorageTypeWithSerializer:
             return storageTypeLabelSerializer;
             break;
-        case StorageWithDB:
+        case StorageTypeWithDB:
             return storageTypeLabelDB;
             break;
     }
@@ -52,10 +52,10 @@ NSInteger passwordStrengthFromString(NSString *string) {
 
 NSInteger storageTypeFromString(NSString *string) {
     if ([string isEqualToString:storageTypeLabelSerializer]) {
-        return StorageWithSerializer;
+        return StorageTypeWithSerializer;
     }
     if ([string isEqualToString:storageTypeLabelDB]) {
-        return StorageWithDB;
+        return StorageTypeWithDB;
     }
     return 0;
 }

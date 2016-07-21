@@ -81,7 +81,7 @@ static NSString *const DefaultFileNameForDB = @"Storage.db";
 - (NSMutableArray *)mutableRecords
 {
     if (!mutableRecords_) {
-        if ([Preferences standardPreferences].lastStorage == StorageWithSerializer) {
+        if ([Preferences standardPreferences].lastStorage == StorageTypeWithSerializer) {
             mutableRecords_ = [NSMutableArray arrayWithContentsOfFile:self.pathSerializer];
             if (!mutableRecords_) {
                 mutableRecords_ = [NSMutableArray array];
@@ -111,7 +111,7 @@ static NSString *const DefaultFileNameForDB = @"Storage.db";
 
 - (BOOL)synchronize
 {
-    if ([Preferences standardPreferences].storageType == StorageWithSerializer) {
+    if ([Preferences standardPreferences].storageType == StorageTypeWithSerializer) {
         return [self.mutableRecords writeToFile:self.pathSerializer atomically:YES];
     }
     else {

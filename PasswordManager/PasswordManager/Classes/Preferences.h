@@ -15,8 +15,8 @@ typedef NS_ENUM(NSInteger, PasswordStrength) {
 };
 
 typedef NS_ENUM(NSInteger, StorageType) {
-    StorageWithSerializer = 0,
-    StorageWithDB = 1
+    StorageTypeWithSerializer = 0,
+    StorageTypeWithDB = 1
 };
 
 @interface Preferences : NSObject

@@ -99,7 +99,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NewRecordViewController *const rootViewController =
-    [[NewRecordViewController alloc] initWithMode:changeRecordMode
+    [[NewRecordViewController alloc] initWithMode:NewRecordViewControllerChangeRecordMode
                                            record:self.recordsManager.records[indexPath.row]
                                       atIndexPath:indexPath];
     rootViewController.delegate = self;
@@ -127,7 +127,7 @@
 - (void)newRecordViewController:(NewRecordViewController *)sender
             didFinishWithRecord:(NSDictionary *)record
 {
-    if (sender.mode == newRecordMode) {
+    if (sender.mode == NewRecordViewControllerNewRecordMode) {
         if (record) {
             [self.recordsManager registerRecord:record];
             [self.recordsManager synchronize];

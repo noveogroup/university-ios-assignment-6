@@ -9,8 +9,8 @@
 #import "Preferences.h"
 
 NSInteger const PasswordStrengthDefault = PasswordStrengthMedium;
-NSInteger const StorageTypeDefault = StorageWithSerializer;
-NSInteger const LastStorageDefault = StorageWithSerializer;
+NSInteger const StorageTypeDefault = StorageTypeWithSerializer;
+NSInteger const LastStorageDefault = StorageTypeWithSerializer;
 static NSString *const kPasswordStrength = @"PasswordStrength";
 static NSString *const kStorageType = @"StorageType";
 static NSString *const kLastStorage = @"LastStorage";
@@ -34,6 +34,17 @@ static NSString *const kLastStorage = @"LastStorage";
     });
 
     return standardPreferences_;
+}
+
+#pragma mark - Initialization
+
+- (id)init
+{
+    if ((self = [super init])) {
+        [self registerUserDefaultsFromSettingsBundle];
+    }
+    
+    return self;
 }
 
 #pragma mark - Getters
@@ -74,17 +85,6 @@ static NSString *const kLastStorage = @"LastStorage";
     [[NSUserDefaults standardUserDefaults] setInteger:lastStorage
                                                forKey:kLastStorage];
     [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-#pragma mark - Initialization
-
-- (id)init
-{
-    if ((self = [super init])) {
-        [self registerUserDefaultsFromSettingsBundle];
-    }
-
-    return self;
 }
 
 #pragma mark - Registering settings bundle
