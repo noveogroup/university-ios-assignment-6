@@ -23,7 +23,10 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
     <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *serviceNameTextField;
-@property (weak, nonatomic) IBOutlet UILabel *passwordLabel;
+@property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
+@property (weak, nonatomic) NSDictionary *record;
+@property (nonatomic, getter = isEdit) BOOL edit;
+@property (nonatomic) NSIndexPath *indexPath;
 
 - (void)refreshPassword;
 - (void)saveRecord;
@@ -41,7 +44,29 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 @synthesize delegate = delegate_;
 
 @synthesize serviceNameTextField = serviceNameTextField_;
-@synthesize passwordLabel = passwordLabel_;
+//@synthesize passwordTextField = _passwordTextField;
+
+#pragma mark - Initialization
+
+- (instancetype)init
+{
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    if (self) {
+        _edit = NO;
+    }
+    return self;
+}
+
+- (instancetype)initWithRecord:(NSDictionary *)record AtIndexPath:(NSIndexPath *)indexPath
+{
+    self = [super initWithNibName:NSStringFromClass([self class]) bundle:nil];
+    if (self) {
+        _indexPath = indexPath;
+        _record = record;
+        _edit = YES;
+    }
+    return self;
+}
 
 #pragma mark - Auxiliaries
 
@@ -67,18 +92,23 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
             break;
         }
     }
-    self.passwordLabel.text =
+    self.passwordTextField.text =
         [PasswordGenerator generatePasswordOfLength:passwordLength
                                       usingAlphabet:alphabet];
 }
 
 - (void)saveRecord
 {
-    if ([self.serviceNameTextField.text length] > 0) {
+    if (([self.serviceNameTextField.text length] > 0) && !(self.isEdit)) {
         NSDictionary *const record =
             @{kServiceName: self.serviceNameTextField.text,
-              kPassword: self.passwordLabel.text};
+              kPassword: self.passwordTextField.text};
         [self.delegate newRecordViewController:self didFinishWithRecord:record];
+    } else {
+        NSDictionary *const record =
+        @{kServiceName: self.serviceNameTextField.text,
+          kPassword: self.passwordTextField.text};
+        [self.delegate newRecordViewController:self didFinishEditWithRecord:record atIndexPath:self.indexPath];
     }
 }
 
@@ -108,8 +138,12 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
-    [self refreshPassword];
+    if (self.isEdit) {
+        self.serviceNameTextField.text = [self.record valueForKey:kServiceName];
+        self.passwordTextField.text = [self.record valueForKey:kPassword];
+    } else {
+        [self refreshPassword];
+    }
 }
 
 #pragma mark - Actions
@@ -121,7 +155,15 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 
 - (void)didTouchSaveBarButtonItem:(UIBarButtonItem *)sender
 {
-    [self saveRecord];
+    if (([self.serviceNameTextField.text length] > 0) && ([self.passwordTextField.text length] > 0)) {
+        [self saveRecord];
+    } else {
+        UIAlertController *alertConrtoller = [UIAlertController alertControllerWithTitle:@"Empty Field" message:nil preferredStyle:(UIAlertControllerStyle)UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault   handler:nil];
+        [alertConrtoller addAction:cancelAction];
+        [self presentViewController:alertConrtoller animated:YES completion:nil];
+
+    }
 }
 
 - (IBAction)didTouchRefreshButton:(UIButton *)sender
@@ -134,7 +176,6 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [self saveRecord];
-
     return YES;
 }
 

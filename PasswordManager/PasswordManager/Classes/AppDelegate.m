@@ -17,7 +17,7 @@
 
 #pragma mark - UIApplicationDelegate implementation
 
--           (BOOL)application:(UIApplication *)application
+- (BOOL)application:(UIApplication *)application
 didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
