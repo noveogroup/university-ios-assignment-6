@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Noveo. All rights reserved.
 //
 
-#import "NewRecordViewController.h"
+#import "RecordViewController.h"
 #import "Record.h"
 #import "RecordsManager.h"
 #import "RecordsViewController.h"
@@ -17,7 +17,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 @interface RecordsViewController ()
     <UITableViewDataSource,
      UITableViewDelegate,
-     NewRecordViewControllerDelegate,
+     RecordViewControllerDelegate,
      SettingsViewControllerDelegate>
 
 @property (nonatomic, readonly) RecordsManager *recordsManager;
@@ -62,7 +62,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 - (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender
 {
-    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] init];
+    RecordViewController *const rootViewController = [[RecordViewController alloc] init];
     rootViewController.delegate = self;
 
     UINavigationController *const navigationController =
@@ -118,7 +118,7 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 -       (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] init];
+    RecordViewController *const rootViewController = [[RecordViewController alloc] init];
     rootViewController.delegate = self;
     
     NSDictionary *record = [[self.recordsManager records] objectAtIndex:indexPath.row];
@@ -133,7 +133,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 
 #pragma mark - NewRecordViewControllerDelegate implementation
 
-- (void)newRecordViewController:(NewRecordViewController *)sender
+- (void)recordViewController:(RecordViewController *)sender
             didFinishWithRecord:(NSDictionary *)record
 {
     if (record) {
