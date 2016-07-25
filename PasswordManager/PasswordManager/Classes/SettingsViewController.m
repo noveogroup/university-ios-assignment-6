@@ -14,6 +14,11 @@ NSString *kPasswordStrengthSection = @"PasswordStrengthSection";
 NSString *kPasswordStorageSection = @"PasswordStorageSection";
 NSString *kPasswordStrengthSectionTitle = @"Password strength";
 NSString *kPasswordStorageSectionTile = @"Password storage";
+NSString *kPasswordStorageSQLite = @"SQLite";
+NSString *kPasswordStorageOld = @"Old";
+NSString *kPasswordStrengthWeak = @"Weak";
+NSString *kPasswordStrengthMedium = @"Medium";
+NSString *kPasswordStrengthStrong = @"Strong";
 
 NSString *kName = @"name";
 NSString *kCheck = @"check";
@@ -24,6 +29,9 @@ NSString *kTitle = @"title";
 @property (nonatomic, strong) NSDictionary *data;
 @property (nonatomic) NSIndexPath *checkedIndexPathPasswordStrengthSection;
 @property (nonatomic) NSIndexPath *checkedIndexPathPasswordStorageSection;
+
+@property (nonatomic, strong) NSArray *dataPasswordStorage;
+@property (nonatomic, strong) NSArray *dataPasswordStrength;
 @end
 
 @implementation SettingsViewController
@@ -41,53 +49,33 @@ NSString *kTitle = @"title";
         [self.navigationItem setRightBarButtonItem:doneBarButtonItem];
     }
     
-    self.data = @{
-                  kPasswordStrengthSection: @[
-                          [@{
-                              kName: @(PasswordStrengthWeak),
-                              kCheck: @NO,
-                              kTitle: @"Weak"
-                              } mutableCopy],
-                          [@{
-                              kName: @(PasswordStrengthMedium),
-                              kCheck: @NO,
-                              kTitle: @"Medium"
-                              } mutableCopy],
-                          [@{
-                              kName: @(PasswordStrengthStrong),
-                              kCheck: @NO,
-                              kTitle: @"Strong"
-                              } mutableCopy]
-                          ],
-                  kPasswordStorageSection: @[
-                          [@{
-                              kName: @(PasswordStorageSQLite),
-                              kCheck: @NO,
-                              kTitle: @"SQLite"
-                              } mutableCopy],
-                          [@{
-                              kName: @(PasswordStorageOld),
-                              kCheck: @NO,
-                              kTitle: @"Old"
-                              } mutableCopy]
-                          ]
-                  };
-//    NSMutableArray *passwordStrengthArray = [NSMutableArray array];
-//    id object;
-//    object = [[NSObject alloc] init];
+    self.dataPasswordStorage = @[kPasswordStorageSQLite, kPasswordStorageOld];
+    self.dataPasswordStrength = @[kPasswordStrengthWeak, kPasswordStrengthMedium,kPasswordStrengthStrong];
     
-    NSInteger passwordStrength = [[Preferences standardPreferences] passwordStrength];
-    for (NSMutableDictionary *dictionary in [self.data objectForKey:kPasswordStrengthSection]) {
-        if ([dictionary[kName] integerValue] == passwordStrength) {
-            [dictionary setValue:@YES forKey:kCheck];
-        }
+    switch ([[Preferences standardPreferences] passwordStrength]) {
+        case PasswordStrengthWeak:
+            self.checkedIndexPathPasswordStrengthSection = [NSIndexPath indexPathForRow:0 inSection:0];
+            break;
+        case PasswordStrengthMedium:
+            self.checkedIndexPathPasswordStrengthSection = [NSIndexPath indexPathForRow:1 inSection:0];
+            break;
+        case PasswordStrengthStrong:
+            self.checkedIndexPathPasswordStrengthSection = [NSIndexPath indexPathForRow:2 inSection:0];
+            break;
+        default:
+            break;
     }
     
-    NSInteger passwordStorage = [[Preferences standardPreferences] passwordStorage];
-    for (NSMutableDictionary *dictionary in [self.data objectForKey:kPasswordStorageSection]) {
-        if ([dictionary[kName] integerValue] == passwordStorage) {
-            [dictionary setValue:@YES forKey:kCheck];
-        }
+    switch ([[Preferences standardPreferences] passwordStorage]) {
+        case PasswordStorageSQLite:
+            self.checkedIndexPathPasswordStorageSection = [NSIndexPath indexPathForRow:0 inSection:1];
+            break;
+        case PasswordStorageOld:
+            self.checkedIndexPathPasswordStorageSection = [NSIndexPath indexPathForRow:1 inSection:1];
+            break;
+            
+        default:
+            break;
     }
 }
 
@@ -103,7 +91,33 @@ NSString *kTitle = @"title";
 
 - (IBAction)didTouchDoneBarButtonItem:(id)sender
 {
-    [self.delegate settingsViewControllerdidFinish:self];
+    switch (self.checkedIndexPathPasswordStrengthSection.row) {
+        case 0:
+            [self updatePasswordStrength:PasswordStrengthWeak];
+            break;
+        case 1:
+            [self updatePasswordStrength:PasswordStrengthMedium];
+            break;
+        case 2:
+            [self updatePasswordStrength:PasswordStrengthStrong];
+            break;
+            
+        default:
+            break;
+    }
+    
+    switch (self.checkedIndexPathPasswordStorageSection.row) {
+        case 0:
+            [self updatePasswordStorage:PasswordStorageSQLite];
+            break;
+        case 1:
+            [self updatePasswordStorage:PasswordStorageOld];
+            break;
+            
+        default:
+            break;
+    }
+    [self.delegate settingsViewControllerDidFinish:self];
 }
 
 #pragma mark - UITableViewDataSource implementation
@@ -112,21 +126,23 @@ NSString *kTitle = @"title";
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)section
 {
-    NSString *sectionTitle = [self.data.allKeys objectAtIndex:section];
-    NSArray *sectionData = [self.data objectForKey:sectionTitle];
-    return [sectionData count];
+    if(section == 0){
+        return self.dataPasswordStrength.count;
+    } else {
+        return self.dataPasswordStorage.count;
+    }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return self.data.allKeys.count;
+    return 2;
 }
 
 - (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if ([[self.data.allKeys objectAtIndex:section] isEqualToString:kPasswordStrengthSection]){
+    if (section == 0){
         return kPasswordStrengthSectionTitle;
-    } else if ([[self.data.allKeys objectAtIndex:section] isEqualToString:kPasswordStorageSection]){
+    } else {
         return kPasswordStorageSectionTile;
     }
     return nil;
@@ -143,15 +159,13 @@ NSString *kTitle = @"title";
         tableViewCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                reuseIdentifier:REUSABLE_CELL_ID];
     }
-    NSString *sectionTitle = [self.data.allKeys objectAtIndex:indexPath.section];
-    NSArray *sectionData = [self.data objectForKey:sectionTitle];
-    tableViewCell.textLabel.text = [sectionData[indexPath.row] valueForKey:kTitle];
-    
-//    if ([[sectionData[indexPath.row] valueForKey:kCheck] boolValue]) {
-//        tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
-//    } else{
-//        tableViewCell.accessoryType = UITableViewCellAccessoryNone;
-//    }
+    if (indexPath.section == 0){
+        tableViewCell.textLabel.text = self.dataPasswordStrength[indexPath.row];
+        tableViewCell.accessoryType = (indexPath.row == self.checkedIndexPathPasswordStrengthSection.row) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    } else {
+        tableViewCell.textLabel.text = self.dataPasswordStorage[indexPath.row];
+        tableViewCell.accessoryType = (indexPath.row == self.checkedIndexPathPasswordStorageSection.row) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    }
     
     return tableViewCell;
     
@@ -163,48 +177,25 @@ NSString *kTitle = @"title";
 -       (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *sectionTitle = [self.data.allKeys objectAtIndex:indexPath.section];
-    NSArray *sectionData = [self.data objectForKey:sectionTitle];
-//    NSArray *objects = [self.data objectForKey:sectionTitle];
-//    for (int i=0; i<objects.count; i++) {
-//        NSMutableDictionary *dictionary = objects[i];
-//        if (i == indexPath.row) {
-//            [dictionary setValue:@YES forKey:kCheck];
-//        } else{
-//            [dictionary setValue:@NO forKey:kCheck];
-//        }
-//    }
-    if ([sectionTitle isEqualToString:kPasswordStrengthSection]) {
-        NSInteger oldRow = (self.checkedIndexPathPasswordStrengthSection != nil) ? self.checkedIndexPathPasswordStrengthSection.row : -1;
-        if (indexPath.row != oldRow) {
-            UITableViewCell *newCell = [tableView cellForRowAtIndexPath:
-                                        indexPath];
-            newCell.accessoryType = UITableViewCellAccessoryCheckmark;
-            
-            UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:
-                                        self.checkedIndexPathPasswordStrengthSection];
-            oldCell.accessoryType = UITableViewCellAccessoryNone;
-            self.checkedIndexPathPasswordStrengthSection = indexPath;
-            [self updatePasswordStrength:[[sectionData[indexPath.row] valueForKey:kName] integerValue]];
+    NSIndexPath *oldIndexPath;
+    if (indexPath.section == 0) {
+        if (indexPath.row == self.checkedIndexPathPasswordStrengthSection.row) {
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            return;
         }
-    } else if ([sectionTitle isEqualToString:kPasswordStorageSection]) {
-        
-        NSInteger oldRow = (self.checkedIndexPathPasswordStorageSection != nil) ? self.checkedIndexPathPasswordStorageSection.row : -1;
-        if (indexPath.row != oldRow) {
-            UITableViewCell *newCell = [tableView cellForRowAtIndexPath:
-                                        indexPath];
-            newCell.accessoryType = UITableViewCellAccessoryCheckmark;
-            
-            UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:
-                                        self.checkedIndexPathPasswordStorageSection];
-            oldCell.accessoryType = UITableViewCellAccessoryNone;
-            self.checkedIndexPathPasswordStorageSection = indexPath;
-            [self updatePasswordStorage:[[sectionData[indexPath.row] valueForKey:kName] integerValue]];
+        oldIndexPath = self.checkedIndexPathPasswordStrengthSection;
+        self.checkedIndexPathPasswordStrengthSection = indexPath;
+    } else {
+        if (indexPath.row == self.checkedIndexPathPasswordStorageSection.row) {
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            return;
         }
+        oldIndexPath = self.checkedIndexPathPasswordStorageSection;
+        self.checkedIndexPathPasswordStorageSection = indexPath;
     }
 
+    [tableView reloadRowsAtIndexPaths:@[oldIndexPath, indexPath] withRowAnimation:UITableViewRowAnimationNone];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 

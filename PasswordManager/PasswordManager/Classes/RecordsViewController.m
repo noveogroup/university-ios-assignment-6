@@ -124,7 +124,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
                              completion:NULL];
 }
 
-- (void)settingsViewControllerdidFinish:(SettingsViewController *)sender
+- (void)settingsViewControllerDidFinish:(SettingsViewController *)sender
 {
     [self dismissViewControllerAnimated:YES
                              completion:NULL];

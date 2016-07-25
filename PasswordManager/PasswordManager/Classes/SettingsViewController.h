@@ -13,7 +13,7 @@
 
 @protocol SettingsViewControllerDelegate <NSObject>
 
-- (void)settingsViewControllerdidFinish:(SettingsViewController *)sender;
+- (void)settingsViewControllerDidFinish:(SettingsViewController *)sender;
 
 @end
 
