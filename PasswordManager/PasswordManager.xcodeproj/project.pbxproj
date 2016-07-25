@@ -27,6 +27,7 @@
 		93E767E318B5EDD90053F9F0 /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E767E218B5EDD90053F9F0 /* Preferences.m */; };
 		93E767E618B5F3790053F9F0 /* NewRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E767E518B5F3790053F9F0 /* NewRecordViewController.m */; };
 		93E767E818B5F9BA0053F9F0 /* NewRecordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */; };
+		E216EAC91D45B9B800870751 /* FMDBStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = E216EAC81D45B9B800870751 /* FMDBStorage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +68,8 @@
 		93E767E518B5F3790053F9F0 /* NewRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewRecordViewController.m; sourceTree = "<group>"; };
 		93E767E718B5F9BA0053F9F0 /* NewRecordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewRecordViewController.xib; sourceTree = "<group>"; };
 		D2FF618516D87487A0BE4DC0 /* Pods-PasswordManager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PasswordManager.release.xcconfig"; path = "Pods/Target Support Files/Pods-PasswordManager/Pods-PasswordManager.release.xcconfig"; sourceTree = "<group>"; };
+		E216EAC71D45B9B800870751 /* FMDBStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDBStorage.h; sourceTree = "<group>"; };
+		E216EAC81D45B9B800870751 /* FMDBStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDBStorage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +160,8 @@
 				844BA1FD1D37F21300D986B4 /* SettingsViewController.h */,
 				844BA1FE1D37F21300D986B4 /* SettingsViewController.m */,
 				844BA2001D37F22700D986B4 /* SettingsViewController.xib */,
+				E216EAC71D45B9B800870751 /* FMDBStorage.h */,
+				E216EAC81D45B9B800870751 /* FMDBStorage.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -306,6 +311,7 @@
 				93DE162118B5955100A46FD2 /* NSString+Shuffling.m in Sources */,
 				93DE161818B4AB7F00A46FD2 /* PasswordGenerator.m in Sources */,
 				93DE161E18B5929400A46FD2 /* NSMutableString+Exchange.m in Sources */,
+				E216EAC91D45B9B800870751 /* FMDBStorage.m in Sources */,
 				93E767E618B5F3790053F9F0 /* NewRecordViewController.m in Sources */,
 				93E767E318B5EDD90053F9F0 /* Preferences.m in Sources */,
 				844BA1FF1D37F21300D986B4 /* SettingsViewController.m in Sources */,

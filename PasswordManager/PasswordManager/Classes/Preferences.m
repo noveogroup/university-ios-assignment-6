@@ -98,7 +98,7 @@ static NSString *const kPasswordStorage = @"PasswordStorage";
     }
     [defaultsToRegister setObject:@(PasswordStrengthDefault)
                            forKey:kPasswordStrength];
-    [defaultsToRegister setObject:@(PasswordStorageOld)
+    [defaultsToRegister setObject:@(PasswordStorageDefault)
                            forKey:kPasswordStorage];
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];

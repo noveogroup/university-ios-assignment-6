@@ -38,11 +38,6 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
 
 @implementation NewRecordViewController
 
-@synthesize delegate = delegate_;
-
-@synthesize serviceNameTextField = serviceNameTextField_;
-@synthesize passwordLabel = passwordLabel_;
-
 #pragma mark - Auxiliaries
 
 - (void)refreshPassword
@@ -103,13 +98,20 @@ static NSString *const DecimalDigitAlphabet = @"1234567890";
                                      action:@selector(didTouchSaveBarButtonItem:)];
         [self.navigationItem setRightBarButtonItem:saveBarButtonItem];
     }
+    
+    if (self.record) {
+        self.serviceNameTextField.text = self.record[kServiceName];
+        self.passwordLabel.text = self.record[kPassword];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 
-    [self refreshPassword];
+    if (!self.record) {
+        [self refreshPassword];
+    }
 }
 
 #pragma mark - Actions

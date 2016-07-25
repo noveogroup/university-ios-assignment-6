@@ -17,7 +17,8 @@ typedef NS_ENUM(NSInteger, PasswordStrength) {
 
 typedef NS_ENUM(NSInteger, PasswordStorage) {
     PasswordStorageOld,
-    PasswordStorageSQLite
+    PasswordStorageSQLite,
+    PasswordStorageDefault = PasswordStorageSQLite
 };
 
 

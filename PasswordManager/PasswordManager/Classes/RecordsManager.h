@@ -26,9 +26,19 @@
 - (void)registerRecord:(NSDictionary *)record;
 
 /**
+ * Replace two records.
+ */
+- (void)replaceRecord:(NSDictionary *)record withRecord:(NSDictionary *)newRecord;
+
+/**
  *  Returns the records the receiver manages.
  */
 - (NSArray *)records;
+
+/**
+ * Delete the specified record.
+ */
+- (void)deleteRecord:(NSDictionary *)record;
 
 /**
  *  Writes any modifications to the persistent domains to disk.

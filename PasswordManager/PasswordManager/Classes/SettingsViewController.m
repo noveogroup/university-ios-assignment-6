@@ -9,9 +9,6 @@
 #import "SettingsViewController.h"
 #import "Preferences.h"
 
-
-NSString *kPasswordStrengthSection = @"PasswordStrengthSection";
-NSString *kPasswordStorageSection = @"PasswordStorageSection";
 NSString *kPasswordStrengthSectionTitle = @"Password strength";
 NSString *kPasswordStorageSectionTile = @"Password storage";
 NSString *kPasswordStorageSQLite = @"SQLite";
@@ -20,13 +17,8 @@ NSString *kPasswordStrengthWeak = @"Weak";
 NSString *kPasswordStrengthMedium = @"Medium";
 NSString *kPasswordStrengthStrong = @"Strong";
 
-NSString *kName = @"name";
-NSString *kCheck = @"check";
-NSString *kTitle = @"title";
-
 @interface SettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) NSDictionary *data;
 @property (nonatomic) NSIndexPath *checkedIndexPathPasswordStrengthSection;
 @property (nonatomic) NSIndexPath *checkedIndexPathPasswordStorageSection;
 
