@@ -28,7 +28,7 @@
 		93E767E618B5F3790053F9F0 /* RecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E767E518B5F3790053F9F0 /* RecordViewController.m */; };
 		93E767E818B5F9BA0053F9F0 /* RecordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E767E718B5F9BA0053F9F0 /* RecordViewController.xib */; };
 		E216EAC91D45B9B800870751 /* FMDBStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = E216EAC81D45B9B800870751 /* FMDBStorage.m */; };
-		E216EACC1D45EE2B00870751 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E216EACB1D45EE2B00870751 /* Settings.bundle */; };
+		E216EC2D1D479BFE00870751 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E216EC2C1D479BFE00870751 /* Settings.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,7 +71,7 @@
 		D2FF618516D87487A0BE4DC0 /* Pods-PasswordManager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PasswordManager.release.xcconfig"; path = "Pods/Target Support Files/Pods-PasswordManager/Pods-PasswordManager.release.xcconfig"; sourceTree = "<group>"; };
 		E216EAC71D45B9B800870751 /* FMDBStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDBStorage.h; sourceTree = "<group>"; };
 		E216EAC81D45B9B800870751 /* FMDBStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDBStorage.m; sourceTree = "<group>"; };
-		E216EACB1D45EE2B00870751 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		E216EC2C1D479BFE00870751 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,7 +92,7 @@
 		93DE15D618B4AA8D00A46FD2 = {
 			isa = PBXGroup;
 			children = (
-				E216EACB1D45EE2B00870751 /* Settings.bundle */,
+				E216EC2C1D479BFE00870751 /* Settings.bundle */,
 				93DE15E818B4AA8D00A46FD2 /* PasswordManager */,
 				93DE15E118B4AA8D00A46FD2 /* Frameworks */,
 				93DE15E018B4AA8D00A46FD2 /* Products */,
@@ -249,8 +249,8 @@
 				93DE15ED18B4AA8D00A46FD2 /* InfoPlist.strings in Resources */,
 				93DE15F518B4AA8D00A46FD2 /* Images.xcassets in Resources */,
 				93E767DD18B5D8DE0053F9F0 /* RecordsViewController.xib in Resources */,
-				E216EACC1D45EE2B00870751 /* Settings.bundle in Resources */,
 				844BA2011D37F22700D986B4 /* SettingsViewController.xib in Resources */,
+				E216EC2D1D479BFE00870751 /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

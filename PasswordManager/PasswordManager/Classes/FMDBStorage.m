@@ -56,7 +56,7 @@
 {
     NSMutableArray *mutableRecords = [NSMutableArray array];
     
-    FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:_url.absoluteString];
+    FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:self.url.absoluteString];
     [queue inDatabase:^(FMDatabase *db) {
         FMResultSet *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@", kDataBaseNameRecords]];
         while ([rs next]) {
@@ -75,7 +75,7 @@
 
 - (BOOL)addRecords:(NSArray *)records
 {
-    FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:_url.absoluteString];
+    FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:self.url.absoluteString];
     
     BOOL __block success = YES;
     
@@ -99,7 +99,7 @@
     BOOL __block success = YES;
     
     if (records.count) {
-        FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:_url.absoluteString];
+        FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:self.url.absoluteString];
         
         [queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
             for(NSDictionary *record in records) {
@@ -119,7 +119,7 @@
 {
     BOOL __block success = YES;
     
-    FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:_url.absoluteString];
+    FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:self.url.absoluteString];
     
     [queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         success = [db executeUpdate:[NSString stringWithFormat:@"DELETE FROM %@", kDataBaseNameRecords]];

@@ -19,11 +19,12 @@ NSString *kPasswordStrengthStrong = @"Strong";
 
 @interface SettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
 @property (nonatomic) NSIndexPath *checkedIndexPathPasswordStrengthSection;
 @property (nonatomic) NSIndexPath *checkedIndexPathPasswordStorageSection;
 
-@property (nonatomic, strong) NSArray *dataPasswordStorage;
-@property (nonatomic, strong) NSArray *dataPasswordStrength;
+@property (nonatomic) NSArray *dataPasswordStorage;
+@property (nonatomic) NSArray *dataPasswordStrength;
 @end
 
 @implementation SettingsViewController
@@ -71,12 +72,12 @@ NSString *kPasswordStrengthStrong = @"Strong";
     }
 }
 
-- (void)updatePasswordStrength:(NSInteger)passwordStrength
+- (void)updatePasswordStrength:(PasswordStrength)passwordStrength
 {
     [Preferences standardPreferences].passwordStrength = passwordStrength;
 }
 
-- (void)updatePasswordStorage:(NSInteger)passwordStorage
+- (void)updatePasswordStorage:(PasswordStorage)passwordStorage
 {
     [Preferences standardPreferences].passwordStorage = passwordStorage;
 }

@@ -34,7 +34,7 @@
 {
     if ((self = [super init])) {
         _url = url;
-        _fmdbStorage = [[FMDBStorage alloc] initWithURL:[url URLByDeletingPathExtension]];
+        _fmdbStorage = [[FMDBStorage alloc] initWithURL:url];
     }
 
     return self;
