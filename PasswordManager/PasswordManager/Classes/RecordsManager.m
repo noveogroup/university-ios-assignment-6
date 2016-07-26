@@ -7,18 +7,18 @@
 //
 
 #import "RecordsManager.h"
+#import "FMDBStorage.h"
+#import "Preferences.h"
 
 @interface RecordsManager ()
 
 @property (nonatomic, strong) NSMutableArray *mutableRecords;
 @property (nonatomic, strong) NSURL *url;
+@property (nonatomic, strong) FMDBStorage *fmdbStorage;
 
 @end
 
 @implementation RecordsManager
-
-@synthesize url = url_;
-@synthesize mutableRecords = mutableRecords_;
 
 #pragma mark - Initialization
 
@@ -33,7 +33,8 @@
 - (instancetype)initWithURL:(NSURL *)url
 {
     if ((self = [super init])) {
-        url_ = url;
+        _url = url;
+        _fmdbStorage = [[FMDBStorage alloc] initWithURL:url];
     }
 
     return self;
@@ -48,16 +49,32 @@
     }
 }
 
+- (void)replaceRecord:(NSDictionary *)record withRecord:(NSDictionary *)newRecord
+{
+    [self.mutableRecords replaceObjectAtIndex:[self.mutableRecords indexOfObject:record] withObject:newRecord];
+}
+
 - (NSMutableArray *)mutableRecords
 {
-    if (!mutableRecords_) {
-        mutableRecords_ = [NSMutableArray arrayWithContentsOfURL:self.url];
-        if (!mutableRecords_) {
-            mutableRecords_ = [NSMutableArray array];
+    if (!_mutableRecords) {
+        switch ([Preferences standardPreferences].passwordStorage) {
+            case PasswordStorageOld:
+                _mutableRecords = [NSMutableArray arrayWithContentsOfURL:self.url];
+                if (!_mutableRecords) {
+                    _mutableRecords = [NSMutableArray array];
+                }
+                break;
+                
+            case PasswordStorageSQLite:
+                _mutableRecords = [self.fmdbStorage records];
+                break;
+            default:
+                break;
         }
+        
     }
 
-    return mutableRecords_;
+    return _mutableRecords;
 }
 
 - (NSArray *)records
@@ -65,11 +82,32 @@
     return [self.mutableRecords copy];
 }
 
+- (void)deleteRecord:(NSDictionary *)record
+{
+    [self.mutableRecords removeObject:record];
+}
+
 #pragma mark - Synchronisation
 
 - (BOOL)synchronize
 {
-    return [self.mutableRecords writeToURL:self.url atomically:YES];
+    switch ([Preferences standardPreferences].passwordStorage) {
+        case PasswordStorageOld:
+            return [self.mutableRecords writeToURL:self.url atomically:YES];
+            break;
+            
+        case PasswordStorageSQLite:
+            [self.fmdbStorage deleteAllRecords];
+            if ([self.fmdbStorage addRecords:[self.mutableRecords copy]]) {
+                return YES;
+            }
+            
+            break;
+        default:
+            break;
+    }
+    
+    return NO;
 }
 
 @end

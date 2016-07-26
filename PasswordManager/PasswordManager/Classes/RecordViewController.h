@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class NewRecordViewController;
+@class RecordViewController;
 
 /**
  *  The protocol describing the duties the instance of @c NewRecordViewController
  *  are able to delegate.
  */
-@protocol NewRecordViewControllerDelegate <NSObject>
+@protocol RecordViewControllerDelegate <NSObject>
 
 /**
  *  Notifies the receiver that the sender has finished its job.
@@ -23,16 +23,18 @@
  *                      If the user has pressed 'Cancel',
  *                      the @c record is @b nil.
  */
-- (void)newRecordViewController:(NewRecordViewController *)sender
+- (void)recordViewController:(RecordViewController *)sender
             didFinishWithRecord:(NSDictionary *)record;
 
 @end
 
-@interface NewRecordViewController : UIViewController
+@interface RecordViewController : UIViewController
 
 /**
  *  Returns the object that handles the delegated duties.
  */
-@property (nonatomic, weak) id<NewRecordViewControllerDelegate> delegate;
+@property (nonatomic, weak) id<RecordViewControllerDelegate> delegate;
+
+@property (nonatomic, strong) NSDictionary *record;
 
 @end

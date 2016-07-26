@@ -6,17 +6,19 @@
 //  Copyright (c) 2014 Noveo. All rights reserved.
 //
 
-#import "NewRecordViewController.h"
+#import "RecordViewController.h"
 #import "Record.h"
 #import "RecordsManager.h"
 #import "RecordsViewController.h"
+#import "SettingsViewController.h"
 
 static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 
 @interface RecordsViewController ()
     <UITableViewDataSource,
      UITableViewDelegate,
-     NewRecordViewControllerDelegate>
+     RecordViewControllerDelegate,
+     SettingsViewControllerDelegate>
 
 @property (nonatomic, readonly) RecordsManager *recordsManager;
 
@@ -29,8 +31,6 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 @implementation RecordsViewController
 
 @synthesize recordsManager = recordsManager_;
-
-@synthesize tableView = tableView_;
 
 #pragma mark - Getters
 
@@ -50,10 +50,19 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 }
 
 #pragma mark - Actions
+- (IBAction)didTouchSettingsBarButtonItem:(id)sender
+{
+    SettingsViewController *const rootViewController = [[SettingsViewController alloc] init];
+    rootViewController.delegate = self;
+    
+    UINavigationController *const navigationController =
+    [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    [self presentViewController:navigationController animated:YES completion:NULL];
+}
 
 - (IBAction)didTouchAddBarButtonItem:(UIBarButtonItem *)sender
 {
-    NewRecordViewController *const rootViewController = [[NewRecordViewController alloc] init];
+    RecordViewController *const rootViewController = [[RecordViewController alloc] init];
     rootViewController.delegate = self;
 
     UINavigationController *const navigationController =
@@ -90,21 +99,49 @@ static NSString *const DefaultFileNameForLocalStore = @"AwesomeFileName.dat";
 #undef REUSABLE_CELL_ID
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [self.recordsManager deleteRecord:self.recordsManager.records[indexPath.row]];
+        [self.recordsManager synchronize];
+        [tableView reloadData];
+    }
+}
+
 #pragma mark - UITableViewDelegate implementation
 
 -       (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    RecordViewController *const rootViewController = [[RecordViewController alloc] init];
+    rootViewController.delegate = self;
+    
+    NSDictionary *record = [[self.recordsManager records] objectAtIndex:indexPath.row];
+    rootViewController.record = record;
+    
+    UINavigationController *const navigationController =
+    [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    [self presentViewController:navigationController animated:YES completion:NULL];
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - NewRecordViewControllerDelegate implementation
 
-- (void)newRecordViewController:(NewRecordViewController *)sender
+- (void)recordViewController:(RecordViewController *)sender
             didFinishWithRecord:(NSDictionary *)record
 {
     if (record) {
-        [self.recordsManager registerRecord:record];
+        if (sender.record) {
+            [self.recordsManager replaceRecord:sender.record withRecord:record];
+        } else {
+            [self.recordsManager registerRecord:record];
+        }
         [self.recordsManager synchronize];
 
         [self.tableView reloadData];
@@ -112,5 +149,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     [self dismissViewControllerAnimated:YES
                              completion:NULL];
 }
+
+- (void)settingsViewControllerDidFinish:(SettingsViewController *)sender
+{
+    [self.recordsManager synchronize];
+    [self dismissViewControllerAnimated:YES
+                             completion:NULL];
+}
+
 
 @end
